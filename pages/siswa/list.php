@@ -21,7 +21,7 @@ $total_siswa = mysqli_num_rows($result);
         </div>
         
         <div class="col-md-8">
-            <form action="" method="GET" class="d-flex justify-content-md-end gap-2">
+            <form action="" method="POST" class="d-flex justify-content-md-end gap-2">
                 <input type="text" class="form-control w-50" placeholder="Cari nama atau NIS..." name="nama">
                 
                 <div class="dropdown w-25 border rounded">
@@ -42,6 +42,7 @@ $total_siswa = mysqli_num_rows($result);
                 </div>
 
                 <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="add.php" class="btn btn-primary w-25 py-2"><i class="bi bi-person-fill-add me-1"></i>Tambah Murid</a>
             </form>
         </div>
     </div>
