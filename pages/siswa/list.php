@@ -7,6 +7,8 @@ JOIN kelas USING(id_kelas)
 JOIN tingkat USING(id_tingkat)
 JOIN program_keahlian USING(id_program_keahlian)");
 $total_siswa = mysqli_num_rows($result);
+
+
 ?>
 
 <div class="container py-5">
@@ -39,7 +41,7 @@ $total_siswa = mysqli_num_rows($result);
                     </ul>
                 </div>
 
-                <button type="submit" class="btn btn-primary px-4">Filter</button>
+                <button type="submit" class="btn btn-primary">Filter</button>
             </form>
         </div>
     </div>
@@ -80,19 +82,6 @@ $total_siswa = mysqli_num_rows($result);
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                    <!-- <tr>
-                        <td class="ps-4 text-muted">0002</td>
-                        <td class="fw-semibold">Juni Budi</td>
-                        <td>XII RPL 2</td>
-                        <td class="text-center">
-                            <span class="badge rounded-pill badge-pindah px-3 py-2">Lulus</span>
-                        </td>
-                        <td class="text-center">
-                            <button class="btn-action btn-detail" title="Detail"><i class="bi bi-eye-fill"></i></button>
-                            <button class="btn-action btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></button>
-                            <button class="btn-action btn-delete" title="Hapus"><i class="bi bi-trash-fill"></i></button>
-                        </td>
-                    </tr> -->
                 </tbody>
             </table>
         </div>
