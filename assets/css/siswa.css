@@ -1,0 +1,12 @@
+/*  
+*   ↜ Dashboard ↝ 
+*/
+    .bg-primary-subtle { background-color: #e7f1ff; }
+    .bg-danger-subtle { background-color: #f8d7da; }
+    .bg-success-subtle { background-color: #d1e7dd; }
+    .bg-warning-subtle { background-color: #fff3cd; }
+    .card { transition: transform 0.2s; }
+    .card:hover { transform: translateY(-5px); }
+/* 
+*   ↜  ↝ 
+*/

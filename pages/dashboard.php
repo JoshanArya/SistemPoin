@@ -7,7 +7,6 @@ include '../config/config.php';
 // Contoh Query untuk statistik (Silakan sesuaikan dengan nama tabelmu)
 $total_siswa = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM siswa"));
 $total_guru = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM guru"));
-// Asumsi ada kolom poin di tabel siswa atau tabel pelanggaran
 $siswa_bermasalah = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT nis FROM pelanggaran_siswa")); 
 ?>
 
@@ -73,62 +72,6 @@ $siswa_bermasalah = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT nis FRO
             </div>
         </div>
     </div>
-
-    <!-- <div class="row">
-        <div class="col-md-8">
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white py-3 border-0">
-                    <h6 class="fw-bold mb-0">Pelanggaran Terbaru</h6>
-                </div>
-                <div class="table-responsive p-3">
-                    <table class="table align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Siswa</th>
-                                <th>Pelanggaran</th>
-                                <th>Poin</th>
-                                <th>Waktu</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="fw-semibold">Abdullah Musa</span></td>
-                                <td>Terlambat Masuk</td>
-                                <td><span class="badge bg-danger">10</span></td>
-                                <td><small class="text-muted">5 Menit lalu</small></td>
-                            </tr>
-                            <tr>
-                                <td><span class="fw-semibold">Juni Budi</span></td>
-                                <td>Baju Keluar</td>
-                                <td><span class="badge bg-danger">5</span></td>
-                                <td><small class="text-muted">1 Jam lalu</small></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm bg-primary text-white p-4 mb-4">
-                <h5 class="fw-bold">Butuh Bantuan?</h5>
-                <p class="small opacity-75">Gunakan tombol di bawah untuk akses cepat menu utama.</p>
-                <div class="d-grid gap-2">
-                    <a href="siswa/index.php" class="btn btn-light text-primary fw-bold">Kelola Siswa</a>
-                    <a href="#" class="btn btn-outline-light">Input Pelanggaran Baru</a>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </div>
-
-<style>
-    .bg-primary-subtle { background-color: #e7f1ff; }
-    .bg-danger-subtle { background-color: #f8d7da; }
-    .bg-success-subtle { background-color: #d1e7dd; }
-    .bg-warning-subtle { background-color: #fff3cd; }
-    .card { transition: transform 0.2s; }
-    .card:hover { transform: translateY(-5px); }
-</style>
 
 <?php include '../includes/footer.php'; ?>
