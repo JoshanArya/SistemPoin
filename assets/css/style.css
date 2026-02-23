@@ -1,0 +1,110 @@
+/*  
+*   ↜ DASHBOARD ↝ 
+*/
+.bg-primary-subtle {
+  background-color: #e7f1ff;
+}
+.bg-danger-subtle {
+  background-color: #f8d7da;
+}
+.bg-success-subtle {
+  background-color: #d1e7dd;
+}
+.bg-warning-subtle {
+  background-color: #fff3cd;
+}
+.card {
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+/* 
+*   ↜ DROPDOWN MENU ↝ 
+*/
+.dropdown-menu {
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown:hover > .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item:hover {
+  background-color: #e0e0e0;
+}
+
+.dropdown-toggle-filter {
+  border: 1px solid #dee2e6;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+/* 
+*   ↜ TABLE LIST ↝ 
+*/
+.table-container {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.219) 6px 3px 8px !important;
+}
+.table-dark-custom {
+  background-color: #1a374d !important;
+  color: white !important;
+}
+
+/* 3. Badge Status Custom */
+.badge-aktif {
+  background-color: #28a8fd44 !important;
+  color: #28a8fd !important;
+}
+.badge-lulus {
+  background-color: #31c54a6b !important;
+  color: #31c54a !important;
+}
+.badge-pindah {
+  background-color: #eb575749 !important;
+  color: #eb5757 !important;
+}
+
+.btn-action {
+  color: #9e9e9e;
+  transition: all 0.3s ease;
+  background: none;
+  border: none;
+  padding: 5px 10px;
+}
+
+/* Detail - Biru */
+.btn-detail:hover {
+  color: #0d6efd;
+  transform: scale(1.2);
+}
+/* Edit - Kuning/Emas */
+.btn-edit:hover {
+  color: #ffc107;
+  transform: scale(1.2);
+}
+/* Delete - Merah */
+.btn-delete:hover {
+  color: #dc3545;
+  transform: scale(1.2);
+}
+
+th {
+  background-color: #1a8cfd !important;
+  color: white !important;
+}
+/* 
+*   ↜ BUTTON AKSI ↝ 
+*/
