@@ -261,7 +261,7 @@ INSERT INTO `ortu_wali` (`id_ortu_wali`, `ayah`, `ibu`, `wali`, `pekerjaan_ayah`
 CREATE TABLE `pelanggaran_siswa` (
   `id_pelanggaran_siswa` int(5) NOT NULL,
   `tanggal` datetime DEFAULT NULL,
-  `nis` int(5) DEFAULT NULL,
+  `nis` char(5) DEFAULT NULL,
   `id_jenis_pelanggaran` int(11) DEFAULT NULL,
   `keterangan` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -372,7 +372,7 @@ INSERT INTO `program_keahlian` (`id_program_keahlian`, `program_keahlian`, `desk
 --
 
 CREATE TABLE `siswa` (
-  `nis` int(5) NOT NULL,
+  `nis` char(5) DEFAULT NULL,
   `nama_siswa` varchar(50) DEFAULT NULL,
   `jenis_kelamin` enum('Laki - Laki','Perempuan') DEFAULT NULL,
   `alamat` varchar(100) DEFAULT NULL,
@@ -405,7 +405,7 @@ CREATE TABLE `surat_keluar` (
   `no_surat` varchar(30) DEFAULT NULL,
   `jenis_surat` varchar(30) DEFAULT NULL,
   `id_surat_pindah` int(5) DEFAULT NULL,
-  `nis` int(5) DEFAULT NULL,
+  `nis` char(5) DEFAULT NULL,
   `tanggal_pembuatan_surat` date DEFAULT NULL,
   `id_profil_sekolah` int(2) DEFAULT NULL,
   `id_tahun_ajaran` int(3) DEFAULT NULL,

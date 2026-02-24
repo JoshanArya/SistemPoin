@@ -1,6 +1,8 @@
 <?php
-include '../../includes/header.php';
-include '../../config/config.php';
+define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/SistemPoin');
+
+include ROOTPATH . "/config/config.php";
+include ROOTPATH . "/includes/header.php";
 
 $result = mysqli_query($conn, "SELECT * FROM siswa
 JOIN kelas USING(id_kelas)

@@ -77,6 +77,10 @@
   color: #eb5757 !important;
 }
 
+
+/* 
+*   ↜ BUTTON AKSI ↝ 
+*/
 .btn-action {
   color: #9e9e9e;
   transition: all 0.3s ease;
@@ -105,6 +109,86 @@ th {
   background-color: #1a8cfd !important;
   color: white !important;
 }
-/* 
-*   ↜ BUTTON AKSI ↝ 
+
+.btn {
+  transition: all 0.4s ease-in-out !important;
+}
+
+.btn:hover {
+  cursor: pointer;
+  /* font-weight: 600; */
+  color: #0564f1 !important;
+  background-color: #0d6dfd7e !important;
+  border: 1px solid #0d6dfd7e !important;
+}
+
+/*
+* ↜ FORM INPUT SISWA ↝ 
 */
+.form-container {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px; /* Selaras dengan .table-container */
+  margin-top: 20px;
+}
+
+.form-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a374d; /* Menggunakan warna utama dari .table-dark-custom */
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e7f1ff; /* Menggunakan warna bg-primary-subtle */
+  display: flex;
+  align-items: center;
+}
+
+.form-section-title i {
+  margin-right: 10px;
+  color: #28a8fd; /* Menggunakan warna dari .badge-aktif */
+}
+
+.form-label {
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 8px;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #28a8fd;
+  box-shadow: 0 0 0 0.25rem rgba(40, 168, 253, 0.1);
+}
+
+/* Tombol Aksi Form */
+.btn-save {
+  background-color: #1a374d;
+  color: white;
+  padding: 10px 25px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-save:hover {
+  background-color: #2d3436;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-cancel {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  padding: 10px 25px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+  background-color: #e0e0e0;
+  color: #333;
+}
