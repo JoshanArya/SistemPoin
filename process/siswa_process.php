@@ -13,10 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $jenis_kelamin = $_POST['jenis_kelamin'];
         $alamat = trim($_POST['alamat_siswa']);
         $kelas_value = $_POST['kelas'];
-
-        // Validasi sederhana
-        if (empty($jenis_kelamin) || empty($kelas_value)) {
-            die("Error: Jenis Kelamin dan Kelas harus dipilih!");
+        $status_siswa = trim($_POST['status_siswa']);
+        
+        if (empty($jenis_kelamin) || empty($kelas_value) || empty($status_siswa)) {
+            echo "<script>alert('Error: Jenis Kelamin, Kelas, dan Status Siswa harus dipilih!');</script>";
+            echo "<script>window.history.back();</script>";
+            exit;
         }
 
         // 2. Pecah string kelas untuk mendapatkan komponennya
@@ -72,12 +74,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $password_input = password_hash("Siswa12345*!", PASSWORD_DEFAULT);
 
         // 8. Insert Data Siswa
-        $query = "INSERT INTO siswa (nis, nama_siswa, jenis_kelamin, alamat, password, id_ortu_wali, id_kelas) 
-                  VALUES ('$nis', '$nama_siswa', '$jenis_kelamin', '$alamat', '$password_input', '$id_ortu_wali', '$id_kelas')";
+        $query = "INSERT INTO siswa (nis, nama_siswa, jenis_kelamin, alamat, password, status_siswa, id_ortu_wali, id_kelas) 
+                  VALUES ('$nis', '$nama_siswa', '$jenis_kelamin', '$alamat', '$password_input', '$status_siswa', '$id_ortu_wali', '$id_kelas')";
         
-        // 9. Redirect jika berhasil
-        header("Location: ../pages/siswa/list.php");
-        exit;
+        // 9. Eksekusi dan cek apakah berhasil
+        if (mysqli_query($conn, $query)) {
+            // Redirect jika berhasil
+            header("Location: ../pages/siswa/list.php");
+            exit;
+        } else {
+            // Tampilkan error jika gagal
+            die("Error inserting siswa: " . mysqli_error($conn));
+        }
 
     } elseif ($action == 'edit') {
         // Logika edit di sini
@@ -95,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             mysqli_query($conn, "DELETE FROM siswa WHERE nis='$nis'");
 
             // Menghapus data perjanjian ortu
-            mysqli_query($conn, "DELETE FROM perjanjian_orang_tua WHERE id_ortu_wali='$id_ortu_wali'");
+            // mysqli_query($conn, "DELETE FROM perjanjian_orang_tua WHERE id_ortu_wali='$id_ortu_wali'");
             
             // Menghapus data ortu_wali
             mysqli_query($conn, "DELETE FROM ortu_wali WHERE id_ortu_wali='$id_ortu_wali'");

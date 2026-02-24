@@ -70,11 +70,16 @@
 }
 .badge-lulus {
   background-color: #31c54a6b !important;
-  color: #31c54a !important;
+  color: #3aa04b !important;
 }
 .badge-pindah {
   background-color: #eb575749 !important;
   color: #eb5757 !important;
+}
+
+.badge-tidak-aktif {
+  background-color: #cfba4291 !important;
+  color: #bda104 !important;
 }
 
 

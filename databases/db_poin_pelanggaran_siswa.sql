@@ -390,9 +390,8 @@ INSERT INTO `siswa` (`nis`, `nama_siswa`, `jenis_kelamin`, `alamat`, `password`,
 (7012, 'Abdullah Musa', 'Laki - Laki', 'Jl Psr Paseban Bl B Lt3, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 1, 1),
 (8312, 'Juni Budi', 'Laki - Laki', 'Jl Gn Krakatau 387 A, Sumatera Utara', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'lulus', 2, 2),
 (9123, 'Wahyuni Yuliana', 'Perempuan', 'Jl MH Thamrin Kav 28-30 Plaza, Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'pindah', 4, 3),
-(9124, 'Ryan', 'Laki - Laki', 'Psr Jatinegara Bl BKS/30, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 3, 4),
-(9125, 'Narin', 'Perempuan', 'Jl Janur 11 43 RT 003/07 Pd Kelapa, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 2, 5),
-(9126, 'Dayu', 'Perempuan', 'Jl Salemba Raya 2 Ged Kenari Baru Bl C/4, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 1, 6);
+(9124, 'Ryan', 'Laki - Laki', 'Psr Jatinegara Bl BKS/30, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 3, 4);
+
 
 -- --------------------------------------------------------
 

@@ -9,7 +9,9 @@ JOIN kelas USING(id_kelas)
 JOIN tingkat USING(id_tingkat)
 JOIN program_keahlian USING(id_program_keahlian)");
 $total_siswa = mysqli_num_rows($result);
-
+$query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FROM kelas 
+                JOIN tingkat USING(id_tingkat) 
+                JOIN program_keahlian USING(id_program_keahlian)");
 
 ?>
 
@@ -25,12 +27,19 @@ $total_siswa = mysqli_num_rows($result);
         <div class="col-md-8">
             <form action="" method="POST" class="d-flex justify-content-md-end gap-2">
                 <input type="text" class="form-control w-50" placeholder="Cari nama atau NIS..." name="nama">
-                
+
                 <div class="dropdown w-25 border rounded">
-                    <button class="btn dropdown-toggle-filter dropdown-toggle w-100" type="button">Semua Kelas</button>
-                    <ul class="dropdown-menu w-100">
-                        <li><a class="dropdown-item" href="#" onclick="this.closest('.dropdown').querySelector('button').innerText=this.innerText">XII RPL 1</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="this.closest('.dropdown').querySelector('button').innerText=this.innerText">XII RPL 2</a></li>
+                    <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_kelas" data-bs-toggle="dropdown">
+                        Semua Kelas
+                    </button>
+                    <ul class="dropdown-menu w-100 text-start">
+                        <?php while($k = mysqli_fetch_assoc($query_kelas)): ?>
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="setDropdown('kelas', 'dropdown_kelas', this.innerText, this.innerText)">
+                                <?= $k['tingkat'].' '.$k['program_keahlian'].' '.$k['rombel'] ?>
+                            </a>
+                        </li>
+                        <?php endwhile; ?>
                     </ul>
                 </div>
 
@@ -69,19 +78,27 @@ $total_siswa = mysqli_num_rows($result);
                             <td><?= htmlspecialchars($total_siswa['tingkat'] . ' ' . $total_siswa['program_keahlian'] . ' ' . $total_siswa['rombel'] ) ?></td>
                             <td class="text-center">
                                 <?php
-                                if($total_siswa['status'] == 'aktif') {
+                                if($total_siswa['status_siswa'] == 'aktif') {
                                     echo '<span class="badge rounded-pill badge-aktif px-3 py-2">Aktif</span>';
-                                } elseif($total_siswa['status'] == 'lulus') {
+                                } elseif($total_siswa['status_siswa'] == 'lulus') {
                                     echo '<span class="badge rounded-pill badge-lulus px-3 py-2">Lulus</span>';
+                                } elseif($total_siswa['status_siswa'] == 'tidak_aktif') {
+                                    echo '<span class="badge rounded-pill badge-tidak-aktif px-3 py-2">Tidak Aktif</span>';
                                 } else {
                                     echo '<span class="badge rounded-pill badge-pindah px-3 py-2">Pindah</span>';
                                 }
                                 ?>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center d-flex justify-content-center gap-1  px-0">
                                 <button class="btn-action btn-detail" title="Detail"><i class="bi bi-eye-fill"></i></button>
-                                <button class="btn-action btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></button>
-                                <button class="btn-action btn-delete" title="Hapus"><i class="bi bi-trash-fill"></i></button>
+                                <button class="btn-action btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></button>    
+                                <form action="/SistemPoin/process/siswa_process.php" method="post"onsubmit="return confirm('Ingin Menghapus data <?= $total_siswa['nama_siswa'] ?>?')">
+                                    <!-- Kirim id dan action ke file proses -->
+                                    <input type="hidden" name="nis" value="<?= $total_siswa['nis'] ?>">
+                                    <input type="hidden" name="action" value="delete">
+                                    <button class="btn-action btn-delete" title="Hapus" type="submit"><i class="bi bi-trash-fill"></i></button>
+                                    <!-- <button class="btn-danger" type="submit">Delete</button> -->
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
