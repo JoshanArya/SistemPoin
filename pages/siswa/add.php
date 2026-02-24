@@ -35,29 +35,35 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                             <input type="text" name="nama_siswa" class="form-control" placeholder="Masukan Nama Siswa.." required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Jenis Kelamin  </label>
+                            <label class="form-label">Jenis Kelamin</label>
+                            <!-- Input tersembunyi untuk menyimpan nilai -->
+                            <input type="hidden" name="jenis_kelamin" id="jenis_kelamin" value="">
                             <div class="dropdown border rounded">
-                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button">Pilih Jenis Kelamin  </i></button>
+                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_jk" data-bs-toggle="dropdown">
+                                    Pilih Jenis Kelamin
+                                </button>
                                 <ul class="dropdown-menu w-100 text-start">
-                                    <li><a class="dropdown-item" href="#" onclick="this.closest('.dropdown').querySelector('button').innerText=this.innerText">Laki-Laki  </a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="this.closest('.dropdown').querySelector('button').innerText=this.innerText">Perempuan  </a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="setDropdown('jenis_kelamin', 'dropdown_jk', this.innerText, 'Laki-Laki')">Laki-Laki</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="setDropdown('jenis_kelamin', 'dropdown_jk', this.innerText, 'Perempuan')">Perempuan</a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Kelas</label>
+                            <!-- Input tersembunyi untuk menyimpan nilai -->
+                            <input type="hidden" name="kelas" id="kelas" value="">
                             <div class="dropdown border rounded">
-                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button">Pilih Kelas  </i></button>
+                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_kelas" data-bs-toggle="dropdown">
+                                    Pilih Kelas
+                                </button>
                                 <ul class="dropdown-menu w-100 text-start">
-                                    <datalist id="kelas">
                                     <?php while($k = mysqli_fetch_assoc($query_kelas)): ?>
-                                    <li><a class="dropdown-item" href="#" onclick="this.closest('.dropdown').querySelector('button').innerText=this.innerText">
-                                        <?= $k['tingkat'].' '.$k['program_keahlian'].' '.$k['rombel'] ?>  
+                                    <li>
+                                        <a class="dropdown-item" href="#" onclick="setDropdown('kelas', 'dropdown_kelas', this.innerText, this.innerText)">
+                                            <?= $k['tingkat'].' '.$k['program_keahlian'].' '.$k['rombel'] ?>
                                         </a>
                                     </li>
                                     <?php endwhile; ?>
-                                    </datalist>
-                                    <input list="kelas" id="kelas" name="kelas" placeholder="Kelas" autocomplete="off" required/>
                                 </ul>
                             </div>
                         </div>
@@ -108,5 +114,15 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
         </div>
     </div>
 </div>
+
+<!-- Script untuk menangani dropdown -->
+<script>
+function setDropdown(inputId, buttonId, displayText, value) {
+    // Set nilai ke input tersembunyi
+    document.getElementById(inputId).value = value;
+    // Update teks tombol dropdown
+    document.getElementById(buttonId).innerText = displayText;
+}
+</script>
 
 <?php include ROOTPATH . "/includes/footer.php"; ?>
