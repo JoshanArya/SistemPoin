@@ -12,7 +12,6 @@ $total_siswa = mysqli_num_rows($result);
 $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FROM kelas 
                 JOIN tingkat USING(id_tingkat) 
                 JOIN program_keahlian USING(id_program_keahlian)");
-
 ?>
 
 <div class="container py-5">
@@ -27,12 +26,12 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
         <div class="col-md-8">
             <form action="" method="POST" class="d-flex justify-content-md-end gap-2">
                 <input type="text" class="form-control w-50" placeholder="Cari nama atau NIS..." name="nama">
-
+                <input type="hidden" name="kelas" id="kelas" value="">
                 <div class="dropdown w-25 border rounded">
                     <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_kelas" data-bs-toggle="dropdown">
                         Semua Kelas
                     </button>
-                    <ul class="dropdown-menu w-100 text-start">
+                    <ul class="dropdown-menu kelas w-100 text-start">
                         <?php while($k = mysqli_fetch_assoc($query_kelas)): ?>
                         <li>
                             <a class="dropdown-item" href="#" onclick="setDropdown('kelas', 'dropdown_kelas', this.innerText, this.innerText)">
@@ -44,11 +43,13 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                 </div>
 
                 <div class="dropdown w-25 border rounded">
-                    <button class="btn dropdown-toggle-filter dropdown-toggle w-100" type="button">Semua Status</button>
-                    <ul class="dropdown-menu w-100">
-                        <li><a class="dropdown-item" href="#" onclick="this.closest('.dropdown').querySelector('button').innerText=this.innerText">Aktif</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="this.closest('.dropdown').querySelector('button').innerText=this.innerText">Lulus</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="this.closest('.dropdown').querySelector('button').innerText=this.innerText">Pindah</a></li>
+                    <input type="hidden" name="status_siswa" id="status" value="">
+                    <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" id="dropdown_status" type="button">Semua Status</button>
+                    <ul class="dropdown-menu w-100 text-start">
+                        <li><a class="dropdown-item" href="#" onclick="setDropdown('status', 'dropdown_status', this.innerText, 'aktif')">Aktif</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setDropdown('status', 'dropdown_status', this.innerText, 'tidak_aktif')">Tidak Aktif</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setDropdown('status', 'dropdown_status', this.innerText, 'pindah')">Pindah Sekolah</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setDropdown('status', 'dropdown_status', this.innerText, 'lulus')">Lulus</a></li>
                     </ul>
                 </div>
 
@@ -90,14 +91,13 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                                 ?>
                             </td>
                             <td class="text-center d-flex justify-content-center gap-1  px-0">
-                                <button class="btn-action btn-detail" title="Detail"><i class="bi bi-eye-fill"></i></button>
-                                <button class="btn-action btn-edit" title="Edit"><i class="bi bi-pencil-fill"></i></button>    
+                                <a class="btn-action d-inline-block btn-detail" title="Detail"><i class="bi bi-eye-fill"></i></a>
+                                <a class="btn-action btn-edit"href="edit.php?nis=<?= $total_siswa['nis'] ?>" title="Edit"><i class="bi bi-pencil-fill"></i></a>    
                                 <form action="/SistemPoin/process/siswa_process.php" method="post"onsubmit="return confirm('Ingin Menghapus data <?= $total_siswa['nama_siswa'] ?>?')">
                                     <!-- Kirim id dan action ke file proses -->
                                     <input type="hidden" name="nis" value="<?= $total_siswa['nis'] ?>">
                                     <input type="hidden" name="action" value="delete">
                                     <button class="btn-action btn-delete" title="Hapus" type="submit"><i class="bi bi-trash-fill"></i></button>
-                                    <!-- <button class="btn-danger" type="submit">Delete</button> -->
                                 </form>
                             </td>
                         </tr>

@@ -7,6 +7,9 @@ include ROOTPATH . "/includes/header.php";
 $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FROM kelas 
                 JOIN tingkat USING(id_tingkat) 
                 JOIN program_keahlian USING(id_program_keahlian)");
+$nis = $_GET["nis"];
+$result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM siswa WHERE nis = '$nis'"));
+
 ?>
 
 <div class="container py-5">
@@ -15,12 +18,12 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
             <div class="form-container">
                 <div class="d-flex align-items-center mb-4">
                     <h2 class="main-title mb-0" style="color: #1a374d; font-weight: 700;">
-                        Tambah <span class="text-primary fst-italic">Siswa Baru</span>
+                        Edit <span class="text-primary fst-italic">Data Siswa</span>
                     </h2>
                 </div>
 
                 <form action="/SistemPoin/process/siswa_process.php" method="POST">
-                    <input type="hidden" name="action" value="add" />
+                    <input type="hidden" name="action" value="edit" />
 
                     <div class="form-section-title">
                         <i class="bi bi-person-badge"></i> Identitas Peserta Didik
@@ -28,23 +31,23 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
                             <label class="form-label">NIS</label>
-                            <input type="text" name="nis" class="form-control" placeholder="Masukkan NIS.." required>
+                            <input type="text" name="nis" class="form-control" placeholder="Masukkan NIS.." value="<?=$result['nis']?>">
                         </div>
                         
                         <div class="col-md-6">
                             <label class="form-label">Nama Lengkap</label>
-                            <input type="text" name="nama_siswa" class="form-control" placeholder="Masukan Nama Siswa.." required>
+                            <input type="text" name="nama_siswa" class="form-control" placeholder="Masukan Nama Siswa.." value="<?= $result['nama_siswa']?>">
                         </div>
                         
                         <div class="col-md-6">
                             <label class="form-label">Jenis Kelamin</label>
                             <input type="hidden" name="jenis_kelamin" id="jenis_kelamin" value="">
                             <div class="dropdown border rounded">
-                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_jk" data-bs-toggle="dropdown">
-                                    Pilih Jenis Kelamin
+                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_jk" data-bs-toggle="dropdown" >
+                                    <?= $result['jenis_kelamin'] ?>
                                 </button>
                                 <ul class="dropdown-menu w-100 text-start">
-                                    <li><a class="dropdown-item" href="#" onclick="setDropdown('jenis_kelamin', 'dropdown_jk', this.innerText, 'Laki - Laki')">Laki-Laki</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="setDropdown('jenis_kelamin', 'dropdown_jk', this.innerText, 'Laki - Laki')">Laki - Laki</a></li>
                                     <li><a class="dropdown-item" href="#" onclick="setDropdown('jenis_kelamin', 'dropdown_jk', this.innerText, 'Perempuan')">Perempuan</a></li>
                                 </ul>
                             </div>
@@ -55,7 +58,7 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                             <input type="hidden" name="kelas" id="kelas" value="">
                             <div class="dropdown border rounded">
                                 <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_kelas" data-bs-toggle="dropdown">
-                                    Pilih Kelas
+                                    <?= $result['id_kelas'] ?>    
                                 </button>
                                 <ul class="dropdown-menu kelas w-100 text-start">
                                     <?php while($k = mysqli_fetch_assoc($query_kelas)): ?>
@@ -75,7 +78,17 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                             <input type="hidden" name="status_siswa" id="status" value="">
                             <div class="dropdown border rounded">
                                 <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_status" data-bs-toggle="dropdown">
-                                    Pilih Status Siswa
+                                    <?php
+                                        if($result['status_siswa'] == 'aktif') {
+                                            echo '<Aktif';
+                                        } elseif($result['status_siswa'] == 'lulus') {
+                                            echo 'Lulus';
+                                        } elseif($result['status_siswa'] == 'tidak_aktif') {
+                                            echo 'Tidak Aktif';
+                                        } else {
+                                            echo 'Pindah';
+                                        }
+                                    ?>
                                 </button>
                                 <ul class="dropdown-menu w-100 text-start">
                                     <li><a class="dropdown-item" href="#" onclick="setDropdown('status', 'dropdown_status', this.innerText, 'aktif')">Aktif</a></li>
@@ -88,7 +101,7 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                         
                         <div class="col-12">
                             <label class="form-label">Alamat Siswa</label>
-                            <textarea name="alamat_siswa" class="form-control" rows="2" placeholder="Alamat lengkap tempat tinggal siswa.."></textarea>
+                            <textarea name="alamat_siswa" class="form-control" rows="2" placeholder="Alamat lengkap tempat tinggal siswa.."><?= $result['alamat'] ?></textarea>
                         </div>
                     </div>
 
