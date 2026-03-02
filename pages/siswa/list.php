@@ -5,13 +5,14 @@ include ROOTPATH . "/config/config.php";
 include ROOTPATH . "/includes/header.php";
 
 $result = mysqli_query($conn, "SELECT * FROM siswa
-JOIN kelas USING(id_kelas)
-JOIN tingkat USING(id_tingkat)
-JOIN program_keahlian USING(id_program_keahlian)");
+                JOIN kelas USING(id_kelas)
+                JOIN tingkat USING(id_tingkat)
+                JOIN program_keahlian USING(id_program_keahlian)");
 $total_siswa = mysqli_num_rows($result);
 $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FROM kelas 
                 JOIN tingkat USING(id_tingkat) 
                 JOIN program_keahlian USING(id_program_keahlian)");
+
 ?>
 
 <div class="container py-5">
@@ -91,7 +92,7 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                                 ?>
                             </td>
                             <td class="text-center d-flex justify-content-center gap-1  px-0">
-                                <a class="btn-action d-inline-block btn-detail" title="Detail"><i class="bi bi-eye-fill"></i></a>
+                                <a class="btn-action d-inline-block btn-detail" title="Detail" href="details.php?nis=<?= $total_siswa['nis'] ?>" ><i class="bi bi-eye-fill"></i></a>
                                 <a class="btn-action btn-edit"href="edit.php?nis=<?= $total_siswa['nis'] ?>" title="Edit"><i class="bi bi-pencil-fill"></i></a>    
                                 <form action="/SistemPoin/process/siswa_process.php" method="post"onsubmit="return confirm('Ingin Menghapus data <?= $total_siswa['nama_siswa'] ?>?')">
                                     <!-- Kirim id dan action ke file proses -->

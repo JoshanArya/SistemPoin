@@ -4,7 +4,7 @@ include ROOTPATH . "/config/config.php";
 include ROOTPATH . "/includes/header.php";
 
 // Ambil data kelas untuk dropdown
-$query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FROM kelas 
+$query_kelas = mysqli_query($conn, "SELECT id_kelas, tingkat, program_keahlian, rombel FROM kelas 
                 JOIN tingkat USING(id_tingkat) 
                 JOIN program_keahlian USING(id_program_keahlian)");
 ?>
@@ -60,7 +60,7 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                                 <ul class="dropdown-menu kelas w-100 text-start">
                                     <?php while($k = mysqli_fetch_assoc($query_kelas)): ?>
                                     <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('kelas', 'dropdown_kelas', this.innerText, this.innerText)">
+                                        <a class="dropdown-item" href="#" onclick="setDropdown('kelas', 'dropdown_kelas', this.innerText, '<?= $k['id_kelas'] ?>')">
                                             <?= $k['tingkat'].' '.$k['program_keahlian'].' '.$k['rombel'] ?>
                                         </a>
                                     </li>

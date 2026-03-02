@@ -4,11 +4,24 @@ include ROOTPATH . "/config/config.php";
 include ROOTPATH . "/includes/header.php";
 
 // Ambil data kelas untuk dropdown
-$query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FROM kelas 
+$query_kelas = mysqli_query($conn, "SELECT id_kelas, tingkat, program_keahlian, rombel FROM kelas 
                 JOIN tingkat USING(id_tingkat) 
                 JOIN program_keahlian USING(id_program_keahlian)");
+// $query_ortu = mysqli_query($conn, "SELECT * FROM orang_tua");
 $nis = $_GET["nis"];
 $result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM siswa WHERE nis = '$nis'"));
+
+// Ambil label kelas saat ini untuk ditampilkan di tombol dropdown
+$current_kelas_label = '';
+if (!empty($result['id_kelas'])) {
+    $ck = mysqli_fetch_assoc(mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FROM kelas 
+                    JOIN tingkat USING(id_tingkat) 
+                    JOIN program_keahlian USING(id_program_keahlian) 
+                    WHERE id_kelas = '".$result['id_kelas']."'"));
+    if ($ck) {
+        $current_kelas_label = $ck['tingkat'].' '.$ck['program_keahlian'].' '.$ck['rombel'];
+    }
+}
 
 ?>
 
@@ -24,6 +37,7 @@ $result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM siswa WHERE nis 
 
                 <form action="/SistemPoin/process/siswa_process.php" method="POST">
                     <input type="hidden" name="action" value="edit" />
+                    <!-- NIS dikirim langsung karena field readonly akan disertakan -->
 
                     <div class="form-section-title">
                         <i class="bi bi-person-badge"></i> Identitas Peserta Didik
@@ -31,7 +45,7 @@ $result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM siswa WHERE nis 
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
                             <label class="form-label">NIS</label>
-                            <input type="text" name="nis" class="form-control" placeholder="Masukkan NIS.." value="<?=$result['nis']?>">
+                            <input type="text" name="nis" class="form-control" placeholder="Masukkan NIS.." value="<?=$result['nis']?>" readonly>
                         </div>
                         
                         <div class="col-md-6">
@@ -41,7 +55,7 @@ $result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM siswa WHERE nis 
                         
                         <div class="col-md-6">
                             <label class="form-label">Jenis Kelamin</label>
-                            <input type="hidden" name="jenis_kelamin" id="jenis_kelamin" value="">
+                            <input type="hidden" name="jenis_kelamin" id="jenis_kelamin" value="<?= $result['jenis_kelamin'] ?>">
                             <div class="dropdown border rounded">
                                 <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_jk" data-bs-toggle="dropdown" >
                                     <?= $result['jenis_kelamin'] ?>
@@ -55,15 +69,15 @@ $result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM siswa WHERE nis 
                         
                         <div class="col-md-6">
                             <label class="form-label">Kelas</label>
-                            <input type="hidden" name="kelas" id="kelas" value="">
+                            <input type="hidden" name="kelas" id="kelas" value="<?= $result['id_kelas'] ?>">
                             <div class="dropdown border rounded">
                                 <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_kelas" data-bs-toggle="dropdown">
-                                    <?= $result['id_kelas'] ?>    
+                                    <?= !empty($current_kelas_label) ? $current_kelas_label : 'Pilih Kelas' ?>
                                 </button>
                                 <ul class="dropdown-menu kelas w-100 text-start">
                                     <?php while($k = mysqli_fetch_assoc($query_kelas)): ?>
                                     <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('kelas', 'dropdown_kelas', this.innerText, this.innerText)">
+                                        <a class="dropdown-item" href="#" onclick="setDropdown('kelas', 'dropdown_kelas', this.innerText, '<?= $k['id_kelas'] ?>')">
                                             <?= $k['tingkat'].' '.$k['program_keahlian'].' '.$k['rombel'] ?>
                                         </a>
                                     </li>
@@ -75,12 +89,12 @@ $result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM siswa WHERE nis 
                         <div class="w-100">
                             <label class="form-label">Status Siswa</label>
                             
-                            <input type="hidden" name="status_siswa" id="status" value="">
+                            <input type="hidden" name="status_siswa" id="status" value="<?= $result['status_siswa'] ?>">
                             <div class="dropdown border rounded">
                                 <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_status" data-bs-toggle="dropdown">
                                     <?php
                                         if($result['status_siswa'] == 'aktif') {
-                                            echo '<Aktif';
+                                            echo 'Aktif';
                                         } elseif($result['status_siswa'] == 'lulus') {
                                             echo 'Lulus';
                                         } elseif($result['status_siswa'] == 'tidak_aktif') {
