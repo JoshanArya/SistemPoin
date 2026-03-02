@@ -16,7 +16,7 @@ $sql = "SELECT
             s.nama_siswa, 
             s.jenis_kelamin, 
             s.alamat,
-            s.status,
+            s.status_siswa AS status,   
             o.id_ortu_wali,
             o.ayah, 
             o.ibu, 
@@ -94,21 +94,7 @@ $sql_surat = "SELECT
 
 $result_surat = mysqli_query($conn, $sql_surat);
 
-// Fungsi untuk mendapatkan badge status (menggunakan class dari style.css)
-function getStatusBadge($status) {
-    switch($status) {
-        case 'aktif':
-            return '<span class="badge badge-aktif">Aktif</span>';
-        case 'tidak_aktif':
-            return '<span class="badge badge-tidak-aktif">Tidak Aktif</span>';
-        case 'pindah':
-            return '<span class="badge badge-pindah">Pindah Sekolah</span>';
-        case 'lulus':
-            return '<span class="badge badge-lulus">Lulus</span>';
-        default:
-            return '<span class="badge bg-secondary">Tidak Diketahui</span>';
-    }
-}
+// Fungsi untuk mendapatkan badge status (dihapus, gunakan inline PHP)
 
 // Fungsi untuk format tanggal Indonesia
 function formatTanggal($tanggal) {
@@ -124,326 +110,6 @@ function formatTanggal($tanggal) {
 }
 ?>
 
-<!-- Additional CSS specific to detail page (non-conflicting with style.css) -->
-<style>
-/* Detail Page Specific Styles - Melengkapi style.css */
-.detail-wrapper {
-    padding: 20px 0;
-}
-
-/* Profile Header - Menggunakan warna dari style.css */
-.profile-header {
-    background: linear-gradient(135deg, #1a374d 0%, #2d3436 100%);
-    color: white;
-    padding: 2.5rem 2rem;
-    border-radius: 12px;
-    margin-bottom: 25px;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
-    position: relative;
-    overflow: hidden;
-}
-
-.profile-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 70%);
-    transform: rotate(45deg);
-}
-
-.profile-icon-large {
-    width: 100px;
-    height: 100px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    border: 4px solid rgba(255,255,255,0.3);
-    backdrop-filter: blur(5px);
-}
-
-.student-name-large {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: white;
-}
-
-.student-nis-badge {
-    background: rgba(255,255,255,0.15);
-    padding: 0.5rem 1.5rem;
-    border-radius: 30px;
-    display: inline-block;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255,255,255,0.2);
-    font-size: 1rem;
-}
-
-/* Stat Cards - Menggunakan warna dari style.css */
-.stat-card-detail {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 8px;
-    border: 1px solid #e7f1ff;
-    transition: all 0.3s ease;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-}
-
-.stat-card-detail:hover {
-    transform: translateY(-5px);
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
-}
-
-.stat-card-detail.warning {
-    border-left: 4px solid #eb5757;
-}
-
-.stat-card-detail.success {
-    border-left: 4px solid #3aa04b;
-}
-
-.stat-card-detail.primary {
-    border-left: 4px solid #28a8fd;
-}
-
-.stat-icon-detail {
-    width: 50px;
-    height: 50px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.stat-icon-detail.warning {
-    background: #eb575749;
-    color: #eb5757;
-}
-
-.stat-icon-detail.success {
-    background: #31c54a6b;
-    color: #3aa04b;
-}
-
-.stat-icon-detail.primary {
-    background: #28a8fd44;
-    color: #28a8fd;
-}
-
-.stat-value-detail {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1a374d;
-    margin-bottom: 0.2rem;
-}
-
-.stat-label-detail {
-    color: #6c757d;
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* Info Sections */
-.info-section-detail {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 8px;
-    border: 1px solid #e7f1ff;
-    height: 100%;
-    transition: all 0.3s ease;
-}
-
-.info-section-detail:hover {
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-}
-
-.info-title-detail {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #1a374d;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.8rem;
-    border-bottom: 2px solid #e7f1ff;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.info-title-detail i {
-    color: #28a8fd;
-    font-size: 1.3rem;
-}
-
-.info-item-detail {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    border-bottom: 1px dashed #e7f1ff;
-}
-
-.info-item-detail:last-child {
-    border-bottom: none;
-}
-
-.info-label-detail {
-    font-weight: 600;
-    color: #6c757d;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 0.2rem;
-}
-
-.info-value-detail {
-    font-weight: 500;
-    color: #2d3436;
-    font-size: 1rem;
-}
-
-/* Timeline for Pelanggaran */
-.timeline-detail {
-    position: relative;
-    padding: 1rem 0;
-}
-
-.timeline-item-detail {
-    padding: 1rem 0 1rem 2rem;
-    border-left: 3px solid #28a8fd;
-    position: relative;
-    margin-left: 1rem;
-    transition: all 0.3s ease;
-}
-
-.timeline-item-detail:hover {
-    border-left-color: #eb5757;
-}
-
-.timeline-item-detail::before {
-    content: '';
-    position: absolute;
-    left: -9px;
-    top: 1.5rem;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #28a8fd;
-    border: 3px solid white;
-    box-shadow: 0 0 0 3px rgba(40, 168, 253, 0.2);
-}
-
-.timeline-item-detail:hover::before {
-    background: #eb5757;
-}
-
-.timeline-date-detail {
-    font-size: 0.85rem;
-    color: #6c757d;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.timeline-content-detail {
-    background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid #e7f1ff;
-}
-
-.poin-badge-detail {
-    background: #eb575749;
-    color: #eb5757;
-    padding: 0.2rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    display: inline-block;
-}
-
-/* Table Custom */
-.table-custom-detail {
-    margin-bottom: 0;
-}
-
-.table-custom-detail tr {
-    border-bottom: 1px solid #e7f1ff;
-}
-
-.table-custom-detail tr:last-child {
-    border-bottom: none;
-}
-
-.table-custom-detail th {
-    width: 40%;
-    font-weight: 600;
-    color: #495057;
-    background: #e7f1ff;
-    padding: 0.8rem 1rem;
-    border: none;
-}
-
-.table-custom-detail td {
-    padding: 0.8rem 1rem;
-    border: none;
-    background: transparent;
-}
-
-/* Action Buttons - Menggunakan class dari style.css dengan tambahan */
-.action-buttons-detail {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .profile-header {
-        padding: 1.5rem;
-    }
-    
-    .student-name-large {
-        font-size: 1.8rem;
-    }
-    
-    .profile-icon-large {
-        width: 80px;
-        height: 80px;
-        font-size: 2.5rem;
-    }
-    
-    .action-buttons-detail {
-        justify-content: center;
-    }
-}
-
-@media print {
-    .no-print, .action-buttons-detail, .btn-action {
-        display: none !important;
-    }
-    
-    .profile-header {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-}
-</style>
-
 <div class="container py-4 detail-wrapper">
     <!-- Profile Header -->
     <div class="profile-header text-center">
@@ -455,7 +121,17 @@ function formatTanggal($tanggal) {
             <i class="bi bi-qr-code me-2"></i>NIS: <?= htmlspecialchars($data['nis']) ?>
         </div>
         <div>
-            <?= getStatusBadge($data['status']) ?>
+            <?php
+            if($data['status'] == 'aktif') {
+                echo '<span class="badge rounded-pill badge-aktif px-3 py-2">Aktif</span>';
+            } elseif($data['status'] == 'lulus') {
+                echo '<span class="badge rounded-pill badge-lulus px-3 py-2">Lulus</span>';
+            } elseif($data['status'] == 'tidak_aktif') {
+                echo '<span class="badge rounded-pill badge-tidak-aktif px-3 py-2">Tidak Aktif</span>';
+            } else {
+                echo '<span class="badge rounded-pill badge-pindah px-3 py-2">Pindah</span>';
+            }
+            ?>
         </div>
     </div>
 
@@ -501,7 +177,7 @@ function formatTanggal($tanggal) {
                     <i class="bi bi-person-badge"></i>
                     <span>Informasi Dasar</span>
                 </div>
-                <table class="table-custom-detail w-100">
+                <table class="table-custom-detail w-100 shadow">
                     <tr>
                         <th>NIS</th>
                         <td><?= htmlspecialchars($data['nis']) ?></td>
@@ -536,7 +212,7 @@ function formatTanggal($tanggal) {
                     <i class="bi bi-building"></i>
                     <span>Informasi Kelas</span>
                 </div>
-                <table class="table-custom-detail w-100">
+                <table class="table-custom-detail w-100 shadow">
                     <tr>
                         <th>Tingkat</th>
                         <td><?= htmlspecialchars($data['tingkat'] ?: '-') ?></td>
@@ -569,7 +245,7 @@ function formatTanggal($tanggal) {
                     <i class="bi bi-telephone"></i>
                     <span>Kontak</span>
                 </div>
-                <table class="table-custom-detail w-100">
+                <table class="table-custom-detail w-100 shadow">
                     <tr>
                         <th>Telp Ayah</th>
                         <td>
@@ -627,7 +303,7 @@ function formatTanggal($tanggal) {
                     <i class="bi bi-gender-male"></i>
                     <span>Data Ayah</span>
                 </div>
-                <table class="table-custom-detail w-100">
+                <table class="table-custom-detail w-100 shadow">
                     <tr>
                         <th>Nama</th>
                         <td><?= htmlspecialchars($data['ayah'] ?: '-') ?></td>
@@ -650,7 +326,7 @@ function formatTanggal($tanggal) {
                     <i class="bi bi-gender-female"></i>
                     <span>Data Ibu</span>
                 </div>
-                <table class="table-custom-detail w-100">
+                <table class="table-custom-detail w-100 shadow">
                     <tr>
                         <th>Nama</th>
                         <td><?= htmlspecialchars($data['ibu'] ?: '-') ?></td>
@@ -673,7 +349,7 @@ function formatTanggal($tanggal) {
                     <i class="bi bi-person-plus"></i>
                     <span>Data Wali</span>
                 </div>
-                <table class="table-custom-detail w-100">
+                <table class="table-custom-detail w-100 shadow">
                     <tr>
                         <th>Nama</th>
                         <td><?= htmlspecialchars($data['wali'] ?: '-') ?></td>
@@ -692,7 +368,7 @@ function formatTanggal($tanggal) {
     </div>
 
     <!-- Riwayat Pelanggaran -->
-    <?php if(mysqli_num_rows($result_riwayat) > 0): ?>
+    <!-- <?php if(mysqli_num_rows($result_riwayat) > 0): ?>
     <div class="row mt-4">
         <div class="col-12">
             <div class="info-section-detail">
@@ -726,7 +402,7 @@ function formatTanggal($tanggal) {
             </div>
         </div>
     </div>
-    <?php endif; ?>
+    <?php endif; ?> -->
 
     <!-- Surat Keluar -->
     <?php if(mysqli_num_rows($result_surat) > 0): ?>
@@ -738,7 +414,7 @@ function formatTanggal($tanggal) {
                     <span>Surat Keluar</span>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle shadow" style="border-radius: 8px; overflow: hidden;">
                         <thead class="table-dark-custom">
                             <tr>
                                 <th>No. Surat</th>
@@ -782,9 +458,9 @@ function formatTanggal($tanggal) {
         <a href="edit.php?nis=<?= $data['nis'] ?>" class="btn btn-save">
             <i class="bi bi-pencil-square me-2"></i>Edit Data
         </a>
-        <button onclick="window.print()" class="btn btn-primary-action btn-action">
+        <!-- <button onclick="window.print()" class="btn btn-primary-action btn-action">
             <i class="bi bi-printer me-2"></i>Cetak
-        </button>
+        </button> -->
     </div>
 </div>
 
