@@ -60,7 +60,7 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
         </div>
     </div>
 
-    <div class="table-container">
+    <div class="table-container" style="max-height: 500px; overflow-y: auto;">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-dark-custom">
