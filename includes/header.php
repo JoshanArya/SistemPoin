@@ -86,14 +86,14 @@ if(!isset($_SESSION['username'])){
                         Kelola Data
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                        <li><a class="dropdown-item" href="/SistemPoin/pages/siswa/index.php"><i class="bi bi-person-workspace me-2"></i> Data Guru</a></li>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/guru/list.php"><i class="bi bi-person-workspace me-2"></i> Data Guru</a></li>
                         <li><a class="dropdown-item" href="/SistemPoin/pages/siswa/list.php"><i class="bi bi-people me-2"></i> Data Siswa</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-exclamation-octagon me-2"></i> Data Pelanggaran</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-door-open me-2"></i> Data Kelas</a></li>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/pelanggaran/list.php"><i class="bi bi-exclamation-octagon me-2"></i> Data Pelanggaran</a></li>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/kelas/list.php"><i class="bi bi-door-open me-2"></i> Data Kelas</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pelanggaran</a>
+                    <a class="nav-link" href="/SistemPoin/pages/pelanggaran/list.php">Pelanggaran</a>
                 </li>
                 <?php endif; ?>
 

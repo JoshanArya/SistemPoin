@@ -368,7 +368,7 @@ function formatTanggal($tanggal) {
     </div>
 
     <!-- Riwayat Pelanggaran -->
-    <!-- <?php if(mysqli_num_rows($result_riwayat) > 0): ?>
+    <?php if(mysqli_num_rows($result_riwayat) > 0): ?>
     <div class="row mt-4">
         <div class="col-12">
             <div class="info-section-detail">
@@ -402,7 +402,7 @@ function formatTanggal($tanggal) {
             </div>
         </div>
     </div>
-    <?php endif; ?> -->
+    <?php endif; ?>
 
     <!-- Surat Keluar -->
     <?php if(mysqli_num_rows($result_surat) > 0): ?>
