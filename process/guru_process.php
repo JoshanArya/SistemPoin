@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $kode_guru = $_POST['kode_guru'];
         
         // Hapus data guru
-        mysqli_query($conn, "DELETE FROM guru WHERE kode_guru='$kode_guru'");
+        mysqli_query($conn, "UPDATE guru SET aktif = 'N' WHERE kode_guru='$kode_guru'");
         
         header("Location: ../pages/guru/list.php");
         exit;

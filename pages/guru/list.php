@@ -37,6 +37,7 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                     <tr>
                         <th class="py-2 ps-4">KODE GURU</th>
                         <th>NAMA</th>
+                        <th>USERNAME</th>
                         <th>JABATAN</th>
                         <th class="text-center">NOMOR TELFON</th>
                         <th class="text-center">AKSI</th>
@@ -47,6 +48,7 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                         <tr>
                             <td class="ps-4 text-muted"><?= $total_guru['kode_guru']?></td>
                             <td class="fw-semibold"><?= $total_guru['nama_pengguna']?></td>
+                            <td class="fw-semibold"><?= $total_guru['username']?></td>
                             <td><?= htmlspecialchars($total_guru['jabatan']) ?></td>
                             <td class="text-center"><?= htmlspecialchars($total_guru['telp']) ?></td>
                             <td class="text-center d-flex justify-content-center gap-1  px-0">
