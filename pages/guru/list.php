@@ -50,7 +50,7 @@ $query_kelas = mysqli_query($conn, "SELECT tingkat, program_keahlian, rombel FRO
                             <td><?= htmlspecialchars($total_guru['jabatan']) ?></td>
                             <td class="text-center"><?= htmlspecialchars($total_guru['telp']) ?></td>
                             <td class="text-center d-flex justify-content-center gap-1  px-0">
-                                <a class="btn-action d-inline-block btn-detail" title="Detail" href="details.php?kode_guru=<?= $total_guru['kode_guru'] ?>" ><i class="bi bi-eye-fill"></i></a>
+                                <!-- <a class="btn-action d-inline-block btn-detail" title="Detail" href="details.php?kode_guru=<?= $total_guru['kode_guru'] ?>" ><i class="bi bi-eye-fill"></i></a> -->
                                 <a class="btn-action btn-edit"href="edit.php?kode_guru=<?= $total_guru['kode_guru'] ?>" title="Edit"><i class="bi bi-pencil-fill"></i></a>    
                                 <form action="/SistemPoin/process/guru_process.php" method="post"onsubmit="return confirm('Ingin Menghapus data <?= $total_guru['nama_pengguna'] ?>?')">
                                     <!-- Kirim id dan action ke file proses -->
