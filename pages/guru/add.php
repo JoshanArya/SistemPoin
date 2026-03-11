@@ -4,7 +4,7 @@ include ROOTPATH . "/config/config.php";
 include ROOTPATH . "/includes/header.php";
 
 // Ambil data guru tidak aktif untuk di-reuse
-$query_inactive = mysqli_query($conn, "SELECT kode_guru, nama_pengguna FROM guru WHERE aktif = 'N' ORDER BY kode_guru");
+// $query_inactive = mysqli_query($conn, "SELECT kode_guru, nama_pengguna FROM guru WHERE aktif = 'N' ORDER BY kode_guru");
 
 // Ambil data guru untuk generate kode_guru otomatis
 $query_last = mysqli_query($conn, "SELECT kode_guru FROM guru ORDER BY kode_guru DESC LIMIT 1");
@@ -52,30 +52,12 @@ $jabatan_list = [
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
                             <label class="form-label">Kode Guru</label>
-                            <?php if(mysqli_num_rows($query_inactive) > 0): ?>
                             <input type="hidden" name="kode_guru" id="kode_guru" value="<?= $new_kode_guru ?>">
                             <div class="dropdown border rounded">
-                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_kode_guru" data-bs-toggle="dropdown">
+                                <button class="btn w-100 text-start" type="button" id="dropdown_kode_guru" data-bs-toggle="dropdown">
                                     Buat Kode Baru: <?= $new_kode_guru ?>
                                 </button>
-                                <ul class="dropdown-menu w-100 text-start kelas">
-                                    <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('kode_guru', 'dropdown_kode_guru', 'Buat Kode Baru: <?= $new_kode_guru ?>', '<?= $new_kode_guru ?>')">
-                                            Buat Kode Baru: <?= $new_kode_guru ?>
-                                        </a>
-                                    </li>
-                                    <?php while($inactive = mysqli_fetch_assoc($query_inactive)): ?>
-                                    <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('kode_guru', 'dropdown_kode_guru', '<?= $inactive['kode_guru'] ?>', '<?= $inactive['kode_guru'] ?>')">
-                                            <?= $inactive['kode_guru'] ?> (<?= $inactive['nama_pengguna'] ?>)
-                                        </a>
-                                    </li>
-                                    <?php endwhile; ?>
-                                </ul>
                             </div>
-                            <?php else: ?>
-                            <input type="text" name="kode_guru" class="form-control" value="<?= $new_kode_guru ?>" readonly>
-                            <?php endif; ?>
                         </div>
                         
                         <div class="col-md-6">
@@ -90,7 +72,7 @@ $jabatan_list = [
                         
                         <div class="col-md-6">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" placeholder="Masukkan Password.." required>
+                            <input type="password" name="password" class="form-control" placeholder="Default: Guru12345*!" value="Guru12345*!" required>
                         </div>
                         
                         <div class="col-md-6">

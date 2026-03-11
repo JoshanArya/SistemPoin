@@ -85,8 +85,8 @@ if (mysqli_num_rows($check_column) > 0 && !empty($kelas['kode_guru_bk'])) {
                                 </button>
                                 <ul class="dropdown-menu w-100 text-start kelas">
                                     <?php while($tingkat = mysqli_fetch_assoc($query_tingkat)): ?>
-                                    <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('id_tingkat', 'dropdown_tingkat', this.innerText, '<?= $tingkat['id_tingkat'] ?>')">
+<li>
+                                        <a class="dropdown-item" href="#" onclick="setDropdown('id_tingkat', 'dropdown_tingkat', this.innerText, '<?= $tingkat['id_tingkat'] ?>'); autoSelectGuruBK(<?= $tingkat['id_tingkat'] ?>)">
                                             <?= $tingkat['tingkat'] ?>
                                         </a>
                                     </li>
@@ -205,8 +205,27 @@ if (mysqli_num_rows($check_column) > 0 && !empty($kelas['kode_guru_bk'])) {
                         <button type="submit" class="btn btn-save shadow-sm border">
                             <i class="bi bi-check-lg me-2"></i> Simpan Perubahan
                         </button>
-                    </div>
+</div>
                 </form>
+                
+                <script>
+                // Auto-select Guru BK based on Tingkat
+                // X (id_tingkat=1) -> Finsensius Ratuaki (0021.093)
+                // XI (id_tingkat=2) -> Ni Putu Chintya Pradnya Suari (0021.094)
+                // XII (id_tingkat=3) -> Ida Gusti Ayu Rinjani (0021.039)
+                function autoSelectGuruBK(id_tingkat) {
+                    var guruBKMap = {
+                        '1': { kode: '0021.093', nama: 'Finsensius Ratuaki, M.Pd.' },
+                        '2': { kode: '0021.094', nama: 'Ni Putu Chintya Pradnya Suari, S.Pd.' },
+                        '3': { kode: '0021.039', nama: 'Ida Gusti Ayu Rinjani, M.Pd.' }
+                    };
+                    
+                    if (guruBKMap[id_tingkat]) {
+                        document.getElementById('kode_guru_bk').value = guruBKMap[id_tingkat].kode;
+                        document.getElementById('dropdown_bk').innerText = guruBKMap[id_tingkat].nama;
+                    }
+                }
+                </script>
             </div>
         </div>
     </div>

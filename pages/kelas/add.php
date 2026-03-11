@@ -34,7 +34,7 @@ $query_guru_bk = mysqli_query($conn, "SELECT kode_guru, nama_pengguna, jabatan F
                         <i class="bi bi-building"></i> Informasi Kelas
                     </div>
                     <div class="row g-3 mb-4">
-                        <div class="col-md-6">
+<div class="col-md-6">
                             <label class="form-label">Tingkat</label>
                             <input type="hidden" name="id_tingkat" id="id_tingkat" value="">
                             <div class="dropdown border rounded">
@@ -44,7 +44,7 @@ $query_guru_bk = mysqli_query($conn, "SELECT kode_guru, nama_pengguna, jabatan F
                                 <ul class="dropdown-menu w-100 text-start kelas">
                                     <?php while($tingkat = mysqli_fetch_assoc($query_tingkat)): ?>
                                     <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('id_tingkat', 'dropdown_tingkat', this.innerText, '<?= $tingkat['id_tingkat'] ?>')">
+                                        <a class="dropdown-item" href="#" onclick="setDropdown('id_tingkat', 'dropdown_tingkat', this.innerText, '<?= $tingkat['id_tingkat'] ?>'); autoSelectGuruBK(<?= $tingkat['id_tingkat'] ?>)">
                                             <?= $tingkat['tingkat'] ?>
                                         </a>
                                     </li>
@@ -136,7 +136,7 @@ $query_guru_bk = mysqli_query($conn, "SELECT kode_guru, nama_pengguna, jabatan F
                         </div>
                     </div>
 
-                    <hr class="my-5">
+<hr class="my-5">
 
                     <div class="d-flex justify-content-end gap-3">
                         <a href="list.php" class="btn btn-cancel shadow-sm border">Batal</a>
@@ -145,6 +145,25 @@ $query_guru_bk = mysqli_query($conn, "SELECT kode_guru, nama_pengguna, jabatan F
                         </button>
                     </div>
                 </form>
+                
+                <script>
+                // Auto-select Guru BK based on Tingkat
+                // X (id_tingkat=1) -> Finsensius Ratuaki (0021.093)
+                // XI (id_tingkat=2) -> Ni Putu Chintya Pradnya Suari (0021.094)
+                // XII (id_tingkat=3) -> Ida Gusti Ayu Rinjani (0021.039)
+                function autoSelectGuruBK(id_tingkat) {
+                    var guruBKMap = {
+                        '1': { kode: '0021.093', nama: 'Finsensius Ratuaki, M.Pd.' },
+                        '2': { kode: '0021.094', nama: 'Ni Putu Chintya Pradnya Suari, S.Pd.' },
+                        '3': { kode: '0021.039', nama: 'Ida Gusti Ayu Rinjani, M.Pd.' }
+                    };
+                    
+                    if (guruBKMap[id_tingkat]) {
+                        document.getElementById('kode_guru_bk').value = guruBKMap[id_tingkat].kode;
+                        document.getElementById('dropdown_bk').innerText = guruBKMap[id_tingkat].nama;
+                    }
+                }
+                </script>
             </div>
         </div>
     </div>
