@@ -67,7 +67,7 @@ if(!isset($_SESSION['username'])){
 <body>
 <nav class="navbar navbar-expand-lg sticky-top bg-white py-3 shadow">
     <div class="container-fluid px-4"> <a class="navbar-brand fw-bold" href="/SistemPoin/pages/dashboard.php">
-            <i class="bi bi-book-half text-primary me-2"></i>SakuSiswa.
+            </i>Saku<span style="color: #1a8cfd;">Siswa.</span>
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
