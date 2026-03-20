@@ -1,0 +1,104 @@
+/* Print Styles untuk Surat Resmi */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .page, .page * {
+        visibility: visible;
+    }
+    .page {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .no-print, .no-print * {
+        display: none !important;
+    }
+    .header img {
+        max-height: 120px;
+    }
+    .body-surat {
+        font-family: 'Times New Roman', serif;
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    .table-info td {
+        padding: 4px 0;
+        vertical-align: top;
+    }
+    .table-info b {
+        font-weight: bold;
+    }
+}
+
+/* Button Printer Animation */
+button {
+    display: flex;
+    height: 3em;
+    align-items: center;
+    justify-content: center;
+    background-color: #eeeeee4b;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    transition: all 0.2s linear;
+    cursor: pointer;
+    border: none;
+    background: #fff;
+    font-weight: bold;
+    margin: 10px;
+}
+button > svg {
+    margin-right: 5px;
+    margin-left: 5px;
+    font-size: 20px;
+    transition: all 0.4s ease-in;
+}
+button:hover > svg {
+    font-size: 1.2em;
+    transform: translateX(-5px);
+}
+button:hover {
+    box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
+    transform: translateY(-2px);
+}
+.printer-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 100%;
+}
+.printer-container {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+.printer-container svg {
+    width: 100%;
+    height: auto;
+    transform: translateY(4px);
+}
+.printer-page-wrapper {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+.printer-page {
+    width: 70%;
+    height: 10px;
+    border: 1px solid black;
+    background-color: white;
+    transform: translateY(0px);
+    transition: all 0.3s;
+    transform-origin: top;
+}
+.print-btn:hover .printer-page {
+    height: 16px;
+}

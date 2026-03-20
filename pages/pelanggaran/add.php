@@ -14,7 +14,8 @@ include ROOTPATH . "/includes/header.php";
                     </h2>
                 </div>
 
-                <form action="/SistemPoin/process/pelanggaran_process.php" method="POST">
+                <form action="/SistemPoin/process/pelanggaran_process.php" method="POST" class="needs-validation"
+                    novalidate>
                     <input type="hidden" name="action" value="add" />
 
                     <div class="form-section-title">
@@ -23,12 +24,14 @@ include ROOTPATH . "/includes/header.php";
                     <div class="row g-3 mb-4">
                         <div class="col-md-8">
                             <label class="form-label">Jenis Pelanggaran</label>
-                            <input type="text" name="jenis" class="form-control" placeholder="Masukkan Jenis Pelanggaran.." required>
+                            <input type="text" name="jenis" class="form-control"
+                                placeholder="Masukkan Jenis Pelanggaran.." required>
                         </div>
-                        
+
                         <div class="col-md-4">
                             <label class="form-label">Point</label>
-                            <input type="number" name="poin" class="form-control" placeholder="Masukkan Point.." min="1" required>
+                            <input type="number" name="poin" class="form-control" placeholder="Masukkan Point.." min="1"
+                                required>
                         </div>
                     </div>
 

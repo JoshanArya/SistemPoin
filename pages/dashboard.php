@@ -1,5 +1,3 @@
-
-
 <?php
 include '../includes/header.php';
 include '../config/config.php';
@@ -7,13 +5,15 @@ include '../config/config.php';
 // Contoh Query untuk statistik (Silakan sesuaikan dengan nama tabelmu)
 $total_siswa = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM siswa"));
 $total_guru = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM guru"));
-$siswa_bermasalah = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT nis FROM pelanggaran_siswa")); 
+$siswa_bermasalah = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT nis FROM pelanggaran_siswa"));
 ?>
 
 <div class="container-fluid px-4 py-4">
     <div class="row mb-4">
         <div class="col-md-12">
-            <h4 class="fw-bold">Selamat Datang, <span class="text-primary fst-italic"><?php echo ($_SESSION['role'] == 'guru') ? $_SESSION['nama_pengguna'] : $_SESSION['nama_siswa']; ?></span> <i class="bi bi-person-fill text-primary"></i></h4>
+            <h4 class="fw-bold">Selamat Datang, <span
+                    class="text-primary fst-italic"><?php echo ($_SESSION['role'] == 'siswa') ? $_SESSION['nama_siswa'] : $_SESSION['nama_pengguna']; ?></span>
+                <i class="bi bi-person-fill text-primary"></i></h4>
             <p class="text-muted">Berikut adalah ringkasan data Sistem Poin hari ini.</p>
         </div>
     </div>

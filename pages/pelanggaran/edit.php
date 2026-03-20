@@ -29,12 +29,14 @@ $result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM jenis_pelanggara
                     <div class="row g-3 mb-4">
                         <div class="col-md-8">
                             <label class="form-label">Jenis Pelanggaran</label>
-                            <input type="text" name="jenis" class="form-control" placeholder="Masukkan Jenis Pelanggaran.." value="<?= $result['jenis'] ?>" required>
+                            <input type="text" name="jenis" class="form-control"
+                                placeholder="Masukkan Jenis Pelanggaran.." value="<?= $result['jenis'] ?>" required>
                         </div>
-                        
+
                         <div class="col-md-4">
                             <label class="form-label">Point</label>
-                            <input type="number" name="poin" class="form-control" placeholder="Masukkan Point.." value="<?= $result['poin'] ?>" min="1" required>
+                            <input type="number" name="poin" class="form-control" placeholder="Masukkan Point.."
+                                value="<?= $result['poin'] ?>" min="1" required>
                         </div>
                     </div>
 

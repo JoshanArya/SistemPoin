@@ -97,11 +97,23 @@ $result_surat = mysqli_query($conn, $sql_surat);
 // Fungsi untuk mendapatkan badge status (dihapus, gunakan inline PHP)
 
 // Fungsi untuk format tanggal Indonesia
-function formatTanggal($tanggal) {
-    if (empty($tanggal)) return '-';
+function formatTanggal($tanggal)
+{
+    if (empty($tanggal))
+        return '-';
     $bulan = array(
-        1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        1 => 'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
     );
     $tgl = date('d', strtotime($tanggal));
     $bln = date('n', strtotime($tanggal));
@@ -122,11 +134,11 @@ function formatTanggal($tanggal) {
         </div>
         <div>
             <?php
-            if($data['status'] == 'aktif') {
+            if ($data['status'] == 'aktif') {
                 echo '<span class="badge rounded-pill badge-aktif px-3 py-2">Aktif</span>';
-            } elseif($data['status'] == 'lulus') {
+            } elseif ($data['status'] == 'lulus') {
                 echo '<span class="badge rounded-pill badge-lulus px-3 py-2">Lulus</span>';
-            } elseif($data['status'] == 'tidak_aktif') {
+            } elseif ($data['status'] == 'tidak_aktif') {
                 echo '<span class="badge rounded-pill badge-tidak-aktif px-3 py-2">Tidak Aktif</span>';
             } else {
                 echo '<span class="badge rounded-pill badge-pindah px-3 py-2">Pindah</span>';
@@ -189,7 +201,7 @@ function formatTanggal($tanggal) {
                     <tr>
                         <th>Jenis Kelamin</th>
                         <td>
-                            <?php if($data['jenis_kelamin'] == 'Laki - Laki'): ?>
+                            <?php if ($data['jenis_kelamin'] == 'Laki - Laki'): ?>
                                 <i class="bi bi-gender-male text-primary me-1"></i>
                             <?php else: ?>
                                 <i class="bi bi-gender-female text-danger me-1"></i>
@@ -229,7 +241,7 @@ function formatTanggal($tanggal) {
                         <th>Wali Kelas</th>
                         <td>
                             <?= htmlspecialchars($data['wali_kelas'] ?: '-') ?>
-                            <?php if($data['kode_guru']): ?>
+                            <?php if ($data['kode_guru']): ?>
                                 <br><small class="text-muted">(<?= $data['kode_guru'] ?>)</small>
                             <?php endif; ?>
                         </td>
@@ -249,7 +261,7 @@ function formatTanggal($tanggal) {
                     <tr>
                         <th>Telp Ayah</th>
                         <td>
-                            <?php if($data['no_telp_ayah']): ?>
+                            <?php if ($data['no_telp_ayah']): ?>
                                 <i class="bi bi-whatsapp text-success me-1"></i>
                                 <?= htmlspecialchars($data['no_telp_ayah']) ?>
                             <?php else: ?>
@@ -260,7 +272,7 @@ function formatTanggal($tanggal) {
                     <tr>
                         <th>Telp Ibu</th>
                         <td>
-                            <?php if($data['no_telp_ibu']): ?>
+                            <?php if ($data['no_telp_ibu']): ?>
                                 <i class="bi bi-whatsapp text-success me-1"></i>
                                 <?= htmlspecialchars($data['no_telp_ibu']) ?>
                             <?php else: ?>
@@ -271,7 +283,7 @@ function formatTanggal($tanggal) {
                     <tr>
                         <th>Telp Wali</th>
                         <td>
-                            <?php if($data['no_telp_wali']): ?>
+                            <?php if ($data['no_telp_wali']): ?>
                                 <i class="bi bi-whatsapp text-success me-1"></i>
                                 <?= htmlspecialchars($data['no_telp_wali']) ?>
                             <?php else: ?>
@@ -282,7 +294,7 @@ function formatTanggal($tanggal) {
                     <tr>
                         <th>Telp Wali Kelas</th>
                         <td>
-                            <?php if($data['telp_guru']): ?>
+                            <?php if ($data['telp_guru']): ?>
                                 <i class="bi bi-telephone text-primary me-1"></i>
                                 <?= htmlspecialchars($data['telp_guru']) ?>
                             <?php else: ?>
@@ -368,86 +380,86 @@ function formatTanggal($tanggal) {
     </div>
 
     <!-- Riwayat Pelanggaran -->
-    <?php if(mysqli_num_rows($result_riwayat) > 0): ?>
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="info-section-detail">
-                <div class="info-title-detail">
-                    <i class="bi bi-clock-history"></i>
-                    <span>Riwayat Pelanggaran (5 Terbaru)</span>
-                </div>
-                <div class="timeline-detail">
-                    <?php while($row = mysqli_fetch_assoc($result_riwayat)): ?>
-                    <div class="timeline-item-detail">
-                        <div class="timeline-date-detail">
-                            <i class="bi bi-calendar3"></i>
-                            <?= formatTanggal($row['tanggal']) ?>
-                        </div>
-                        <div class="timeline-content-detail">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <strong><?= htmlspecialchars($row['jenis']) ?></strong>
-                                    <p class="mb-0 mt-1 text-muted small">
-                                        <?= htmlspecialchars($row['keterangan'] ?: '-') ?>
-                                    </p>
-                                </div>
-                                <span class="poin-badge-detail">
-                                    <i class="bi bi-star me-1"></i><?= $row['poin'] ?> Poin
-                                </span>
-                            </div>
-                        </div>
+    <?php if (mysqli_num_rows($result_riwayat) > 0): ?>
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="info-section-detail">
+                    <div class="info-title-detail">
+                        <i class="bi bi-clock-history"></i>
+                        <span>Riwayat Pelanggaran (5 Terbaru)</span>
                     </div>
-                    <?php endwhile; ?>
+                    <div class="timeline-detail">
+                        <?php while ($row = mysqli_fetch_assoc($result_riwayat)): ?>
+                            <div class="timeline-item-detail">
+                                <div class="timeline-date-detail">
+                                    <i class="bi bi-calendar3"></i>
+                                    <?= formatTanggal($row['tanggal']) ?>
+                                </div>
+                                <div class="timeline-content-detail">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <strong><?= htmlspecialchars($row['jenis']) ?></strong>
+                                            <p class="mb-0 mt-1 text-muted small">
+                                                <?= htmlspecialchars($row['keterangan'] ?: '-') ?>
+                                            </p>
+                                        </div>
+                                        <span class="poin-badge-detail">
+                                            <i class="bi bi-star me-1"></i><?= $row['poin'] ?> Poin
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     <?php endif; ?>
 
     <!-- Surat Keluar -->
-    <?php if(mysqli_num_rows($result_surat) > 0): ?>
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="info-section-detail">
-                <div class="info-title-detail">
-                    <i class="bi bi-envelope-paper"></i>
-                    <span>Surat Keluar</span>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle shadow" style="border-radius: 8px; overflow: hidden;">
-                        <thead class="table-dark-custom">
-                            <tr>
-                                <th>No. Surat</th>
-                                <th>Jenis Surat</th>
-                                <th>Tanggal</th>
-                                <th>Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php while($row = mysqli_fetch_assoc($result_surat)): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($row['no_surat'] ?: '-') ?></td>
-                                <td>
-                                    <span class="badge bg-primary-subtle text-primary">
-                                        <?= htmlspecialchars($row['jenis_surat'] ?: '-') ?>
-                                    </span>
-                                </td>
-                                <td><?= formatTanggal($row['tanggal_pembuatan_surat']) ?></td>
-                                <td>
-                                    <?php if($row['jenis_surat'] == 'Pindah Sekolah' && $row['sekolah_tujuan']): ?>
-                                        <small>Tujuan: <?= htmlspecialchars($row['sekolah_tujuan']) ?></small>
-                                    <?php else: ?>
-                                        -
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    </table>
+    <?php if (mysqli_num_rows($result_surat) > 0): ?>
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="info-section-detail">
+                    <div class="info-title-detail">
+                        <i class="bi bi-envelope-paper"></i>
+                        <span>Surat Keluar</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle shadow" style="border-radius: 8px; overflow: hidden;">
+                            <thead class="table-dark-custom">
+                                <tr>
+                                    <th>No. Surat</th>
+                                    <th>Jenis Surat</th>
+                                    <th>Tanggal</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php while ($row = mysqli_fetch_assoc($result_surat)): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($row['no_surat'] ?: '-') ?></td>
+                                        <td>
+                                            <span class="badge bg-primary-subtle text-primary">
+                                                <?= htmlspecialchars($row['jenis_surat'] ?: '-') ?>
+                                            </span>
+                                        </td>
+                                        <td><?= formatTanggal($row['tanggal_pembuatan_surat']) ?></td>
+                                        <td>
+                                            <?php if ($row['jenis_surat'] == 'Pindah Sekolah' && $row['sekolah_tujuan']): ?>
+                                                <small>Tujuan: <?= htmlspecialchars($row['sekolah_tujuan']) ?></small>
+                                            <?php else: ?>
+                                                -
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     <?php endif; ?>
 
     <!-- Action Buttons -->

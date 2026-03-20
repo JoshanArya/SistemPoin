@@ -80,44 +80,50 @@ if (mysqli_num_rows($check_column) > 0 && !empty($kelas['kode_guru_bk'])) {
                             <label class="form-label">Tingkat</label>
                             <input type="hidden" name="id_tingkat" id="id_tingkat" value="<?= $kelas['id_tingkat'] ?>">
                             <div class="dropdown border rounded">
-                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_tingkat" data-bs-toggle="dropdown">
+                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start"
+                                    type="button" id="dropdown_tingkat" data-bs-toggle="dropdown">
                                     <?= $kelas['tingkat'] ?>
                                 </button>
                                 <ul class="dropdown-menu w-100 text-start kelas">
-                                    <?php while($tingkat = mysqli_fetch_assoc($query_tingkat)): ?>
-<li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('id_tingkat', 'dropdown_tingkat', this.innerText, '<?= $tingkat['id_tingkat'] ?>'); autoSelectGuruBK(<?= $tingkat['id_tingkat'] ?>)">
-                                            <?= $tingkat['tingkat'] ?>
-                                        </a>
-                                    </li>
+                                    <?php while ($tingkat = mysqli_fetch_assoc($query_tingkat)): ?>
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                                onclick="setDropdown('id_tingkat', 'dropdown_tingkat', this.innerText, '<?= $tingkat['id_tingkat'] ?>'); autoSelectGuruBK(<?= $tingkat['id_tingkat'] ?>)">
+                                                <?= $tingkat['tingkat'] ?>
+                                            </a>
+                                        </li>
                                     <?php endwhile; ?>
                                 </ul>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label class="form-label">Program Keahlian</label>
-                            <input type="hidden" name="id_program_keahlian" id="id_program_keahlian" value="<?= $kelas['id_program_keahlian'] ?>">
+                            <input type="hidden" name="id_program_keahlian" id="id_program_keahlian"
+                                value="<?= $kelas['id_program_keahlian'] ?>">
                             <div class="dropdown border rounded">
-                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_pk" data-bs-toggle="dropdown">
+                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start"
+                                    type="button" id="dropdown_pk" data-bs-toggle="dropdown">
                                     <?= $kelas['program_keahlian'] ?> - <?= $kelas['deskripsi'] ?>
                                 </button>
                                 <ul class="dropdown-menu w-100 text-start kelas">
                                     <?php mysqli_data_seek($query_pk, 0); ?>
-                                    <?php while($pk = mysqli_fetch_assoc($query_pk)): ?>
-                                    <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('id_program_keahlian', 'dropdown_pk', '<?= $pk['program_keahlian'] . ' - ' . $pk['deskripsi'] ?>', '<?= $pk['id_program_keahlian'] ?>')">
-                                            <?= $pk['program_keahlian'] ?> - <?= $pk['deskripsi'] ?>
-                                        </a>
-                                    </li>
+                                    <?php while ($pk = mysqli_fetch_assoc($query_pk)): ?>
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                                onclick="setDropdown('id_program_keahlian', 'dropdown_pk', '<?= $pk['program_keahlian'] . ' - ' . $pk['deskripsi'] ?>', '<?= $pk['id_program_keahlian'] ?>')">
+                                                <?= $pk['program_keahlian'] ?> - <?= $pk['deskripsi'] ?>
+                                            </a>
+                                        </li>
                                     <?php endwhile; ?>
                                 </ul>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label class="form-label">Rombel</label>
-                            <input type="number" name="rombel" class="form-control" value="<?= $kelas['rombel'] ?>" min="1" required>
+                            <input type="number" name="rombel" class="form-control" value="<?= $kelas['rombel'] ?>"
+                                min="1" required>
                         </div>
                     </div>
 
@@ -131,7 +137,7 @@ if (mysqli_num_rows($check_column) > 0 && !empty($kelas['kode_guru_bk'])) {
                             <label class="form-label">Wali Kelas</label>
                             <input type="hidden" name="kode_guru" id="kode_guru" value="<?= $wali_terpilih ?>">
                             <div class="dropdown border rounded">
-                                <?php 
+                                <?php
                                 // Ambil nama guru terpilih
                                 $wali_nama = "Pilih Wali Kelas";
                                 if ($wali_terpilih) {
@@ -141,32 +147,35 @@ if (mysqli_num_rows($check_column) > 0 && !empty($kelas['kode_guru_bk'])) {
                                     }
                                 }
                                 ?>
-                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_wali" data-bs-toggle="dropdown">
+                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start"
+                                    type="button" id="dropdown_wali" data-bs-toggle="dropdown">
                                     <?= $wali_nama ?>
                                 </button>
                                 <ul class="dropdown-menu w-100 text-start kelas">
                                     <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('kode_guru', 'dropdown_wali', 'Tidak Ada', '')">
+                                        <a class="dropdown-item" href="#"
+                                            onclick="setDropdown('kode_guru', 'dropdown_wali', 'Tidak Ada', '')">
                                             <em>Tidak Ada</em>
                                         </a>
                                     </li>
                                     <?php mysqli_data_seek($query_guru, 0); ?>
-                                    <?php while($guru = mysqli_fetch_assoc($query_guru)): ?>
-                                    <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('kode_guru', 'dropdown_wali', '<?= htmlspecialchars($guru['nama_pengguna']) ?>', '<?= $guru['kode_guru'] ?>')">
-                                            <?= $guru['nama_pengguna'] ?>
-                                        </a>
-                                    </li>
+                                    <?php while ($guru = mysqli_fetch_assoc($query_guru)): ?>
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                                onclick="setDropdown('kode_guru', 'dropdown_wali', '<?= htmlspecialchars($guru['nama_pengguna']) ?>', '<?= $guru['kode_guru'] ?>')">
+                                                <?= $guru['nama_pengguna'] ?>
+                                            </a>
+                                        </li>
                                     <?php endwhile; ?>
                                 </ul>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label class="form-label">Guru BK</label>
                             <input type="hidden" name="kode_guru_bk" id="kode_guru_bk" value="<?= $kode_bk_terpilih ?>">
                             <div class="dropdown border rounded">
-                                <?php 
+                                <?php
                                 // Ambil nama guru BK terpilih
                                 $bk_nama = "Pilih Guru BK";
                                 if ($kode_bk_terpilih) {
@@ -176,22 +185,25 @@ if (mysqli_num_rows($check_column) > 0 && !empty($kelas['kode_guru_bk'])) {
                                     }
                                 }
                                 ?>
-                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_bk" data-bs-toggle="dropdown">
+                                <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start"
+                                    type="button" id="dropdown_bk" data-bs-toggle="dropdown">
                                     <?= $bk_nama ?>
                                 </button>
                                 <ul class="dropdown-menu w-100 text-start kelas">
                                     <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('kode_guru_bk', 'dropdown_bk', 'Tidak Ada', '')">
+                                        <a class="dropdown-item" href="#"
+                                            onclick="setDropdown('kode_guru_bk', 'dropdown_bk', 'Tidak Ada', '')">
                                             <em>Tidak Ada</em>
                                         </a>
                                     </li>
                                     <?php mysqli_data_seek($query_guru_bk, 0); ?>
-                                    <?php while($guru_bk = mysqli_fetch_assoc($query_guru_bk)): ?>
-                                    <li>
-                                        <a class="dropdown-item" href="#" onclick="setDropdown('kode_guru_bk', 'dropdown_bk', '<?= htmlspecialchars($guru_bk['nama_pengguna']) ?>', '<?= $guru_bk['kode_guru'] ?>')">
-                                            <?= $guru_bk['nama_pengguna'] ?>
-                                        </a>
-                                    </li>
+                                    <?php while ($guru_bk = mysqli_fetch_assoc($query_guru_bk)): ?>
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                                onclick="setDropdown('kode_guru_bk', 'dropdown_bk', '<?= htmlspecialchars($guru_bk['nama_pengguna']) ?>', '<?= $guru_bk['kode_guru'] ?>')">
+                                                <?= $guru_bk['nama_pengguna'] ?>
+                                            </a>
+                                        </li>
                                     <?php endwhile; ?>
                                 </ul>
                             </div>
@@ -205,26 +217,26 @@ if (mysqli_num_rows($check_column) > 0 && !empty($kelas['kode_guru_bk'])) {
                         <button type="submit" class="btn btn-save shadow-sm border">
                             <i class="bi bi-check-lg me-2"></i> Simpan Perubahan
                         </button>
-</div>
+                    </div>
                 </form>
-                
+
                 <script>
-                // Auto-select Guru BK based on Tingkat
-                // X (id_tingkat=1) -> Finsensius Ratuaki (0021.093)
-                // XI (id_tingkat=2) -> Ni Putu Chintya Pradnya Suari (0021.094)
-                // XII (id_tingkat=3) -> Ida Gusti Ayu Rinjani (0021.039)
-                function autoSelectGuruBK(id_tingkat) {
-                    var guruBKMap = {
-                        '1': { kode: '0021.093', nama: 'Finsensius Ratuaki, M.Pd.' },
-                        '2': { kode: '0021.094', nama: 'Ni Putu Chintya Pradnya Suari, S.Pd.' },
-                        '3': { kode: '0021.039', nama: 'Ida Gusti Ayu Rinjani, M.Pd.' }
-                    };
-                    
-                    if (guruBKMap[id_tingkat]) {
-                        document.getElementById('kode_guru_bk').value = guruBKMap[id_tingkat].kode;
-                        document.getElementById('dropdown_bk').innerText = guruBKMap[id_tingkat].nama;
+                    // Auto-select Guru BK based on Tingkat
+                    // X (id_tingkat=1) -> Finsensius Ratuaki (0021.093)
+                    // XI (id_tingkat=2) -> Ni Putu Chintya Pradnya Suari (0021.094)
+                    // XII (id_tingkat=3) -> Ida Gusti Ayu Rinjani (0021.039)
+                    function autoSelectGuruBK(id_tingkat) {
+                        var guruBKMap = {
+                            '1': { kode: '0021.093', nama: 'Finsensius Ratuaki, M.Pd.' },
+                            '2': { kode: '0021.094', nama: 'Ni Putu Chintya Pradnya Suari, S.Pd.' },
+                            '3': { kode: '0021.039', nama: 'Ida Gusti Ayu Rinjani, M.Pd.' }
+                        };
+
+                        if (guruBKMap[id_tingkat]) {
+                            document.getElementById('kode_guru_bk').value = guruBKMap[id_tingkat].kode;
+                            document.getElementById('dropdown_bk').innerText = guruBKMap[id_tingkat].nama;
+                        }
                     }
-                }
                 </script>
             </div>
         </div>
@@ -232,4 +244,3 @@ if (mysqli_num_rows($check_column) > 0 && !empty($kelas['kode_guru_bk'])) {
 </div>
 
 <?php include ROOTPATH . "/includes/footer.php"; ?>
-

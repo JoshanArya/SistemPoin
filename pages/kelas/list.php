@@ -59,7 +59,7 @@ $total_kelas = mysqli_num_rows($result);
             </h2>
             <small class="text-muted">Total Data: <?php echo $total_kelas ?></small>
         </div>
-        
+
         <div class="col-md-8">
             <form action="" method="POST" class="d-flex justify-content-md-end gap-2">
                 <input type="text" class="form-control w-50" placeholder="Cari kelas..." name="nama">
@@ -73,7 +73,7 @@ $total_kelas = mysqli_num_rows($result);
         </div>
     </div>
 
-    <div class="table-container shadow-lg" style="max-height: 500px; overflow-y: auto;">
+    <div class="table-container" style="max-height: 500px; overflow-y: auto;">
         <table class="table table-hover mb-0">
             <thead class="table-dark-custom">
                 <tr>
@@ -85,41 +85,42 @@ $total_kelas = mysqli_num_rows($result);
                 </tr>
             </thead>
             <tbody>
-                <?php 
+                <?php
                 $no = 1;
-                while($row = mysqli_fetch_assoc($result)): 
-                ?>
-                <tr>
-                    <td class="text-center fw-semibold"><?= $no++ ?></td>
-                    <td class="fw-semibold"><?= $row['tingkat'].' '.$row['program_keahlian'].' '.$row['rombel'] ?></td>
-                    <td class="text-start">
-                        <?= $row['nama_wali_kelas'] ? $row['nama_wali_kelas'] : '<span class="text-muted">-</span>' ?>
-                    </td>
-                    <td class="text-start">
-                        <?= $row['nama_guru_bk'] ? $row['nama_guru_bk'] : '<span class="text-muted">-</span>' ?>
-                    </td>
-                    <td class="text-center d-flex justify-content-center gap-1 px-0">
-                        <a class="btn-action btn-edit" href="edit.php?id=<?= $row['id_kelas'] ?>" title="Edit">
-                            <i class="bi bi-pencil-fill"></i>
-                        </a>    
-                        <form action="/SistemPoin/process/kelas_process.php" method="post" onsubmit="return confirm('Ingin Menghapus data kelas <?= $row['tingkat'].' '.$row['program_keahlian'].' '.$row['rombel'] ?>?')">
-                            <input type="hidden" name="id" value="<?= $row['id_kelas'] ?>">
-                            <input type="hidden" name="action" value="delete">
-                            <button class="btn-action btn-delete" title="Hapus" type="submit">
-                                <i class="bi bi-trash-fill"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
+                while ($row = mysqli_fetch_assoc($result)):
+                    ?>
+                    <tr>
+                        <td class="text-center fw-semibold"><?= $no++ ?></td>
+                        <td class="fw-semibold"><?= $row['tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel'] ?></td>
+                        <td class="text-start">
+                            <?= $row['nama_wali_kelas'] ? $row['nama_wali_kelas'] : '<span class="text-muted">-</span>' ?>
+                        </td>
+                        <td class="text-start">
+                            <?= $row['nama_guru_bk'] ? $row['nama_guru_bk'] : '<span class="text-muted">-</span>' ?>
+                        </td>
+                        <td class="text-center d-flex justify-content-center gap-1 px-0">
+                            <a class="btn-action btn-edit" href="edit.php?id=<?= $row['id_kelas'] ?>" title="Edit">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <form action="/SistemPoin/process/kelas_process.php" method="post"
+                                onsubmit="return confirm('Ingin Menghapus data kelas <?= $row['tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel'] ?>?')">
+                                <input type="hidden" name="id" value="<?= $row['id_kelas'] ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <button class="btn-action btn-delete" title="Hapus" type="submit">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                 <?php endwhile; ?>
-                
-                <?php if($total_kelas == 0): ?>
-                <tr>
-                    <td colspan="5" class="text-center py-4 text-muted">
-                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                        Tidak ada data kelas
-                    </td>
-                </tr>
+
+                <?php if ($total_kelas == 0): ?>
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            Tidak ada data kelas
+                        </td>
+                    </tr>
                 <?php endif; ?>
             </tbody>
         </table>

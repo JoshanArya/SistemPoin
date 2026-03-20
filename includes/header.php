@@ -28,16 +28,15 @@ if(!isset($_SESSION['username'])){
             font-weight: 600;
             color: #555 !important;
             padding: 0.5rem 1rem !important;
-            transition: all 0.3s ease-in-out; /* Menghilangkan efek patah-patah */
+            transition: all 0.3s ease-in-out;
             position: relative;
         }
 
         .nav-link:hover {
             color: #0d6efd !important;
-            transform: translateY(-1px); /* Efek angkat sedikit agar elegan */
+            transform: translateY(-1px);
         }
 
-        /* Styling khusus Dropdown agar muncul dengan animasi smooth */
         .dropdown-menu {
             display: block;
             opacity: 0;
@@ -66,50 +65,76 @@ if(!isset($_SESSION['username'])){
 </head>
 <body>
 <nav class="navbar navbar-expand-lg sticky-top bg-white py-3 shadow">
-<a class="navbar-brand fw-bold d-flex align-items-center" href="/SistemPoin/pages/dashboard.php">
-            <img src="/SistemPoin/assets/img/Logo.svg" alt="SakuSiswa Logo" style="height: 32px; width: auto;" class="ms-2">
-            Saku<span style="color: #1a8cfd;">Siswa.</span>
-        </a>
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="/SistemPoin/pages/dashboard.php">
+        <img src="/SistemPoin/assets/img/Logo.svg" alt="SakuSiswa Logo" style="height: 32px; width: auto;" class="ms-2">
+        Saku<span style="color: #1a8cfd;">Siswa.</span>
+    </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+            <li class="nav-item">
+                <a class="nav-link active" href="/SistemPoin/pages/dashboard.php">Dashboard</a>
+            </li>
+
+            <?php 
+            // Role-based navigation
+            if ($_SESSION['role'] == 'siswa') { ?>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/SistemPoin/pages/dashboard.php">Dashboard</a>
+                    <a class="nav-link" href="/SistemPoin/pages/siswa/my_profile.php"><i class="bi bi-person me-1"></i>Profil Saya</a>
                 </li>
-
-                <?php if ($_SESSION['role'] == 'guru') : ?>
+            <?php } else { // guru/admin/bk/manajemen
+                $show_admin = ($_SESSION['user_role'] == 'admin');
+                $show_surat = in_array($_SESSION['user_role'], ['bk', 'manajemen', 'admin']);
+                $show_reports = in_array($_SESSION['user_role'], ['admin', 'bk', 'manajemen']);
+            ?>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown">
-                        Kelola Data
-                    </a>
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Kelola Data</a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                        <li><a class="dropdown-item" href="/SistemPoin/pages/guru/list.php"><i class="bi bi-person-workspace me-2"></i> Data Guru</a></li>
-                        <li><a class="dropdown-item" href="/SistemPoin/pages/siswa/list.php"><i class="bi bi-people me-2"></i> Data Siswa</a></li>
-                        <li><a class="dropdown-item" href="/SistemPoin/pages/pelanggaran/list.php"><i class="bi bi-exclamation-octagon me-2"></i> Data Pelanggaran</a></li>
-                        <li><a class="dropdown-item" href="/SistemPoin/pages/kelas/list.php"><i class="bi bi-door-open me-2"></i> Data Kelas</a></li>
+                        <?php if($show_admin): ?>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/guru/list.php"><i class="bi bi-person-workspace-fill me-2" style="color: #1a8cfd;"></i>Data Guru</a></li>
+                        <?php endif; ?>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/siswa/list.php"><i class="bi bi-people-fill me-2" style="color: #1a8cfd;"></i>Data Siswa</a></li>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/pelanggaran/list.php"><i class="bi bi-exclamation-octagon-fill me-2" style="color: #1a8cfd;"></i>Jenis Pelanggaran</a></li>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/kelas/list.php"><i class="bi bi-door-open-fill me-2" style="color: #1a8cfd;"></i>Data Kelas</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/SistemPoin/pages/pelanggaran/list.php">Pelanggaran</a>
+                    <a class="nav-link" href="/SistemPoin/pages/pelanggaran/add_violation.php">Pelanggaran</a>
+                </li>
+                <?php if($show_surat): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="/SistemPoin/pages/cetak/list.php">Cetak Surat</span></a>
                 </li>
                 <?php endif; ?>
-
+                <?php if($show_reports): ?>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle fw-bold text-primary" href="#" id="profileDropdown" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle me-1"></i>
-                        <?php echo ($_SESSION['role'] == 'guru') ? $_SESSION['nama_pengguna'] : $_SESSION['nama_siswa']; ?>
-                    </a>
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Laporan</a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-fill me-2"></i> Edit Profil</a></li>
-                       
-                        <li><a href="/SistemPoin/logout.php" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/laporan/pelanggaran_siswa.php"><i class="bi bi-file-earmark-text-fill me-2" style="color: #1a8cfd;"></i>Pelanggaran Siswa</a></li>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/laporan/panggilan_ortu.php"><i class="bi bi-file-earmark-text-fill me-2" style="color: #1a8cfd;"></i>Surat Panggilan Ortu</a></li>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/laporan/perjanjian.php"><i class="bi bi-file-earmark-text-fill me-2" style="color: #1a8cfd;"></i>Surat Perjanjian</a></li>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/laporan/pindah_sekolah.php"><i class="bi bi-file-earmark-text-fill me-2" style="color: #1a8cfd;"></i>Surat Pindah</a></li>
                     </ul>
                 </li>
-            </ul>
-        </div>
+                <?php endif; 
+            } ?>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle fw-bold text-primary" href="#" id="profileDropdown" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle me-1"></i>
+                    <?php echo ($_SESSION['role'] == 'guru') ? $_SESSION['nama_pengguna'] : $_SESSION['nama_siswa']; ?>
+                    <small class="d-none d-md-inline ms-1">(<?= $_SESSION['user_role'] ?? 'user' ?>)</small>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-fill me-2" style="color: #1a8cfd;"></i> Edit Profil</a></li>
+                    <li><a href="/SistemPoin/logout.php" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </nav>
+
