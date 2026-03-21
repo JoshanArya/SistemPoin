@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Feb 03, 2026 at 12:12 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Host: localhost:3306
+-- Generation Time: Mar 20, 2026 at 12:47 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,14 +28,14 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `guru` (
-  `kode_guru` char(8) NOT NULL,
-  `nama_pengguna` varchar(100) DEFAULT NULL,
-  `role` varchar(30) DEFAULT NULL,
-  `username` varchar(50) DEFAULT NULL,
-  `password` varchar(70) DEFAULT NULL,
-  `aktif` enum('Y','N') DEFAULT NULL,
-  `jabatan` varchar(50) DEFAULT NULL,
-  `telp` varchar(16) DEFAULT NULL
+  `kode_guru` char(8) COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_pengguna` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `role` enum('admin','bk','guru','manajemen','siswa') COLLATE utf8mb4_general_ci DEFAULT 'guru',
+  `username` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password` varchar(70) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `aktif` enum('Y','N') COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `jabatan` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `telp` varchar(16) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -43,102 +43,104 @@ CREATE TABLE `guru` (
 --
 
 INSERT INTO `guru` (`kode_guru`, `nama_pengguna`, `role`, `username`, `password`, `aktif`, `jabatan`, `telp`) VALUES
-('0021.001', 'Drs. I Gusti Made Murjana, M.Pd.', 'Guru', 'made', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Kepala Sekolah', '081805474228'),
-('0021.002', 'I Nyoman Sucana, M.Kom.', 'Guru', 'sucana', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Kurikulum', '08123650940'),
-('0021.003', 'Bagus Putu Eka Wijaya, S.Kom.', 'Guru', 'guseka', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Kesiswaan', '082146503026'),
-('0021.004', 'Dewa Made Indra Suarmika, S.Kom.', 'Guru', 'indra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Sarana Prasarana', '082237442222'),
-('0021.005', 'I Gede Pradipta Adi Nugraha, M.Kom.', 'Guru', 'dipta', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Humas', '087861863842'),
-('0021.006', 'I Gede Agung Abdi Prasetya, S.Ak.', 'Guru', 'abdi', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Komka AN', '082247033088'),
-('0021.007', 'A.A Gede Putra Dwi Artajaya, S.Si., M.Kom.', 'Guru', 'artajaya', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Komka RPL', '082247033044'),
-('0021.008', 'I Komang Arta Wijaya, M.Kom.', 'Guru', 'arta', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Komka DKV', '082247033030'),
-('0021.009', 'I Made Sastrawan Adi Putra, S.Kom.', 'Guru', 'sastra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Komka TKJ', '087837454455'),
-('0021.010', 'Ni Wayan Sri Arini, ST., M.Kom.', 'Guru', 'sriarini', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081338512340'),
-('0021.011', 'I Putu Urip Sutresna Mantra, S.Kom.', 'Guru', 'urip', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Ketua Lab', '087862656412'),
-('0021.012', 'Ni Wayan Rumasni, S.Pd., M.Pd.', 'Guru', 'rum', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081338638999'),
-('0021.013', 'I Wayan Agus Wiranata, S.Pd.', 'Guru', 'wiranata', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082291355411'),
-('0021.014', 'Nyoman Hendra Adi Wijaya, S.Pd., M.Kom.', 'Guru', 'hendra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085738216181'),
-('0021.015', 'Dra. Ni Made Ayu Adnyani', 'Guru', 'ayuadnyani', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081238437877'),
-('0021.016', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '083114537674'),
-('0021.017', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '085738235218'),
-('0021.018', 'Putu Yenny Suryantari, S.Pd.', 'Guru', 'yenny', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081353285810'),
-('0021.019', 'I Gusti Ayu Sri Erna Dewi, SE.', 'Guru', 'erna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081220692219'),
-('0021.020', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081338401856'),
-('0021.021', 'Ida Ayu Indra Pratiwi, S.Sn.', 'Guru', 'dayuindra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081239588346'),
-('0021.022', 'I Wayan Sudarsa, S.Kom.', 'Guru', 'sudarsa', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081237896743'),
-('0021.023', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082247033088'),
-('0021.024', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082247033030'),
-('0021.025', 'I Putu Dedy Karsana, S.Pd.', 'Guru', 'dedy', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '08563769773'),
-('0021.026', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081238437877'),
-('0021.027', 'I Putu Agus Sujana Adi Putra, S.Pd.', 'Guru', 'gussujana', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081237896743'),
-('0021.028', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081933019479'),
-('0021.029', 'Drs. I Gusti Putu Tirta Yasa, M.Pd.', 'Guru', 'tirta', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081338401856'),
-('0021.030', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081220692219'),
-('0021.031', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081353285810'),
-('0021.032', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081338512340'),
-('0021.033', 'Ni Putu Anita Prahandari, S.Pd.', 'Guru', 'anita', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082146167817'),
-('0021.034', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081338638999'),
-('0021.035', 'I Kadek Yogi Mayudana, M.Pd.', 'Guru', 'yogi', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081933019479'),
-('0021.036', 'Luh Putu Ayu Desiani, S.Kom., MM.', 'Guru', 'desi', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081805474228'),
-('0021.037', 'I Kadek Puji Aksama, S.Pd.', 'Guru', 'aksama', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081933106676'),
-('0021.038', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082146503026'),
-('0021.039', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Guru', 'anjani', '$2y$10$L/11/fwOBwX3FJlyigeu.ehiLcZ1.cXX/ZugdZGP.fDSgHqWd25aK', 'Y', 'Guru BK XII', '081999976038'),
-('0021.040', 'Ainul Mubsiroh, S.Pd.I, M.Pd.', 'Guru', 'ain', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082247033044'),
-('0021.041', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '087862656412'),
-('0021.042', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082237442222'),
-('0021.043', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '085953912558'),
-('0021.044', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '08563769773'),
-('0021.045', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '087863112233'),
-('0021.046', 'Masri Kagatanaribe, M.Pd.', 'Guru', 'masri', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085739990443'),
-('0021.047', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '087861863842'),
-('0021.048', 'Luh Putu Trisma Prabawati, S.Kom.', 'Guru', 'trisma', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083114537674'),
-('0021.049', 'Kadek Diah Kertiana, S.Kom.', 'Guru', 'diah', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082247033484'),
-('0021.050', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '08123650940'),
-('0021.051', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '083114537674'),
-('0021.052', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '085738235218'),
-('0021.053', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082146167817'),
-('0021.054', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081239588346'),
-('0021.055', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081338401856'),
-('0021.056', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '085738216181'),
-('0021.057', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '083834969500'),
-('0021.058', 'I Wayan Arik Sukariawan, S.Kom.', 'Guru', 'arik', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082247033088'),
-('0021.059', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082247033030'),
-('0021.060', 'I Putu Eka Mahendra, S.Kom.', 'Guru', 'eka', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085739990443'),
-('0021.061', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081238437877'),
-('0021.062', 'Bella Cintya Devi, S.Kom.', 'Guru', 'bella', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081999022333'),
-('0021.063', 'Darsusanto, S.Ag.', 'Guru', 'darsusanto', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081933019479'),
-('0021.064', 'I Gusti Made Gunawan, S.Pd.', 'Guru', 'gun', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '087837454455'),
-('0021.065', 'Ni Wayan Sriyaningsih, S.Sos.', 'Guru', 'anik', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081220692219'),
-('0021.066', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081353285810'),
-('0021.067', 'Nengah Dwi Rahayu, SE', 'Guru', 'dwirahayu', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081338512340'),
-('0021.068', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081933106676'),
-('0021.069', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081338638999'),
-('0021.070', 'Ni Putu Tirta Purnama Dewi, S.Pd', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081999022333'),
-('0021.071', 'Ni Nyoman Damayanti, S.Pd., M.Pd.', 'Guru', 'kotika', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081805474228'),
-('0021.072', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083117769593'),
-('0021.073', 'Ni Wayan Lina Valentine, S.Pd.', 'Guru', 'lina', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '08970147321'),
-('0021.074', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081999976038'),
-('0021.075', 'Nama_Pengguna', 'Guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082247033044'),
-('0021.076', 'Triono Doni Wijaya, S.Kom.', 'Guru', 'doni', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '087863112233'),
-('0021.077', 'Nuri Sutiyaningsih, M.Kom.', 'Guru', 'nuri', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082291355411'),
-('0021.078', 'Kadek Arie Wira Kusuma, S.Kom.', 'Guru', 'ariewira', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082247033484'),
-('0021.079', 'Ni Putu Linda Agustini, S.Pd.', 'Guru', 'linda', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085738235218'),
-('0021.080', 'Ida Bagus Angga Baskara, S.Pd.', 'Guru', 'baskara', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '087863112233'),
-('0021.081', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Guru', 'sintha', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '0895347674833'),
-('0021.082', 'Ida Bagus Maha Indra Prasada, S.Kom.', 'Guru', 'mahaindra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083117769593'),
-('0021.083', 'Ida Ayu Dewi Paramita, S.Pd.', 'Guru', 'dayumita', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '0895375837712'),
-('0021.084', 'Ni Luh Rosa Diarsanthi, S.Pd.', 'Guru', 'rosa', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083834969500'),
-('0021.085', 'Yustina Mariana Odang, S.Pd.', 'Guru', 'yustina', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '08123650940'),
-('0021.086', 'Ida Ayu Amrita Pancajania, SE.', 'Guru', 'amrita', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083114537674'),
-('0021.087', 'A.A Gde Radika Mahaprasta Putra', 'Guru', 'radika', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085738235218'),
-('0021.088', 'Ni Ketut Supartini, SS.', 'Guru', 'tini', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082146167817'),
-('0021.089', 'M. Agus Wahyudi, S.Pd.', 'Guru', 'yudi', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081239588346'),
-('0021.090', 'I Made Pranayama, S.Pd.', 'Guru', 'pranayama', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081338401856'),
-('0021.091', 'Ni Kadek Chandra Putri Irani, S.Pd., M.Pd.', 'Guru', 'chandra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085953912558'),
-('0021.092', 'I Dewa Ayu Setiyawati, S.Pd.', 'Guru', 'dayu', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083834969500'),
-('0021.093', 'Finsensius Ratuaki, M.Pd.', 'Guru', 'finsen', '$2y$10$L/11/fwOBwX3FJlyigeu.ehiLcZ1.cXX/ZugdZGP.fDSgHqWd25aK', 'Y', 'Guru BK X', '082247033088'),
-('0021.094', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Guru', 'chintya', '$2y$10$L/11/fwOBwX3FJlyigeu.ehiLcZ1.cXX/ZugdZGP.fDSgHqWd25aK', 'Y', 'Guru BK XI', '082247033030'),
-('0021.095', 'Adventina Puspita', 'Guru', 'puspita', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '0895347674833'),
-('0021.096', 'Aprianus Anjelius Foutnine, S.Fil', 'Guru', 'anjel', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081238437877');
+('0021.001', 'Drs. I Gusti Made Murjana, M.Pd.', 'admin', 'made', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Kepala Sekolah', '081805474228'),
+('0021.002', 'I Nyoman Sucana, M.Kom.', 'manajemen', 'sucana', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Kurikulum', '08123650940'),
+('0021.003', 'Bagus Putu Eka Wijaya, S.Kom.', 'manajemen', 'guseka', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Kesiswaan', '082146503026'),
+('0021.004', 'Dewa Made Indra Suarmika, S.Kom.', 'manajemen', 'indra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Sarana Prasarana', '082237442222'),
+('0021.005', 'I Gede Pradipta Adi Nugraha, M.Kom.', 'manajemen', 'dipta', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Humas', '087861863842'),
+('0021.006', 'I Gede Agung Abdi Prasetya, S.Ak.', 'guru', 'abdi', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Komka AN', '082247033088'),
+('0021.007', 'A.A Gede Putra Dwi Artajaya, S.Si., M.Kom.', 'guru', 'artajaya', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Komka RPL', '082247033044'),
+('0021.008', 'I Komang Arta Wijaya, M.Kom.', 'guru', 'arta', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Komka DKV', '082247033030'),
+('0021.009', 'I Made Sastrawan Adi Putra, S.Kom.', 'guru', 'sastra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Komka TKJ', '087837454455'),
+('0021.010', 'Ni Wayan Sri Arini, ST., M.Kom.', 'guru', 'sriarini', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081338512340'),
+('0021.011', 'I Putu Urip Sutresna Mantra, S.Kom.', 'guru', 'urip', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Ketua Lab', '087862656412'),
+('0021.012', 'Ni Wayan Rumasni, S.Pd., M.Pd.', 'guru', 'rum', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081338638999'),
+('0021.013', 'I Wayan Agus Wiranata, S.Pd.', 'guru', 'wiranata', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082291355411'),
+('0021.014', 'Nyoman Hendra Adi Wijaya, S.Pd., M.Kom.', 'guru', 'hendra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085738216181'),
+('0021.015', 'Dra. Ni Made Ayu Adnyani', 'guru', 'ayuadnyani', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081238437877'),
+('0021.016', 'Abdul', 'manajemen', 'abdull', '$2y$10$YRLuJjYGKjf2/wFFexfkdumgD5uzpGf/I8ssV6cKPHK.HKhEdbqiG', 'Y', 'Waka Kurikulum', '08555111111'),
+('0021.017', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '085738235218'),
+('0021.018', 'Putu Yenny Suryantari, S.Pd.', 'guru', 'yenny', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081353285810'),
+('0021.019', 'I Gusti Ayu Sri Erna Dewi, SE.', 'guru', 'erna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081220692219'),
+('0021.020', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081338401856'),
+('0021.021', 'Ida Ayu Indra Pratiwi, S.Sn.', 'guru', 'dayuindra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081239588346'),
+('0021.022', 'I Wayan Sudarsa, S.Kom.', 'guru', 'sudarsa', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081237896743'),
+('0021.023', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082247033088'),
+('0021.024', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082247033030'),
+('0021.025', 'I Putu Dedy Karsana, S.Pd.', 'guru', 'dedy', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '08563769773'),
+('0021.026', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081238437877'),
+('0021.027', 'I Putu Agus Sujana Adi Putra, S.Pd.', 'guru', 'gussujana', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081237896743'),
+('0021.028', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081933019479'),
+('0021.029', 'Drs. I Gusti Putu Tirta Yasa, M.Pd.', 'guru', 'tirta', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081338401856'),
+('0021.030', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081220692219'),
+('0021.031', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081353285810'),
+('0021.032', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081338512340'),
+('0021.033', 'Ni Putu Anita Prahandari, S.Pd.', 'guru', 'anita', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082146167817'),
+('0021.034', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081338638999'),
+('0021.035', 'I Kadek Yogi Mayudana, M.Pd.', 'guru', 'yogi', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081933019479'),
+('0021.036', 'Luh Putu Ayu Desiani, S.Kom., MM.', 'guru', 'desi', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081805474228'),
+('0021.037', 'I Kadek Puji Aksama, S.Pd.', 'guru', 'aksama', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081933106676'),
+('0021.038', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082146503026'),
+('0021.039', 'Ida Gusti Ayu Rinjani, M.Pd.', 'bk', 'anjani', '$2y$10$L/11/fwOBwX3FJlyigeu.ehiLcZ1.cXX/ZugdZGP.fDSgHqWd25aK', 'Y', 'Guru BK XII', '081999976038'),
+('0021.040', 'Ainul Mubsiroh, S.Pd.I, M.Pd.', 'guru', 'ain', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082247033044'),
+('0021.041', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '087862656412'),
+('0021.042', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082237442222'),
+('0021.043', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '085953912558'),
+('0021.044', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '08563769773'),
+('0021.045', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '087863112233'),
+('0021.046', 'Masri Kagatanaribe, M.Pd.', 'guru', 'masri', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085739990443'),
+('0021.047', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '087861863842'),
+('0021.048', 'Luh Putu Trisma Prabawati, S.Kom.', 'guru', 'trisma', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083114537674'),
+('0021.049', 'Kadek Diah Kertiana, S.Kom.', 'guru', 'diah', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082247033484'),
+('0021.050', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '08123650940'),
+('0021.051', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '083114537674'),
+('0021.052', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '085738235218'),
+('0021.053', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082146167817'),
+('0021.054', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081239588346'),
+('0021.055', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081338401856'),
+('0021.056', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '085738216181'),
+('0021.057', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '083834969500'),
+('0021.058', 'I Wayan Arik Sukariawan, S.Kom.', 'guru', 'arik', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082247033088'),
+('0021.059', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082247033030'),
+('0021.060', 'I Putu Eka Mahendra, S.Kom.', 'guru', 'eka', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085739990443'),
+('0021.061', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081238437877'),
+('0021.062', 'Bella Cintya Devi, S.Kom.', 'guru', 'bella', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081999022333'),
+('0021.063', 'Darsusanto, S.Ag.', 'guru', 'darsusanto', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081933019479'),
+('0021.064', 'I Gusti Made Gunawan, S.Pd.', 'guru', 'gun', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '087837454455'),
+('0021.065', 'Ni Wayan Sriyaningsih, S.Sos.', 'guru', 'anik', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081220692219'),
+('0021.066', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081353285810'),
+('0021.067', 'Nengah Dwi Rahayu, SE', 'guru', 'dwirahayu', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081338512340'),
+('0021.068', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081933106676'),
+('0021.069', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081338638999'),
+('0021.070', 'Ni Putu Tirta Purnama Dewi, S.Pd', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081999022333'),
+('0021.071', 'Ni Nyoman Damayanti, S.Pd., M.Pd.', 'guru', 'kotika', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081805474228'),
+('0021.072', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083117769593'),
+('0021.073', 'Ni Wayan Lina Valentine, S.Pd.', 'guru', 'lina', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '08970147321'),
+('0021.074', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '081999976038'),
+('0021.075', 'Nama_Pengguna', 'guru', 'pengguna', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'N', 'Guru Mapel', '082247033044'),
+('0021.076', 'Triono Doni Wijaya, S.Kom.', 'guru', 'doni', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '087863112233'),
+('0021.077', 'Nuri Sutiyaningsih, M.Kom.', 'guru', 'nuri', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082291355411'),
+('0021.078', 'Kadek Arie Wira Kusuma, S.Kom.', 'guru', 'ariewira', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082247033484'),
+('0021.079', 'Ni Putu Linda Agustini, S.Pd.', 'guru', 'linda', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085738235218'),
+('0021.080', 'Ida Bagus Angga Baskara, S.Pd.', 'guru', 'baskara', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '087863112233'),
+('0021.081', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'guru', 'sintha', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '0895347674833'),
+('0021.082', 'Ida Bagus Maha Indra Prasada, S.Kom.', 'guru', 'mahaindra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083117769593'),
+('0021.083', 'Ida Ayu Dewi Paramita, S.Pd.', 'guru', 'dayumita', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '0895375837712'),
+('0021.084', 'Ni Luh Rosa Diarsanthi, S.Pd.', 'guru', 'rosa', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083834969500'),
+('0021.085', 'Yustina Mariana Odang, S.Pd.', 'guru', 'yustina', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '08123650940'),
+('0021.086', 'Ida Ayu Amrita Pancajania, SE.', 'guru', 'amrita', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083114537674'),
+('0021.087', 'A.A Gde Radika Mahaprasta Putra', 'guru', 'radika', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085738235218'),
+('0021.088', 'Ni Ketut Supartini, SS.', 'guru', 'tini', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '082146167817'),
+('0021.089', 'M. Agus Wahyudi, S.Pd.', 'guru', 'yudi', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081239588346'),
+('0021.090', 'I Made Pranayama, S.Pd.', 'guru', 'pranayama', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081338401856'),
+('0021.091', 'Ni Kadek Chandra Putri Irani, S.Pd., M.Pd.', 'guru', 'chandra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '085953912558'),
+('0021.092', 'I Dewa Ayu Setiyawati, S.Pd.', 'guru', 'dayu', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '083834969500'),
+('0021.093', 'Finsensius Ratuaki, M.Pd.', 'bk', 'finsen', '$2y$10$L/11/fwOBwX3FJlyigeu.ehiLcZ1.cXX/ZugdZGP.fDSgHqWd25aK', 'Y', 'Guru BK X', '082247033088'),
+('0021.094', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'bk', 'chintya', '$2y$10$L/11/fwOBwX3FJlyigeu.ehiLcZ1.cXX/ZugdZGP.fDSgHqWd25aK', 'Y', 'Guru BK XI', '082247033030'),
+('0021.095', 'Adventina Puspita', 'guru', 'puspita', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '0895347674833'),
+('0021.096', 'Aprianus Anjelius Foutnine, S.Fil', 'guru', 'anjel', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081238437877'),
+('0021.097', 'Joshan Arya', 'admin', 'joshan', '$2y$10$dezm4WwwZYCja9GEz5ppcuLx4Xt0fO0.eS7zgZu1DBaPb0XKX3XQC', 'Y', 'Kepala Sekolah', '085174060031'),
+('0021.098', 'Joshan Arya2', 'bk', 'joshann', '$2y$10$w0rRxDWkqWAMGBT2QNFEq.CgiWg3D1.BP2ExKdT2kZBmPvAHRE2OS', 'Y', 'Guru BK XII', '0812313413141');
 
 -- --------------------------------------------------------
 
@@ -147,9 +149,9 @@ INSERT INTO `guru` (`kode_guru`, `nama_pengguna`, `role`, `username`, `password`
 --
 
 CREATE TABLE `jenis_pelanggaran` (
-  `id_jenis_pelanggaran` int(2) NOT NULL,
-  `jenis` varchar(50) DEFAULT NULL,
-  `poin` int(2) DEFAULT NULL
+  `id_jenis_pelanggaran` int NOT NULL,
+  `jenis` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `poin` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -163,7 +165,8 @@ INSERT INTO `jenis_pelanggaran` (`id_jenis_pelanggaran`, `jenis`, `poin`) VALUES
 (4, 'Pelanggaran Norma Norma', 9),
 (5, 'Pelanggaran Berat', 10),
 (6, 'Kesopanan Berkendara', 8),
-(7, 'Upacara Bendera', 4);
+(7, 'Upacara Bendera', 4),
+(8, 'Gay', 1000);
 
 -- --------------------------------------------------------
 
@@ -172,11 +175,11 @@ INSERT INTO `jenis_pelanggaran` (`id_jenis_pelanggaran`, `jenis`, `poin`) VALUES
 --
 
 CREATE TABLE `kelas` (
-  `id_kelas` int(3) NOT NULL,
-  `id_tingkat` int(11) DEFAULT NULL,
-  `id_program_keahlian` int(11) DEFAULT NULL,
-  `rombel` int(11) DEFAULT NULL,
-  `kode_guru` char(8) DEFAULT NULL
+  `id_kelas` int NOT NULL,
+  `id_tingkat` int DEFAULT NULL,
+  `id_program_keahlian` int DEFAULT NULL,
+  `rombel` int DEFAULT NULL,
+  `kode_guru` char(8) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -227,19 +230,19 @@ INSERT INTO `kelas` (`id_kelas`, `id_tingkat`, `id_program_keahlian`, `rombel`, 
 --
 
 CREATE TABLE `ortu_wali` (
-  `id_ortu_wali` int(5) NOT NULL,
-  `ayah` varchar(50) DEFAULT NULL,
-  `ibu` varchar(50) DEFAULT NULL,
-  `wali` varchar(50) DEFAULT NULL,
-  `pekerjaan_ayah` varchar(50) DEFAULT NULL,
-  `pekerjaan_ibu` varchar(50) DEFAULT NULL,
-  `pekerjaan_wali` varchar(50) DEFAULT NULL,
-  `no_telp_ayah` varchar(16) DEFAULT NULL,
-  `no_telp_ibu` varchar(16) DEFAULT NULL,
-  `no_telp_wali` varchar(16) DEFAULT NULL,
-  `alamat_ayah` varchar(100) DEFAULT NULL,
-  `alamat_ibu` varchar(100) DEFAULT NULL,
-  `alamat_wali` varchar(100) DEFAULT NULL
+  `id_ortu_wali` int NOT NULL,
+  `ayah` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ibu` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `wali` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pekerjaan_ayah` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pekerjaan_ibu` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pekerjaan_wali` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `no_telp_ayah` varchar(16) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `no_telp_ibu` varchar(16) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `no_telp_wali` varchar(16) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `alamat_ayah` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `alamat_ibu` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `alamat_wali` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -247,10 +250,11 @@ CREATE TABLE `ortu_wali` (
 --
 
 INSERT INTO `ortu_wali` (`id_ortu_wali`, `ayah`, `ibu`, `wali`, `pekerjaan_ayah`, `pekerjaan_ibu`, `pekerjaan_wali`, `no_telp_ayah`, `no_telp_ibu`, `no_telp_wali`, `alamat_ayah`, `alamat_ibu`, `alamat_wali`) VALUES
-(1, 'Bagus Ahmad', 'Wati Utari', NULL, 'Dokter Spesialis', 'Dokter Spesialis', NULL, '6281679485408', '6281679485408', NULL, 'Jalan Nangka 2 A, Gang Rujak', 'Jalan Nangka 2 A, Gang Rujak', NULL),
+(1, '', '', '', '', '', '', '', '', '', '', '', ''),
 (2, 'Lukman Halimah', 'Mega Rahma', NULL, 'Penjahit', 'Penjahit', NULL, '628621323300', '628621323300', NULL, 'Jalan Antasura, Perumahan Elit', 'Jalan Antasura, Perumahan Elit', NULL),
-(3, 'Calvin Connor', 'Natalia Glover', NULL, 'Pengelola Properti', 'Pengelola Properti', NULL, '6282540268936', '628785988574', NULL, NULL, NULL, 'Jalan Sesetan, Gang No 5'),
-(4, NULL, NULL, 'Safiya Hartman', NULL, NULL, 'Designer', NULL, NULL, '62860589252', 'Psr Jatinegara Bl BKS/30, Dki Jakarta', 'Psr Jatinegara Bl BKS/30, Dki Jakarta', NULL);
+(3, '', '', '', '', '', '', '', '', '', '', '', ''),
+(4, '', '', '', '', '', '', '', '', '', '', '', ''),
+(11, '', 'Kepo', '', '', 'Boss', '', '', '1235551223', '', '', 'Kepo', '');
 
 -- --------------------------------------------------------
 
@@ -259,11 +263,11 @@ INSERT INTO `ortu_wali` (`id_ortu_wali`, `ayah`, `ibu`, `wali`, `pekerjaan_ayah`
 --
 
 CREATE TABLE `pelanggaran_siswa` (
-  `id_pelanggaran_siswa` int(5) NOT NULL,
+  `id_pelanggaran_siswa` int NOT NULL,
   `tanggal` datetime DEFAULT NULL,
-  `nis` char(5) DEFAULT NULL,
-  `id_jenis_pelanggaran` int(11) DEFAULT NULL,
-  `keterangan` text DEFAULT NULL
+  `nis` char(5) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_jenis_pelanggaran` int DEFAULT NULL,
+  `keterangan` text COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -271,9 +275,12 @@ CREATE TABLE `pelanggaran_siswa` (
 --
 
 INSERT INTO `pelanggaran_siswa` (`id_pelanggaran_siswa`, `tanggal`, `nis`, `id_jenis_pelanggaran`, `keterangan`) VALUES
-(1, '2026-01-02 09:26:32', 9124, 2, 'Terlambat masuk hari Senin'),
-(2, '2026-01-02 09:26:35', 9125, 3, 'Tidak mengerjakan PR'),
-(3, '2026-01-02 11:26:35', 9126, 3, 'Makan di kelas saat pelajaran Matematika');
+(1, '2026-01-02 09:26:32', '9124', 2, 'Terlambat masuk hari Senin'),
+(2, '2026-01-02 09:26:35', '9125', 3, 'Tidak mengerjakan PR'),
+(3, '2026-01-02 11:26:35', '9126', 3, 'Makan di kelas saat pelajaran Matematika'),
+(4, '2026-03-17 00:00:00', '7012', 8, 'Ketahuan pacaran dengan cowo'),
+(5, '2026-03-17 00:00:00', '9123', 2, 'Terlambah masuk kelas'),
+(6, '2026-03-17 00:00:00', '9124', 8, 'Ketahuan Pacaran Dengan Gilang');
 
 -- --------------------------------------------------------
 
@@ -282,12 +289,12 @@ INSERT INTO `pelanggaran_siswa` (`id_pelanggaran_siswa`, `tanggal`, `nis`, `id_j
 --
 
 CREATE TABLE `perjanjian_orang_tua` (
-  `id_perjanjian_ortu` int(5) NOT NULL,
+  `id_perjanjian_ortu` int NOT NULL,
   `tanggal` datetime DEFAULT NULL,
-  `id_pelanggaran_siswa` int(5) DEFAULT NULL,
-  `status` enum('Masih Proses','Selesai') DEFAULT NULL,
-  `foto_dokumen` varchar(100) DEFAULT NULL,
-  `tingkat` varchar(3) DEFAULT NULL
+  `id_pelanggaran_siswa` int DEFAULT NULL,
+  `status` enum('Masih Proses','Selesai') COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `foto_dokumen` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tingkat` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -305,12 +312,12 @@ INSERT INTO `perjanjian_orang_tua` (`id_perjanjian_ortu`, `tanggal`, `id_pelangg
 --
 
 CREATE TABLE `perjanjian_siswa` (
-  `id_perjanjian_siswa` int(5) NOT NULL,
+  `id_perjanjian_siswa` int NOT NULL,
   `tanggal` datetime DEFAULT NULL,
-  `id_pelanggaran_siswa` int(11) DEFAULT NULL,
-  `status` enum('Masih Proses','Selesai') DEFAULT NULL,
-  `foto_dokumen` varchar(100) DEFAULT NULL,
-  `tingkat` varchar(3) DEFAULT NULL
+  `id_pelanggaran_siswa` int DEFAULT NULL,
+  `status` enum('Masih Proses','Selesai') COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `foto_dokumen` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tingkat` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -329,10 +336,10 @@ INSERT INTO `perjanjian_siswa` (`id_perjanjian_siswa`, `tanggal`, `id_pelanggara
 --
 
 CREATE TABLE `profil_sekolah` (
-  `id_profil_sekolah` int(2) NOT NULL,
-  `nama_sekolah` varchar(50) DEFAULT NULL,
-  `alamat_sekolah` varchar(100) DEFAULT NULL,
-  `kota` varchar(30) DEFAULT NULL
+  `id_profil_sekolah` int NOT NULL,
+  `nama_sekolah` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `alamat_sekolah` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `kota` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -349,9 +356,9 @@ INSERT INTO `profil_sekolah` (`id_profil_sekolah`, `nama_sekolah`, `alamat_sekol
 --
 
 CREATE TABLE `program_keahlian` (
-  `id_program_keahlian` int(2) NOT NULL,
-  `program_keahlian` varchar(6) DEFAULT NULL,
-  `deskripsi` varchar(50) DEFAULT NULL
+  `id_program_keahlian` int NOT NULL,
+  `program_keahlian` varchar(6) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `deskripsi` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -372,26 +379,26 @@ INSERT INTO `program_keahlian` (`id_program_keahlian`, `program_keahlian`, `desk
 --
 
 CREATE TABLE `siswa` (
-  `nis` char(5) DEFAULT NULL,
-  `nama_siswa` varchar(50) DEFAULT NULL,
-  `jenis_kelamin` enum('Laki - Laki','Perempuan') DEFAULT NULL,
-  `alamat` varchar(100) DEFAULT NULL,
-  `password` varchar(70) DEFAULT NULL,
-  `status` enum('aktif','tidak_aktif','lulus','pindah') DEFAULT NULL,
-  `id_ortu_wali` int(5) DEFAULT NULL,
-  `id_kelas` int(3) DEFAULT NULL
+  `nis` char(5) COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_siswa` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `jenis_kelamin` enum('Laki - Laki','Perempuan') COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `alamat` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password` varchar(70) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status_siswa` enum('aktif','tidak_aktif','lulus','pindah') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_ortu_wali` int DEFAULT NULL,
+  `id_kelas` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `siswa`
 --
 
-INSERT INTO `siswa` (`nis`, `nama_siswa`, `jenis_kelamin`, `alamat`, `password`, `status`, `id_ortu_wali`, `id_kelas`) VALUES
-(7012, 'Abdullah Musa', 'Laki - Laki', 'Jl Psr Paseban Bl B Lt3, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 1, 1),
-(8312, 'Juni Budi', 'Laki - Laki', 'Jl Gn Krakatau 387 A, Sumatera Utara', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'lulus', 2, 2),
-(9123, 'Wahyuni Yuliana', 'Perempuan', 'Jl MH Thamrin Kav 28-30 Plaza, Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'pindah', 4, 3),
-(9124, 'Ryan', 'Laki - Laki', 'Psr Jatinegara Bl BKS/30, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 3, 4);
-
+INSERT INTO `siswa` (`nis`, `nama_siswa`, `jenis_kelamin`, `alamat`, `password`, `status_siswa`, `id_ortu_wali`, `id_kelas`) VALUES
+('6712', 'Joshan', 'Laki - Laki', 'Kepo 123', '$2y$10$i8SKu3rq9zFk2eZsSd9Z8e0Az6pQ5JnutvAGrVWndinkBXY/47hO6', 'aktif', 11, 10),
+('7012', 'Abdullah Musa', 'Laki - Laki', 'Jl Psr Paseban Bl B Lt3, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'pindah', 1, 24),
+('8312', 'Juni Budi', 'Laki - Laki', 'Jl Gn Krakatau 387 A, Sumatera Utara', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'lulus', 2, 2),
+('9123', 'Wahyuni Yuliana', 'Perempuan', 'Jl MH Thamrin Kav 28-30 Plaza, Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 4, 3),
+('9124', 'Ryan', 'Laki - Laki', 'Psr Jatinegara Bl BKS/30, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 3, 4);
 
 -- --------------------------------------------------------
 
@@ -400,15 +407,15 @@ INSERT INTO `siswa` (`nis`, `nama_siswa`, `jenis_kelamin`, `alamat`, `password`,
 --
 
 CREATE TABLE `surat_keluar` (
-  `id_surat_keluar` int(5) NOT NULL,
-  `no_surat` varchar(30) DEFAULT NULL,
-  `jenis_surat` varchar(30) DEFAULT NULL,
-  `id_surat_pindah` int(5) DEFAULT NULL,
-  `nis` char(5) DEFAULT NULL,
+  `id_surat_keluar` int NOT NULL,
+  `no_surat` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `jenis_surat` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_surat_pindah` int DEFAULT NULL,
+  `nis` char(5) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tanggal_pembuatan_surat` date DEFAULT NULL,
-  `id_profil_sekolah` int(2) DEFAULT NULL,
-  `id_tahun_ajaran` int(3) DEFAULT NULL,
-  `tingkat` varchar(3) DEFAULT NULL
+  `id_profil_sekolah` int DEFAULT NULL,
+  `id_tahun_ajaran` int DEFAULT NULL,
+  `tingkat` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -416,9 +423,9 @@ CREATE TABLE `surat_keluar` (
 --
 
 INSERT INTO `surat_keluar` (`id_surat_keluar`, `no_surat`, `jenis_surat`, `id_surat_pindah`, `nis`, `tanggal_pembuatan_surat`, `id_profil_sekolah`, `id_tahun_ajaran`, `tingkat`) VALUES
-(1, '548/SMKTI/BG/XII/2025', 'Pindah Sekolah', 1, 7012, '2026-01-08', 1, 5, 'XI'),
-(2, '549/SMKTI/BG/XII/2025', 'Panggilan Orang Tua', NULL, 8312, '2026-01-08', 1, 5, 'XI'),
-(3, '550/SMKTI/BG/I/2026', 'Pindah Sekolah', 2, 9123, '2026-01-10', 1, 5, 'X');
+(1, '548/SMKTI/BG/XII/2025', 'Pindah Sekolah', 1, '7012', '2026-01-08', 1, 5, 'XI'),
+(2, '549/SMKTI/BG/XII/2025', 'Panggilan Orang Tua', NULL, '8312', '2026-01-08', 1, 5, 'XI'),
+(3, '550/SMKTI/BG/I/2026', 'Pindah Sekolah', 2, '9123', '2026-01-10', 1, 5, 'X');
 
 -- --------------------------------------------------------
 
@@ -427,9 +434,9 @@ INSERT INTO `surat_keluar` (`id_surat_keluar`, `no_surat`, `jenis_surat`, `id_su
 --
 
 CREATE TABLE `surat_pindah` (
-  `id_surat_pindah` int(5) NOT NULL,
-  `sekolah_tujuan` varchar(100) DEFAULT NULL,
-  `alasan_pindah` text DEFAULT NULL
+  `id_surat_pindah` int NOT NULL,
+  `sekolah_tujuan` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `alasan_pindah` text COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -448,9 +455,9 @@ INSERT INTO `surat_pindah` (`id_surat_pindah`, `sekolah_tujuan`, `alasan_pindah`
 --
 
 CREATE TABLE `tahun_ajaran` (
-  `id_tahun_ajaran` int(3) NOT NULL,
-  `tahun` varchar(10) DEFAULT NULL,
-  `aktif` enum('Y','N') DEFAULT NULL
+  `id_tahun_ajaran` int NOT NULL,
+  `tahun` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `aktif` enum('Y','N') COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -471,8 +478,8 @@ INSERT INTO `tahun_ajaran` (`id_tahun_ajaran`, `tahun`, `aktif`) VALUES
 --
 
 CREATE TABLE `tingkat` (
-  `id_tingkat` int(1) NOT NULL,
-  `tingkat` varchar(6) DEFAULT NULL
+  `id_tingkat` int NOT NULL,
+  `tingkat` varchar(6) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -590,76 +597,76 @@ ALTER TABLE `tingkat`
 --
 
 --
--- AUTO_INCREMENT for table `ortu_wali`
---
-ALTER TABLE `ortu_wali`
-  MODIFY `id_ortu_wali` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT for table `perjanjian_orang_tua`
---
-ALTER TABLE `perjanjian_orang_tua`
-  MODIFY `id_perjanjian_ortu` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `ortu_wali`
---
-ALTER TABLE `profil_sekolah`
-  MODIFY `id_profil_sekolah` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `surat_keluar`
---
-ALTER TABLE `surat_keluar`
-  MODIFY `id_surat_keluar` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `surat_pindah`
---
-ALTER TABLE `surat_pindah`
-  MODIFY `id_surat_pindah` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `tahun_ajaran`
---
-ALTER TABLE `tahun_ajaran`
-  MODIFY `id_tahun_ajaran` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `tingkat`
---
-ALTER TABLE `tingkat`
-  MODIFY `id_tingkat` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `program_keahlian`
---
-ALTER TABLE `program_keahlian`
-  MODIFY `id_program_keahlian` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;  
-
---
 -- AUTO_INCREMENT for table `jenis_pelanggaran`
 --
 ALTER TABLE `jenis_pelanggaran`
-  MODIFY `id_jenis_pelanggaran` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_jenis_pelanggaran` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_kelas` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+
+--
+-- AUTO_INCREMENT for table `ortu_wali`
+--
+ALTER TABLE `ortu_wali`
+  MODIFY `id_ortu_wali` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `pelanggaran_siswa`
 --
 ALTER TABLE `pelanggaran_siswa`
-  MODIFY `id_pelanggaran_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_pelanggaran_siswa` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `perjanjian_orang_tua`
+--
+ALTER TABLE `perjanjian_orang_tua`
+  MODIFY `id_perjanjian_ortu` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `perjanjian_siswa`
 --
 ALTER TABLE `perjanjian_siswa`
-  MODIFY `id_perjanjian_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_perjanjian_siswa` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `profil_sekolah`
+--
+ALTER TABLE `profil_sekolah`
+  MODIFY `id_profil_sekolah` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `program_keahlian`
+--
+ALTER TABLE `program_keahlian`
+  MODIFY `id_program_keahlian` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `surat_keluar`
+--
+ALTER TABLE `surat_keluar`
+  MODIFY `id_surat_keluar` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `surat_pindah`
+--
+ALTER TABLE `surat_pindah`
+  MODIFY `id_surat_pindah` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tahun_ajaran`
+--
+ALTER TABLE `tahun_ajaran`
+  MODIFY `id_tahun_ajaran` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `tingkat`
+--
+ALTER TABLE `tingkat`
+  MODIFY `id_tingkat` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -674,39 +681,10 @@ ALTER TABLE `kelas`
   ADD CONSTRAINT `kelas_ibfk_3` FOREIGN KEY (`kode_guru`) REFERENCES `guru` (`kode_guru`);
 
 --
--- Constraints for table `pelanggaran_siswa`
---
-ALTER TABLE `pelanggaran_siswa`
-  ADD CONSTRAINT `pelanggaran_siswa_ibfk_1` FOREIGN KEY (`nis`) REFERENCES `siswa` (`nis`),
-  ADD CONSTRAINT `pelanggaran_siswa_ibfk_2` FOREIGN KEY (`id_jenis_pelanggaran`) REFERENCES `jenis_pelanggaran` (`id_jenis_pelanggaran`);
-
---
 -- Constraints for table `perjanjian_orang_tua`
 --
 ALTER TABLE `perjanjian_orang_tua`
   ADD CONSTRAINT `perjanjian_orang_tua_ibfk_1` FOREIGN KEY (`id_pelanggaran_siswa`) REFERENCES `pelanggaran_siswa` (`id_pelanggaran_siswa`);
-
---
--- Constraints for table `perjanjian_siswa`
---
-ALTER TABLE `perjanjian_siswa`
-  ADD CONSTRAINT `perjanjian_siswa_ibfk_1` FOREIGN KEY (`id_pelanggaran_siswa`) REFERENCES `pelanggaran_siswa` (`id_pelanggaran_siswa`);
-
---
--- Constraints for table `siswa`
---
-ALTER TABLE `siswa`
-  ADD CONSTRAINT `siswa_ibfk_1` FOREIGN KEY (`id_ortu_wali`) REFERENCES `ortu_wali` (`id_ortu_wali`),
-  ADD CONSTRAINT `siswa_ibfk_2` FOREIGN KEY (`id_kelas`) REFERENCES `kelas` (`id_kelas`);
-
---
--- Constraints for table `surat_keluar`
---
-ALTER TABLE `surat_keluar`
-  ADD CONSTRAINT `surat_keluar_ibfk_2` FOREIGN KEY (`id_surat_pindah`) REFERENCES `surat_pindah` (`id_surat_pindah`),
-  ADD CONSTRAINT `surat_keluar_ibfk_3` FOREIGN KEY (`nis`) REFERENCES `siswa` (`nis`),
-  ADD CONSTRAINT `surat_keluar_ibfk_4` FOREIGN KEY (`id_profil_sekolah`) REFERENCES `profil_sekolah` (`id_profil_sekolah`),
-  ADD CONSTRAINT `surat_keluar_ibfk_5` FOREIGN KEY (`id_tahun_ajaran`) REFERENCES `tahun_ajaran` (`id_tahun_ajaran`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

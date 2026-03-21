@@ -95,7 +95,7 @@ if(!isset($_SESSION['username'])){
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Kelola Data</a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
                         <?php if($show_admin): ?>
-                        <li><a class="dropdown-item" href="/SistemPoin/pages/guru/list.php"><i class="bi bi-person-workspace-fill me-2" style="color: #1a8cfd;"></i>Data Guru</a></li>
+                        <li><a class="dropdown-item" href="/SistemPoin/pages/guru/list.php"><i class="bi bi-person-workspace me-2" style="color: #1a8cfd;"></i>Data Guru</a></li>
                         <?php endif; ?>
                         <li><a class="dropdown-item" href="/SistemPoin/pages/siswa/list.php"><i class="bi bi-people-fill me-2" style="color: #1a8cfd;"></i>Data Siswa</a></li>
                         <li><a class="dropdown-item" href="/SistemPoin/pages/pelanggaran/list.php"><i class="bi bi-exclamation-octagon-fill me-2" style="color: #1a8cfd;"></i>Jenis Pelanggaran</a></li>
