@@ -3,8 +3,8 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/SistemPoin');
 include ROOTPATH . "/config/config.php";
 include ROOTPATH . "/includes/header.php";
 
-// Role check - Guru/BK only
-if (!in_array($_SESSION['user_role'] ?? 'guru', ['guru', 'bk'])) {
+// Role check - Guru/BK/Admin only
+if (!in_array($_SESSION['user_role'] ?? 'guru', ['bk', 'admin'])) {
     echo "<script>alert('Akses ditolak');window.location.href='/SistemPoin/pages/dashboard.php';</script>";
     exit;
 }

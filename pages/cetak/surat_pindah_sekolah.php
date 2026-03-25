@@ -42,19 +42,19 @@ $tanggal = date("d") . " " . $bulan_indo[date("n")] . " " . date("Y");
 <style>
     @media print {
 
-        \n .no-print,
+        .no-print,
         nav,
         header {
             display: none !important;
         }
 
-        \n body {
+        body {
             margin: 0;
             padding: 1cm;
             font-size: 12pt;
         }
 
-        \n .page {
+        .page {
             box-shadow: none !important;
             border: none;
             width: 100%;
@@ -62,16 +62,15 @@ $tanggal = date("d") . " " . $bulan_indo[date("n")] . " " . date("Y");
             padding: 0;
         }
 
-        \n table {
+        table {
             font-size: 11pt;
         }
 
-        \n img {
+        img {
             max-width: 100%;
             height: auto;
         }
 
-        \n
     }
 
     /* Styling khusus cetak */

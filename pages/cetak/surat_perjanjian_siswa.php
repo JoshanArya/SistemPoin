@@ -1,6 +1,6 @@
 <?php
 // Menentukan lokasi root folder proyek di server
-define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/Poin_Pelanggaran_Siswa_XIIRPL3');
+define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/SistemPoin');
 
 // Menghubungkan ke file konfigurasi (koneksi database)
 include ROOTPATH . "/config/config.php";
@@ -175,7 +175,7 @@ include ROOTPATH . "/includes/header.php";
     <!-- Header -->
     <div class="header">
         <!-- menampilkan gambar kop surat dari folder gambar-->
-        <img src="/Poin_Pelanggaran_Siswa_XIIRPL3/gambar/kop.jpg" alt="kepala surat" width="100%">
+        <img src="/SistemPoin/assets/img/kop.jpg" alt="kepala surat" width="100%">
     </div>
 
     <div class="title">SURAT PERNYATAAN SISWA</div>
@@ -301,6 +301,5 @@ include ROOTPATH . "/includes/header.php";
     }
 </script>
 <?php
-// Menyertakan bagian footer (penutup halaman)
 include "../../includes/footer.php";
 ?>

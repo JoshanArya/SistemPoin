@@ -1,6 +1,45 @@
 /*  
 *   ↜ DASHBOARD ↝ 
 */
+.datalist-container input[list] {
+  background: white;
+  min-height: 45px;
+  padding-right: 30px;
+  position: relative;
+}
+
+input[list]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+datalist {
+  background: white;
+  z-index: 9999;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+datalist option {
+  background: white;
+  color: black;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: nowrap;
+  width: 100%;
+}
+
+datalist option:hover {
+  background: #f0f8ff;
+  color: #0066cc;
+}
+
+datalist option:checked {
+  background: #e3f2fd;
+  font-weight: 500;
+}
 .bg-primary-subtle {
   background-color: #e7f1ff;
 }
@@ -153,8 +192,9 @@ th {
   font-size: 1.1rem;
   font-weight: 700;
   color: #1a374d; /* Menggunakan warna utama dari .table-dark-custom */
-  margin-bottom: 20px;
-  padding-bottom: 10px;
+  margin-top: 1rem;
+  margin-bottom: 0rem;
+  padding-bottom: 8px;
   border-bottom: 2px solid #e7f1ff; /* Menggunakan warna bg-primary-subtle */
   display: flex;
   align-items: center;
@@ -169,6 +209,7 @@ th {
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 8px;
+  margin-top: 0.5rem;
 }
 
 .form-control:focus,
@@ -217,8 +258,6 @@ th {
   max-height: 200px;
   overflow-y: auto;
 }
-
-
 
 /*
 * ↜ DETAIL SISWA ↝ 

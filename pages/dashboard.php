@@ -71,6 +71,7 @@ $siswa_bermasalah = mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT nis FRO
                 </div>
             </div>
         </div>
+        
     </div>
 </div>
 

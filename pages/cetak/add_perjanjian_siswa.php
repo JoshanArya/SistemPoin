@@ -17,6 +17,10 @@ include ROOTPATH . "/includes/header.php";
 
                 <form action="surat_perjanjian_siswa.php" method="POST" class="needs-validation" novalidate>
                     <input type="hidden" name="nis" id="nis" value="">
+                    <input type="hidden" name="nama_ortu" id="nama_ortu" value="">
+                    <input type="hidden" name="pekerjaan" id="pekerjaan" value="">
+                    <input type="hidden" name="alamat" id="alamat" value="">
+                    <input type="hidden" name="no_telp" id="no_telp" value="">
 
                     <div class="form-section-title">
                         <i class="bi bi-person-badge"></i> Pilih Siswa
@@ -31,40 +35,20 @@ include ROOTPATH . "/includes/header.php";
                                 </button>
                                 <ul class="dropdown-menu w-100 text-start kelas">
                                     <?php
-                                    $siswa_query = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa ORDER BY nama_siswa");
-                                    while ($s = mysqli_fetch_assoc($siswa_query)): ?>
+                                    $siswa_query = mysqli_query($conn, "SELECT nis, nama_siswa, ayah, ibu, wali, pekerjaan_ayah, pekerjaan_ibu, pekerjaan_wali, alamat_ayah, alamat_ibu, alamat_wali, no_telp_ayah, no_telp_ibu, no_telp_wali FROM siswa JOIN ortu_wali USING(id_ortu_wali) ORDER BY nama_siswa");
+                                    $siswa_data = [];
+                                    while ($s = mysqli_fetch_assoc($siswa_query)): 
+                                        $siswa_data[$s['nis']] = $s;
+                                    ?>
                                         <li>
                                             <a class="dropdown-item" href="#"
-                                                onclick="setDropdown('nis', 'dropdown_siswa', '<?= $s['nis'] ?> | <?= htmlspecialchars($s['nama_siswa']) ?>', '<?= $s['nis'] ?>')">
+                                                onclick="selectSiswa('<?= $s['nis'] ?>', '<?= htmlspecialchars($s['nama_siswa']) ?>')">
                                                 <?= $s['nis'] ?> | <?= htmlspecialchars($s['nama_siswa']) ?>
                                             </a>
                                         </li>
                                     <?php endwhile; ?>
                                 </ul>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section-title">
-                        <i class="bi bi-people"></i> Data Orang Tua/Wali
-                    </div>
-
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label class="form-label">Nama Orang Tua/Wali <span class="text-danger">*</span></label>
-                            <input type="text" name="nama_ortu" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Pekerjaan</label>
-                            <input type="text" name="pekerjaan" class="form-control">
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Alamat <span class="text-danger">*</span></label>
-                            <textarea name="alamat" class="form-control" rows="3" required></textarea>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">No. Telp <span class="text-danger">*</span></label>
-                            <input type="tel" name="no_telp" class="form-control" required>
                         </div>
                     </div>
 
@@ -83,6 +67,44 @@ include ROOTPATH . "/includes/header.php";
 </div>
 
 <script>
+    const siswaData = <?php echo json_encode($siswa_data); ?>;
+
+    function selectSiswa(nis, displayText) {
+        document.getElementById('nis').value = nis;
+        document.getElementById('dropdown_siswa').textContent = displayText;
+
+        // Ambil data ortu
+        const data = siswaData[nis];
+        let nama_ortu = '';
+        let pekerjaan = '';
+        let alamat = '';
+        let no_telp = '';
+
+        // Prioritas: wali > ayah > ibu
+        if (data.wali && data.wali.trim() !== '') {
+            nama_ortu = data.wali;
+            pekerjaan = data.pekerjaan_wali || '';
+            alamat = data.alamat_wali || '';
+            no_telp = data.no_telp_wali || '';
+        } else if (data.ayah && data.ayah.trim() !== '') {
+            nama_ortu = data.ayah;
+            pekerjaan = data.pekerjaan_ayah || '';
+            alamat = data.alamat_ayah || '';
+            no_telp = data.no_telp_ayah || '';
+        } else if (data.ibu && data.ibu.trim() !== '') {
+            nama_ortu = data.ibu;
+            pekerjaan = data.pekerjaan_ibu || '';
+            alamat = data.alamat_ibu || '';
+            no_telp = data.no_telp_ibu || '';
+        }
+
+        // Set hidden inputs
+        document.getElementById('nama_ortu').value = nama_ortu;
+        document.getElementById('pekerjaan').value = pekerjaan;
+        document.getElementById('alamat').value = alamat;
+        document.getElementById('no_telp').value = no_telp;
+    }
+
     function setDropdown(inputId, buttonId, displayText, value) {
         document.getElementById(inputId).value = value;
         document.getElementById(buttonId).textContent = displayText;

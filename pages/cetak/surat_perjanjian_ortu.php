@@ -1,25 +1,75 @@
 <?php
 // Menentukan lokasi root folder proyek di server
-define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/Poin_Pelanggaran_Siswa_XIIRPL3');
+define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/SistemPoin');
 
 // Menghubungkan ke file konfigurasi (koneksi database)
 include ROOTPATH . "/config/config.php";
+// Menyertakan tampilan header (bagian atas halaman)
+include ROOTPATH . "/includes/header.php";
 
-$nis = $_POST['nis'];
-// Data Orang Tua / Wali (dikirim dari file add_perjanjian_siswa.php menggunakan method POST)
-$nama_ortu = $_POST['nama_ortu'];
-$tempat_lahir = $_POST['tempat_lahir'];
-$pekerjaan = $_POST['pekerjaan'];
-$alamat = $_POST['alamat'];
-$no_telp = $_POST['no_telp'];
+$nis = $_POST['nis'] ?? '';
+$ortu_type = $_POST['ortu_type'] ?? 'ayah';
 
-// mengambil data siswa dari database join ke tabel ortu_wali, kelas, tingkat, dan program_keahlian
-$query_siswa = mysqli_query($conn, "SELECT nis, nama_siswa, tingkat, program_keahlian, rombel, ayah, ibu, wali FROM siswa
-JOIN ortu_wali USING(id_ortu_wali)
-JOIN kelas USING(id_kelas)
-JOIN tingkat USING(id_tingkat)
-JOIN program_keahlian USING(id_program_keahlian) WHERE nis = '$nis'");
+// Validasi data
+if (empty($nis)) {
+    die("Error: NIS tidak ditemukan. Silakan kembali ke form dan pilih siswa terlebih dahulu.");
+}
+
+if (empty($ortu_type)) {
+    die("Error: Tipe orang tua tidak ditemukan. Silakan kembali ke form dan pilih ayah/ibu/wali.");
+}
+
+// Escape NIS untuk mencegah SQL Injection
+$nis_escaped = mysqli_real_escape_string($conn, $nis);
+
+// Ambil data siswa dan ortu dari database berdasarkan nis dan tipe ortu
+$query_siswa = mysqli_query($conn, "SELECT s.nis, s.nama_siswa, t.tingkat, p.program_keahlian, k.rombel,
+    ow.ayah, ow.ibu, ow.wali,
+    ow.pekerjaan_ayah, ow.pekerjaan_ibu, ow.pekerjaan_wali,
+    ow.alamat_ayah, ow.alamat_ibu, ow.alamat_wali,
+    ow.no_telp_ayah, ow.no_telp_ibu, ow.no_telp_wali
+FROM siswa s
+JOIN ortu_wali ow USING(id_ortu_wali)
+JOIN kelas k USING(id_kelas)
+JOIN tingkat t ON k.id_tingkat = t.id_tingkat
+JOIN program_keahlian p ON k.id_program_keahlian = p.id_program_keahlian
+WHERE s.nis = '$nis_escaped'");
 $row_siswa = mysqli_fetch_assoc($query_siswa);
+
+// Debug: cek apakah data siswa ditemukan
+if (!$row_siswa) {
+    die("Error: Data siswa dengan NIS '$nis' tidak ditemukan di database. Periksa koneksi database atau data siswa.");
+}
+
+// Tentukan data ortu berdasarkan tipe
+if ($row_siswa) {
+    if ($ortu_type === 'ibu') {
+        $nama_ortu = $row_siswa['ibu'] ?? '';
+        $pekerjaan = $row_siswa['pekerjaan_ibu'] ?? '';
+        $alamat = $row_siswa['alamat_ibu'] ?? '';
+        $no_telp = $row_siswa['no_telp_ibu'] ?? '';
+    } elseif ($ortu_type === 'wali') {
+        $nama_ortu = $row_siswa['wali'] ?? '';
+        $pekerjaan = $row_siswa['pekerjaan_wali'] ?? '';
+        $alamat = $row_siswa['alamat_wali'] ?? '';
+        $no_telp = $row_siswa['no_telp_wali'] ?? '';
+    } else {
+        $nama_ortu = $row_siswa['ayah'] ?? '';
+        $pekerjaan = $row_siswa['pekerjaan_ayah'] ?? '';
+        $alamat = $row_siswa['alamat_ayah'] ?? '';
+        $no_telp = $row_siswa['no_telp_ayah'] ?? '';
+    }
+
+    // Validasi bahwa data ortu tidak kosong
+    if (empty($nama_ortu)) {
+        die("Error: Data $ortu_type untuk siswa ini tidak ditemukan di database. Pastikan data orang tua sudah lengkap.");
+    }
+} else {
+    // Jika data siswa tidak ditemukan, tampilkan error
+    die("Error: Data siswa tidak ditemukan di database.");
+}
+
+$tempat_lahir = $_POST['tempat_lahir'] ?? '';
 
 // buat array bulan (berfungsi untuk mengubah angka bulan menjadi nama bulan, contoh : 2 menjadi Februari)
 $bulan_indo = ["", "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -29,13 +79,6 @@ $tgl_target = strtotime("+3 months");
 $bulan = $bulan_indo[date("n", $tgl_target)] . " " . date("Y", $tgl_target);
 
 $tanggal = date("d") . " " . $bulan_indo[date("n")] . " " . date("Y");
-
-$tanggal_lahir = $_POST['tanggal_lahir'];
-//ubah format tanggal lahir
-$tanggal_lahir = date("d", strtotime($tanggal_lahir)) . " " . $bulan_indo[date("n", strtotime($tanggal_lahir))] . " " . date("Y", strtotime($tanggal_lahir));
-
-// Menyertakan tampilan header (bagian atas halaman)
-include ROOTPATH . "/includes/header.php";
 
 ?>
 
@@ -170,7 +213,7 @@ include ROOTPATH . "/includes/header.php";
 <div class="page">
     <!-- Header -->
     <div class="header">
-        <img src="/Poin_Pelanggaran_Siswa_XIIRPL3/gambar/kop.jpg" alt="kepala surat" width="100%">
+        <img src="/SistemPoin/assets/img/kop.jpg" alt="kepala surat" width="100%">
     </div>
 
     <div class="title">SURAT PERNYATAAN ORANG TUA</div>
@@ -183,11 +226,6 @@ include ROOTPATH . "/includes/header.php";
                 <div class="label">Nama</div>
                 <div class="separator">:</div>
                 <div class="field"><?= $nama_ortu ?></div>
-            </div>
-            <div class="form-row">
-                <div class="label">Tempat/ tanggal Lahir</div>
-                <div class="separator">:</div>
-                <div class="field"><?= $tempat_lahir ?>/<?= $tanggal_lahir ?></div>
             </div>
             <div class="form-row">
                 <div class="label">Pekerjaan</div>
@@ -250,6 +288,7 @@ include ROOTPATH . "/includes/header.php";
         window.print();
     }
 </script>
+
 <?php
 // Menyertakan bagian footer (penutup halaman)
 include "../../includes/footer.php";
