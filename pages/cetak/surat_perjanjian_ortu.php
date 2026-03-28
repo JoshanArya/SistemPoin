@@ -4,25 +4,23 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/SistemPoin');
 
 // Menghubungkan ke file konfigurasi (koneksi database)
 include ROOTPATH . "/config/config.php";
-// Menyertakan tampilan header (bagian atas halaman)
+// Menyertakan tampilan header (bagian atas halaman) - Navbar tetap aman di sini
 include ROOTPATH . "/includes/header.php";
 
 $nis = $_POST['nis'] ?? '';
 $ortu_type = $_POST['ortu_type'] ?? 'ayah';
+$no_surat = $_POST['no_surat'] ?? '---';
+$tanggal_input = $_POST['tanggal'] ?? date('Y-m-d');
 
 // Validasi data
 if (empty($nis)) {
-    die("Error: NIS tidak ditemukan. Silakan kembali ke form dan pilih siswa terlebih dahulu.");
-}
-
-if (empty($ortu_type)) {
-    die("Error: Tipe orang tua tidak ditemukan. Silakan kembali ke form dan pilih ayah/ibu/wali.");
+    die("Error: NIS tidak ditemukan.");
 }
 
 // Escape NIS untuk mencegah SQL Injection
 $nis_escaped = mysqli_real_escape_string($conn, $nis);
 
-// Ambil data siswa dan ortu dari database berdasarkan nis dan tipe ortu
+// Ambil data siswa
 $query_siswa = mysqli_query($conn, "SELECT s.nis, s.nama_siswa, t.tingkat, p.program_keahlian, k.rombel,
     ow.ayah, ow.ibu, ow.wali,
     ow.pekerjaan_ayah, ow.pekerjaan_ibu, ow.pekerjaan_wali,
@@ -36,260 +34,284 @@ JOIN program_keahlian p ON k.id_program_keahlian = p.id_program_keahlian
 WHERE s.nis = '$nis_escaped'");
 $row_siswa = mysqli_fetch_assoc($query_siswa);
 
-// Debug: cek apakah data siswa ditemukan
 if (!$row_siswa) {
-    die("Error: Data siswa dengan NIS '$nis' tidak ditemukan di database. Periksa koneksi database atau data siswa.");
+    die("Error: Data siswa tidak ditemukan.");
 }
 
-// Tentukan data ortu berdasarkan tipe
-if ($row_siswa) {
+// Logika penentuan data orang tua
+$nama_ortu = $_POST['nama_ortu'] ?? ($row_siswa['ayah'] ?? '');
+$pekerjaan = $_POST['pekerjaan'] ?? ($row_siswa['pekerjaan_ayah'] ?? '');
+$alamat = $_POST['alamat'] ?? ($row_siswa['alamat_ayah'] ?? '');
+$no_telp = $_POST['no_telp'] ?? ($row_siswa['no_telp_ayah'] ?? '');
+
+if (empty($nama_ortu) && $row_siswa) {
     if ($ortu_type === 'ibu') {
-        $nama_ortu = $row_siswa['ibu'] ?? '';
-        $pekerjaan = $row_siswa['pekerjaan_ibu'] ?? '';
-        $alamat = $row_siswa['alamat_ibu'] ?? '';
-        $no_telp = $row_siswa['no_telp_ibu'] ?? '';
+        $nama_ortu = $row_siswa['ibu'];
+        $pekerjaan = $row_siswa['pekerjaan_ibu'];
+        $alamat = $row_siswa['alamat_ibu'];
+        $no_telp = $row_siswa['no_telp_ibu'];
     } elseif ($ortu_type === 'wali') {
-        $nama_ortu = $row_siswa['wali'] ?? '';
-        $pekerjaan = $row_siswa['pekerjaan_wali'] ?? '';
-        $alamat = $row_siswa['alamat_wali'] ?? '';
-        $no_telp = $row_siswa['no_telp_wali'] ?? '';
-    } else {
-        $nama_ortu = $row_siswa['ayah'] ?? '';
-        $pekerjaan = $row_siswa['pekerjaan_ayah'] ?? '';
-        $alamat = $row_siswa['alamat_ayah'] ?? '';
-        $no_telp = $row_siswa['no_telp_ayah'] ?? '';
+        $nama_ortu = $row_siswa['wali'];
+        $pekerjaan = $row_siswa['pekerjaan_wali'];
+        $alamat = $row_siswa['alamat_wali'];
+        $no_telp = $row_siswa['no_telp_wali'];
     }
-
-    // Validasi bahwa data ortu tidak kosong
-    if (empty($nama_ortu)) {
-        die("Error: Data $ortu_type untuk siswa ini tidak ditemukan di database. Pastikan data orang tua sudah lengkap.");
-    }
-} else {
-    // Jika data siswa tidak ditemukan, tampilkan error
-    die("Error: Data siswa tidak ditemukan di database.");
 }
 
-$tempat_lahir = $_POST['tempat_lahir'] ?? '';
-
-// buat array bulan (berfungsi untuk mengubah angka bulan menjadi nama bulan, contoh : 2 menjadi Februari)
+// Format tanggal
 $bulan_indo = ["", "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-// hitung tanggal 3 bulan dari sekarang
-$tgl_target = strtotime("+3 months");
-// ambil 3 bulan dari sekarang
-$bulan = $bulan_indo[date("n", $tgl_target)] . " " . date("Y", $tgl_target);
+$tgl_input_obj = DateTime::createFromFormat('Y-m-d', $tanggal_input);
+$tanggal_formatted = $tgl_input_obj ? $tgl_input_obj->format('d') . ' ' . $bulan_indo[$tgl_input_obj->format('n')] . ' ' . $tgl_input_obj->format('Y') : $tanggal_input;
 
-$tanggal = date("d") . " " . $bulan_indo[date("n")] . " " . date("Y");
-
+$tgl_target_obj = clone $tgl_input_obj;
+$tgl_target_obj->modify('+3 months');
+$bulan_target = $bulan_indo[$tgl_target_obj->format('n')] . ' ' . $tgl_target_obj->format('Y');
 ?>
 
 <style>
+    /* TAMPILAN DI LAYAR WEB (Berdasarkan Gambar UI Anda) */
+    body {
+        background-color: #f4f7f6;
+    }
+
+    .print-container {
+        background: white;
+        width: 210mm;
+        /* Ukuran A4 */
+        min-height: 297mm;
+        padding: 20mm;
+        margin: 20px auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-family: "Times New Roman", Times, serif;
+        line-height: 1.5;
+        color: black;
+    }
+
+    .no-print {
+        margin-bottom: 20px;
+    }
+
+    /* Tombol Style */
+    .btn-action {
+        padding: 8px 15px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        background: white;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* FORM LAYOUT (Sesuai PDF) */
+    .header-img {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .title-doc {
+        text-align: center;
+        font-weight: bold;
+        text-decoration: underline;
+        font-size: 16pt;
+        margin: 20px 0;
+    }
+
+    .table-data {
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+    }
+
+    .table-data tr {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .table-data td {
+        padding: 5px;
+        vertical-align: middle;
+    }
+
+    .label-cell {
+        width: 180px;
+        flex-shrink: 0;
+    }
+
+    .separator-cell {
+        width: 10px;
+        flex-shrink: 0;
+        text-align: center;
+    }
+
+    .table-data td:last-child {
+        flex: 1;
+        border-bottom: 1px dotted black;
+        min-height: 20px;
+        padding-bottom: 5px;
+    }
+
+    .signature-wrapper {
+        margin-top: 50px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .signature-box {
+        text-align: center;
+        width: 250px;
+    }
+
+    .sig-space {
+        height: 80px;
+    }
+
+    /* TAMPILAN KHUSUS SAAT PRINT */
+    @media print {
+
+        /* Sembunyikan Navbar dan Tombol */
+        nav,
+        .navbar,
+        .no-print,
+        header,
+        footer {
+            display: none !important;
+        }
+
+        body {
+            background: white;
+            margin: 0;
+            padding: 80px;
+        }
+
+        .print-container {
+            margin: 0;
+            padding: 0;
+            box-shadow: none;
+            width: 100%;
+        }
+
+        /* Pastikan gambar KOP muncul */
+        .header-img {
+            width: 100%;
+        }
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+
     button {
         display: flex;
         height: 3em;
         align-items: center;
         justify-content: center;
-        background-color: #eeeeee4b;
+        background-color: #fff;
         border-radius: 3px;
-        letter-spacing: 1px;
-        transition: all 0.2s linear;
         cursor: pointer;
-        border: none;
-        background: #fff;
-    }
-
-    button>svg {
-        margin-right: 5px;
-        margin-left: 5px;
-        font-size: 20px;
-        transition: all 0.4s ease-in;
-    }
-
-    button:hover>svg {
-        font-size: 1.2em;
-        transform: translateX(-5px);
+        border: 1px solid #ddd;
+        padding: 0 15px;
+        transition: all 0.2s linear;
     }
 
     button:hover {
-        box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
+        background-color: #f9f9f9;
         transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    /* animasi icon printer */
-    .printer-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 20px;
-        height: 100%;
-    }
-
-    .printer-container {
-        height: 50%;
-        width: 100%;
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-    }
-
-    .printer-container svg {
-        width: 100%;
-        height: auto;
-        transform: translateY(4px);
-    }
-
-    .printer-page-wrapper {
-        width: 100%;
-        height: 50%;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-    }
-
-    .printer-page {
-        width: 70%;
-        height: 10px;
-        border: 1px solid black;
-        background-color: white;
-        transform: translateY(0px);
-        transition: all 0.3s;
-        transform-origin: top;
-    }
-
-    .print-btn:hover .printer-page {
-        height: 16px;
-    }
-
-    /* animasi icon printer */
-
-    .statement b {
+    .statement b{
         text-decoration: underline 1px dotted black;
         text-underline-offset: 5px;
     }
+
+    /* .field {
+        flex-grow: 1;
+        border-bottom: 1px dotted black;
+        position: relative;
+        top: -5px;
+        text-decoration: underline 1px dotted black;
+        text-underline-offset: 4px;
+    } */
 </style>
 
-<!-- tombol kembali -->
 <center class="no-print">
-
-    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-        <!-- tombol ini berfungsi untuk kembali ke halaman add_perjanjian_ortu.php dan mengirimkan nis yang sudah di cek menggunakan method post -->
-        <form action="add_perjanjian_ortu.php" method="post" style="margin: 0;">
-            <input type="text" name="nis" value="<?= $nis ?>" hidden>
-            <button type="submit">
-                <svg height="16" width="16" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1024 1024">
-                    <path
-                        d="M874.690416 495.52477c0 11.2973-9.168824 20.466124-20.466124 20.466124l-604.773963 0 188.083679 188.083679c7.992021 7.992021 7.992021 20.947078 0 28.939099-4.001127 3.990894-9.240455 5.996574-14.46955 5.996574-5.239328 0-10.478655-1.995447-14.479783-5.996574l-223.00912-223.00912c-3.837398-3.837398-5.996574-9.046027-5.996574-14.46955 0-5.433756 2.159176-10.632151 5.996574-14.46955l223.019353-223.029586c7.992021-7.992021 20.957311-7.992021 28.949332 0 7.992021 8.002254 7.992021 20.957311 0 28.949332l-188.073446 188.073446 604.753497 0C865.521592 475.058646 874.690416 484.217237 874.690416 495.52477z">
-                    </path>
-                </svg>
-                <span>Kembali</span>
-            </button>
-        </form>
-
-        <!-- tombol ini berfungsi untuk print halaman ini -->
-        <button class="print-btn" onclick="window.print()">
-            <span class="printer-wrapper">
-                <span class="printer-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 92 75">
-                        <path stroke-width="5" stroke="black"
-                            d="M12 37.5H80C85.2467 37.5 89.5 41.7533 89.5 47V69C89.5 70.933 87.933 72.5 86 72.5H6C4.067 72.5 2.5 70.933 2.5 69V47C2.5 41.7533 6.75329 37.5 12 37.5Z">
-                        </path>
-                        <mask fill="white" id="path-2-inside-1_30_7">
-                            <path d="M12 12C12 5.37258 17.3726 0 24 0H57C70.2548 0 81 10.7452 81 24V29H12V12Z"></path>
-                        </mask>
-                        <path mask="url(#path-2-inside-1_30_7)" fill="black"
-                            d="M7 12C7 2.61116 14.6112 -5 24 -5H57C73.0163 -5 86 7.98374 86 24H76C76 13.5066 67.4934 5 57 5H24C20.134 5 17 8.13401 17 12H7ZM81 29H12H81ZM7 29V12C7 2.61116 14.6112 -5 24 -5V5C20.134 5 17 8.13401 17 12V29H7ZM57 -5C73.0163 -5 86 7.98374 86 24V29H76V24C76 13.5066 67.4934 5 57 5V-5Z">
-                        </path>
-                        <circle fill="black" r="3" cy="49" cx="78"></circle>
-                    </svg>
-                </span>
-                <span class="printer-page-wrapper"><span class="printer-page"></span></span>
-            </span>
-            <span>&nbsp;&nbsp;Cetak Lagi</span>
+    <div class="btn-container">
+        <button onclick="window.history.back()" class="btn btn-cancel shadow-sm border">
+            <span>Batal</span>
+        </button>
+        <button onclick="window.print()" class="btn btn-save shadow-sm border">
+            <span><i class="bi bi-printer-fill" style="color: #1a8cfd;"></i> Cetak Laporan</span>
         </button>
     </div>
-
 </center>
 
-<div class="page">
-    <!-- Header -->
-    <div class="header">
-        <img src="/SistemPoin/assets/img/kop.jpg" alt="kepala surat" width="100%">
+<div class="print-container">
+    <img src="/SistemPoin/assets/img/kop.jpg" class="header-img" alt="Kop Surat">
+
+    <div class="title-doc">SURAT PERNYATAAN ORANG TUA</div>
+
+    <p>Yang bertandatangan di bawah ini orang tua/wali siswa SMK TI Bali Global Denpasar :</p>
+
+    <div class="indent">
+        <div class="form-row">
+            <div class="label">Nama</div>
+            <div class="separator">:</div>
+            <div class="field"><?= htmlspecialchars($nama_ortu) ?></div>
+        </div>
+        <div class="form-row">
+            <div class="label">Pekerjaan</div>
+            <div class="separator">:</div>
+            <div class="field"><?= htmlspecialchars($pekerjaan) ?></div>
+        </div>
+        <div class="form-row">
+            <div class="label">Alamat Rumah</div>
+            <div class="separator">:</div>
+            <div class="field"><?= htmlspecialchars($alamat) ?></div>
+        </div>
+        <div class="form-row">
+            <div class="label">No. Hp./Telp.</div>
+            <div class="separator">:</div>
+            <div class="field"><?= htmlspecialchars($no_telp) ?></div>
+        </div>
+
+        <br>
     </div>
 
-    <div class="title">SURAT PERNYATAAN ORANG TUA</div>
-    <br>
-    <div class="content">
-        <p>Yang bertandatangan di bawah ini orang tua/wali siswa SMK TI Bali Global Denpasar :</p>
+    <p class="statement" style="text-align: justify;">
+        Menyatakan memang benar sanggup membina anak kami yang bernama
+        <b><?= htmlspecialchars($row_siswa['nama_siswa']) ?></b>,
+        Kelas :
+        <b><?= htmlspecialchars($row_siswa['tingkat'] . ' ' . $row_siswa['program_keahlian'] . ' ' . $row_siswa['rombel']) ?></b>
+        untuk lebih disiplin mengikuti proses pembelajaran dan mengikuti Tata Tertib Sekolah.
+        <br><br>
+    </p>
 
-        <div class="indent">
-            <div class="form-row">
-                <div class="label">Nama</div>
-                <div class="separator">:</div>
-                <div class="field"><?= $nama_ortu ?></div>
-            </div>
-            <div class="form-row">
-                <div class="label">Pekerjaan</div>
-                <div class="separator">:</div>
-                <div class="field"><?= $pekerjaan ?></div>
-            </div>
-            <div class="form-row">
-                <div class="label">Alamat Rumah</div>
-                <div class="separator">:</div>
-                <div class="field"><?= $alamat ?></div>
-            </div>
-            <div class="form-row">
-                <div class="label">No. Hp./Telp.</div>
-                <div class="separator">:</div>
-                <div class="field"><?= $no_telp ?></div>
-            </div>
+    <p style="text-align: justify;">
+        Demikian pernyataan kami dan jika tidak sesuai dengan pernyataan diatas, anak kami dapat dikeluarkan dari
+        sekolah ini dengan rekomendasi pindah ke SMK lain yang serumpun.
+    </p>
+
+    <div class="signature-wrapper">
+        <div class="signature-box">
+            <div>Denpasar, <?= $tanggal_formatted ?></div>
+            <div>Yang membuat pernyataan,</div>
+            <div>Orang Tua/Wali siswa</div>
+            <div class="sig-space"></div>
+            <div style="text-decoration: underline; font-weight: bold;"><?= htmlspecialchars($nama_ortu) ?></div>
         </div>
-        <br>
-        <br>
+    </div>
 
-        <!-- menampilkan isi surat perjanjian orang tua/wali dengan menampilkan data siswa dari hasil query database line: 16-->
-        <p class="statement">
-            Menyatakan memang benar sanggup membina anak kami yang bernama
-            <b><?php echo $row_siswa['nama_siswa']; ?></b>, Kelas :
-            <b><?php echo $row_siswa['tingkat'] . ' ' . $row_siswa['program_keahlian'] . ' ' . $row_siswa['rombel'] ?></b>
-            untuk lebih disiplin mengikuti proses pembelajaran dan mengikuti Tata Tertib Sekolah. <br><br>
-            Demikian pernyataan kami dan jika tidak sesuai dengan pernyataan diatas, anak kami dapat dikeluarkan dari
-            sekolah ini dengan rekomendasi pindah ke SMK lain yang serumpun.
-        </p>
-
-        <div class="signature-section">
-            <div class="sig-block"></div>
-            <div class="sig-block sig-right">
-                <!-- menampilkan tanggal hari ini dengan menggunakan bulan bahasa indonesia line : 31-->
-                <div>Denpasar, <?php echo $tanggal ?></div>
-                <div>
-                    Yang membuat pernyataan<br>
-                    Orang Tua/Wali siswa
-                </div>
-                <!-- menampilkan nama orang tua/wali -->
-                <div class="sig-name-plain"><?= $nama_ortu ?></div>
-            </div>
-        </div>
-
-        <div class="indent">
-            <div class="form-row">
-                <div><u>NB : <br>
-                        <!-- menampilkan bulan hari ini + 3 bulan kedepan -->
-                        Jika siswa tidak bisa mengikuti proses pembelajaran sampai bulan <?= $bulan ?> maka <br>
-                        Siswa dinyatakan mengundurkan diri.</u>
-                </div>
-            </div>
-        </div>
+    <div style="margin-top: 30px; font-size: 10pt;">
+        <strong><u>NB:</u></strong><br>
+        <i>Jika siswa tidak bisa mengikuti proses pembelajaran sampai bulan <?= $bulan_target ?> maka siswa dinyatakan
+            mengundurkan diri.</i>
     </div>
 </div>
 
-<script>
-    // ketika halaman selesai loading maka halaman akan otomatis di print
-    window.onload = function () {
-        window.print();
-    }
-</script>
-
-<?php
-// Menyertakan bagian footer (penutup halaman)
-include "../../includes/footer.php";
-?>
+<?php include "../../includes/footer.php"; ?>

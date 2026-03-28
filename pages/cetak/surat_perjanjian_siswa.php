@@ -11,6 +11,8 @@ $nama_ortu = $_POST['nama_ortu'];
 $pekerjaan = $_POST['pekerjaan'];
 $alamat = $_POST['alamat'];
 $no_telp = $_POST['no_telp'];
+$masalah = $_POST['masalah'] ?? '';
+$tanggal_input = $_POST['tanggal'] ?? date('Y-m-d');
 
 // mengambil data siswa dari database join ke tabel ortu_wali, kelas, tingkat, program_keahlian, dan guru
 $query_siswa = mysqli_query($conn, "SELECT nis, nama_siswa, tingkat, program_keahlian, rombel, ayah, ibu, wali, nama_pengguna, deskripsi FROM siswa
@@ -40,257 +42,236 @@ $waka_kesiswaan = $row_waka['nama_pengguna'];
 
 // buat array bulan (berfungsi untuk mengubah angka bulan menjadi nama bulan, contoh : 2 menjadi Februari)
 $bulan_indo = ["", "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-$tanggal = date("d") . " " . $bulan_indo[date("n")] . " " . date("Y");
+
+// Format tanggal dari input
+$tgl_obj = DateTime::createFromFormat('Y-m-d', $tanggal_input);
+$tanggal_formatted = $tgl_obj ? $tgl_obj->format('d') . ' ' . $bulan_indo[$tgl_obj->format('n')] . ' ' . $tgl_obj->format('Y') : date('d') . ' ' . $bulan_indo[date('n')] . ' ' . date('Y');
 
 // Menyertakan tampilan header (bagian atas halaman)
 include ROOTPATH . "/includes/header.php";
-
 ?>
 
 <style>
-    button {
+    body {
+        background-color: #f4f7f6;
+    }
+
+    .print-container {
+        background: white;
+        width: 210mm; /* Ukuran A4 */
+        min-height: 297mm;
+        padding: 20mm;
+        margin: 20px auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-family: "Times New Roman", Times, serif;
+        line-height: 1.5;
+        color: black;
+    }
+
+    .no-print-tools {
         display: flex;
-        height: 3em;
-        align-items: center;
         justify-content: center;
-        background-color: #eeeeee4b;
-        border-radius: 3px;
-        letter-spacing: 1px;
-        transition: all 0.2s linear;
-        cursor: pointer;
-        border: none;
-        background: #fff;
+        align-items: center;
+        gap: 10px;
+        margin: 20px 0;
     }
 
-    button>svg {
-        margin-right: 5px;
-        margin-left: 5px;
-        font-size: 20px;
-        transition: all 0.4s ease-in;
+    .header-img {
+        width: 100%;
+        margin-bottom: 10px;
     }
 
-    button:hover>svg {
-        font-size: 1.2em;
-        transform: translateX(-5px);
+    .title-doc {
+        text-align: center;
+        font-weight: bold;
+        text-decoration: underline;
+        font-size: 16pt;
+        margin-bottom: 20px;
+        text-transform: uppercase;
     }
 
-    button:hover {
-        box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
-        transform: translateY(-2px);
+    .content-section {
+        margin-bottom: 20px;
     }
 
-    /* animasi icon printer */
-    .printer-wrapper {
+    .form-row {
+        display: flex;
+        margin-bottom: 5px;
+    }
+
+    .label-cell {
+        width: 180px;
+        flex-shrink: 0;
+    }
+
+    .separator-cell {
+        width: 20px;
+        flex-shrink: 0;
+        text-align: center;
+    }
+
+    .field-cell {
+        flex: 1;
+        border-bottom: 1px dotted black;
+        min-height: 22px;
+        font-weight: bold;
+    }
+
+    .signature-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 30px;
+        gap: 30px;
+    }
+
+    .sig-box {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        width: 20px;
-        height: 100%;
+        text-align: center;
+        page-break-inside: avoid;
+        break-inside: avoid-page;
     }
 
-    .printer-container {
-        height: 50%;
-        width: 100%;
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
+    .sig-name {
+        margin-top: 60px;
+        font-weight: bold;
+        text-decoration: underline;
     }
 
-    .printer-container svg {
-        width: 100%;
-        height: auto;
-        transform: translateY(4px);
+    .wakasek-wrapper {
+        margin-top: 40px; 
+        display: flex; 
+        justify-content: center; 
+        page-break-inside: avoid; 
+        break-inside: avoid;
     }
 
-    .printer-page-wrapper {
-        width: 100%;
-        height: 50%;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
+    @media print {
+        nav, .navbar, .no-print, header, footer {
+            display: none !important;
+        }
+        body {
+            background: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .print-container {
+            box-shadow: none;
+            margin: 0 auto;
+            width: 100%;
+            padding: 10mm 10mm 30mm 10mm; Menambah padding bawah agar tidak mepet batas kertas
+            min-height: auto;
+            overflow: visible !important;
+        }
     }
-
-    .printer-page {
-        width: 70%;
-        height: 10px;
-        border: 1px solid black;
-        background-color: white;
-        transform: translateY(0px);
-        transition: all 0.3s;
-        transform-origin: top;
-    }
-
-    .print-btn:hover .printer-page {
-        height: 16px;
-    }
-
-    /* animasi icon printer */
 </style>
 
-<!-- tombol kembali -->
-<center class="no-print">
-
-    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-        <!-- tombol ini berfungsi untuk kembali ke halaman add_perjanjian_siswa.php dan mengirimkan nis yang sudah di cek menggunakan method post -->
-        <form action="add_perjanjian_siswa.php" method="post" style="margin: 0;">
-            <input type="text" name="nis" value="<?= $nis ?>" hidden>
-            <button type="submit">
-                <svg height="16" width="16" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1024 1024">
-                    <path
-                        d="M874.690416 495.52477c0 11.2973-9.168824 20.466124-20.466124 20.466124l-604.773963 0 188.083679 188.083679c7.992021 7.992021 7.992021 20.947078 0 28.939099-4.001127 3.990894-9.240455 5.996574-14.46955 5.996574-5.239328 0-10.478655-1.995447-14.479783-5.996574l-223.00912-223.00912c-3.837398-3.837398-5.996574-9.046027-5.996574-14.46955 0-5.433756 2.159176-10.632151 5.996574-14.46955l223.019353-223.029586c7.992021-7.992021 20.957311-7.992021 28.949332 0 7.992021 8.002254 7.992021 20.957311 0 28.949332l-188.073446 188.073446 604.753497 0C865.521592 475.058646 874.690416 484.217237 874.690416 495.52477z">
-                    </path>
-                </svg>
-                <span>Kembali</span>
-            </button>
-        </form>
-
-        <!-- tombol ini berfungsi untuk print halaman ini -->
-        <button class="print-btn" onclick="window.print()">
-            <span class="printer-wrapper">
-                <span class="printer-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 92 75">
-                        <path stroke-width="5" stroke="black"
-                            d="M12 37.5H80C85.2467 37.5 89.5 41.7533 89.5 47V69C89.5 70.933 87.933 72.5 86 72.5H6C4.067 72.5 2.5 70.933 2.5 69V47C2.5 41.7533 6.75329 37.5 12 37.5Z">
-                        </path>
-                        <mask fill="white" id="path-2-inside-1_30_7">
-                            <path d="M12 12C12 5.37258 17.3726 0 24 0H57C70.2548 0 81 10.7452 81 24V29H12V12Z"></path>
-                        </mask>
-                        <path mask="url(#path-2-inside-1_30_7)" fill="black"
-                            d="M7 12C7 2.61116 14.6112 -5 24 -5H57C73.0163 -5 86 7.98374 86 24H76C76 13.5066 67.4934 5 57 5H24C20.134 5 17 8.13401 17 12H7ZM81 29H12H81ZM7 29V12C7 2.61116 14.6112 -5 24 -5V5C20.134 5 17 8.13401 17 12V29H7ZM57 -5C73.0163 -5 86 7.98374 86 24V29H76V24C76 13.5066 67.4934 5 57 5V-5Z">
-                        </path>
-                        <circle fill="black" r="3" cy="49" cx="78"></circle>
-                    </svg>
-                </span>
-                <span class="printer-page-wrapper"><span class="printer-page"></span></span>
-            </span>
-            <span>&nbsp;&nbsp;Cetak Lagi</span>
+<div class="no-print no-print-tools">
+    <form action="add_perjanjian_siswa.php" method="post" style="margin: 0;">
+        <input type="hidden" name="nis" value="<?= $nis ?>">
+        <button type="submit" class="btn btn-cancel shadow-sm border">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
         </button>
-    </div>
+    </form>
+    <button onclick="window.print()" class="btn btn-save shadow-sm border">
+        <i class="bi bi-printer-fill me-1" style="color: #1a8cfd;"></i> Cetak Pernyataan
+    </button>
+</div>
 
-</center>
+<div class="print-container">
+    <img src="/SistemPoin/assets/img/kop.jpg" class="header-img" alt="Kop Surat">
 
+    <div class="title-doc">SURAT PERNYATAAN SISWA</div>
 
-<div class="page">
-    <!-- Header -->
-    <div class="header">
-        <!-- menampilkan gambar kop surat dari folder gambar-->
-        <img src="/SistemPoin/assets/img/kop.jpg" alt="kepala surat" width="100%">
-    </div>
-
-    <div class="title">SURAT PERNYATAAN SISWA</div>
-
-    <div class="content">
-        <p>Yang bertandatangan di bawah ini :</p>
-
+    <div class="content-section">
+        <p>Yang bertandatangan di bawah ini:</p>
         <div class="indent">
             <div class="form-row">
-                <div class="label">Nama</div>
-                <div class="separator">:</div>
-                <!-- menampilkan nama siswa dari hasil query database line: 16-->
-                <div class="field"><?php echo $row_siswa['nama_siswa']; ?></div>
+                <div class="label-cell">Nama</div>
+                <div class="separator-cell">:</div>
+                <div class="field-cell"><?= htmlspecialchars($row_siswa['nama_siswa']) ?></div>
             </div>
             <div class="form-row">
-                <div class="label">NIS</div>
-                <div class="separator">:</div>
-                <!-- menampilkan nis siswa dari hasil query database line: 16-->
-                <div class="field"><?php echo $row_siswa['nis']; ?></div>
+                <div class="label-cell">NIS</div>
+                <div class="separator-cell">:</div>
+                <div class="field-cell"><?= htmlspecialchars($row_siswa['nis']) ?></div>
             </div>
             <div class="form-row">
-                <div class="label">Kelas</div>
-                <div class="separator">:</div>
-                <!-- menampilkan kelas siswa dari hasil query database line: 16-->
-                <div class="field">
-                    <?php echo $row_siswa['tingkat'] . ' ' . $row_siswa['program_keahlian'] . ' ' . $row_siswa['rombel'] ?>
-                </div>
+                <div class="label-cell">Kelas</div>
+                <div class="separator-cell">:</div>
+                <div class="field-cell"><?= $row_siswa['tingkat'] . ' ' . $row_siswa['program_keahlian'] . ' ' . $row_siswa['rombel'] ?></div>
             </div>
             <div class="form-row">
-                <div class="label">Program Keahlian</div>
-                <div class="separator">:</div>
-                <!-- menampilkan program keahlian siswa dari hasil query database line: 16-->
-                <div class="field"><?php echo $row_siswa['deskripsi']; ?></div>
+                <div class="label-cell">Program Keahlian</div>
+                <div class="separator-cell">:</div>
+                <div class="field-cell"><?= htmlspecialchars($row_siswa['deskripsi']) ?></div>
             </div>
             <div class="form-row">
-                <div class="label">Masalah</div>
-                <div class="separator">:</div>
-                <!-- menampilkan masalah siswa dari database tabel masalah -->
-                <div class="field-masalah"></div>
+                <div class="label-cell">Masalah</div>
+                <div class="separator-cell">:</div>
+                <div class="field-cell"><?= htmlspecialchars($masalah) ?></div>
+            </div>
+
+            <div class="form-row">
+                <div class="label-cell">Nama Orang Tua</div>
+                <div class="separator-cell">:</div>
+                <div class="field-cell"><?= htmlspecialchars($nama_ortu) ?></div>
+            </div>
+            <div class="form-row">
+                <div class="label-cell">Pekerjaan</div>
+                <div class="separator-cell">:</div>
+                <div class="field-cell"><?= htmlspecialchars($pekerjaan) ?></div>
+            </div>
+            <div class="form-row">
+                <div class="label-cell">Alamat Rumah</div>
+                <div class="separator-cell">:</div>
+                <div class="field-cell"><?= htmlspecialchars($alamat) ?></div>
+            </div>
+            <div class="form-row">
+                <div class="label-cell">No. Hp./Telp.</div>
+                <div class="separator-cell">:</div>
+                <div class="field-cell"><?= htmlspecialchars($no_telp) ?></div>
             </div>
         </div>
+    </div>
 
-        <div class="indent">
-            <div class="form-row">
-                <div class="label">Nama Orang Tua</div>
-                <div class="separator">:</div>
-                <!-- menampilkan nama orang tua dari halaman add_perjanjian_siswa line : 10 -->
-                <div class="field"><?= $nama_ortu ?></div>
-            </div>
-            <div class="form-row">
-                <div class="label">Pekerjaan</div>
-                <div class="separator">:</div>
-                <!-- menampilkan pekerjaan orang tua dari halaman add_perjanjian_siswa line : 11 -->
-                <div class="field"><?= $pekerjaan ?></div>
-            </div>
-            <div class="form-row">
-                <div class="label">Alamat Rumah</div>
-                <div class="separator">:</div>
-                <!-- menampilkan alamat orang tua dari halaman add_perjanjian_siswa line : 12 -->
-                <div class="field"><?= $alamat ?></div>
-            </div>
-            <div class="form-row">
-                <div class="label">No. Hp./Telp.</div>
-                <div class="separator">:</div>
-                <!-- menampilkan no. hp orang tua dari halaman add_perjanjian_siswa line : 13 -->
-                <div class="field"><?= $no_telp ?></div>
-            </div>
-        </div>
-
-        <p class="statement">
-            Menyatakan dan berjanji akan bersungguh-sungguh berubah dan bersedia mentaati aturan dan tata tertib
-            sekolah.
-            Apabila selama masa pembinaan tidak mengalami perubahan, maka siswa yang bersangkutan dikembalikan kepada
-            orang tua/wali. <br>
+    <div class="content-section">
+        <p style="text-align: justify; text-indent: 40px; margin-bottom: 0; margin-top: -15px">
+            Menyatakan dan berjanji akan bersungguh-sungguh berubah dan bersedia mentaati aturan dan tata tertib sekolah. 
+            Apabila selama masa pembinaan tidak mengalami perubahan, maka saya bersedia dikembalikan kepada orang tua/wali. 
             Demikian surat pernyataan ini saya buat dengan sesungguhnya tanpa ada tekanan dari siapapun.
         </p>
+    </div>
 
-        <div class="signature-section">
-            <div class="sig-block">
-                <div>Mengetahui,</div>
-                <div>Orang Tua/Wali siswa</div>
-                <!-- menampilkan nama orang tua dari halaman add_perjanjian_siswa line : 10 -->
-                <div class="sig-name-plain"><?= $nama_ortu ?></div>
-            </div>
-            <div class="sig-block sig-right">
-                <!-- menampilkan tanggal hari ini menggunakan format tanggal indonesia -->
-                <div>Denpasar, <?php echo $tanggal; ?></div>
-                <div>Siswa yang bersangkutan</div>
-                <!-- menampilkan nama siswa dari hasil query database line: 16 -->
-                <div class="sig-name-plain"><?php echo $row_siswa['nama_siswa']; ?></div>
-            </div>
-
-            <div class="sig-block">
-                <div>Guru Bimbingan Konseling</div>
-                <!-- menampilkan nama guru bimbingan konseling dari hasil query database line: 17 -->
-                <div class="sig-name" style="margin-top: 70px; border: none; text-decoration: underline;">
-                    <?= $guru_bk ?>
-                </div>
-            </div>
-            <div class="sig-block sig-right">
-                <div>Guru Wali Kelas</div>
-                <!-- menampilkan nama guru wali kelas dari hasil query database line: 16 -->
-                <div class="sig-name" style="margin-top: 70px;"><?php echo $row_siswa['nama_pengguna']; ?></div>
-            </div>
+    <div class="signature-grid">
+        <div class="sig-box">
+            <div>Mengetahui,</div>
+            <div>Orang Tua/Wali Siswa</div>
+            <div class="sig-name"><?= htmlspecialchars($nama_ortu) ?></div>
         </div>
+        <div class="sig-box">
+            <div>Denpasar, <?= $tanggal_formatted ?></div>
+            <div>Siswa yang bersangkutan</div>
+            <div class="sig-name"><?= htmlspecialchars($row_siswa['nama_siswa']) ?></div>
+        </div>
+        <div class="sig-box">
+            <div>Guru Bimbingan Konseling</div>
+            <div class="sig-name"><?= htmlspecialchars($guru_bk) ?></div>
+        </div>
+        <div class="sig-box">
+            <div>Guru Wali Kelas</div>
+            <div class="sig-name"><?= htmlspecialchars($row_siswa['nama_pengguna']) ?></div>
+        </div>
+    </div>
 
-        <div class="footer-sig">
-            <div>Mengetahui</div>
+    <!-- Bagian Tanda Tangan Wakasek Kesiswaan yang diposisikan di tengah -->
+    <div class="wakasek-wrapper">
+        <div class="sig-box">
+            <div>Mengetahui,</div>
             <div>Wakasek Kesiswaan</div>
-            <div class="sig-name">
-                <!-- menampilkan nama wakasek kesiswaan dari hasil query database line: 37 -->
-                <?= $waka_kesiswaan ?>
-            </div>
+            <div class="sig-name">( <?= htmlspecialchars($waka_kesiswaan) ?> )</div>
         </div>
-
     </div>
 </div>
 
@@ -301,5 +282,5 @@ include ROOTPATH . "/includes/header.php";
     }
 </script>
 <?php
-include "../../includes/footer.php";
+include ROOTPATH . "/includes/footer.php";
 ?>

@@ -3,7 +3,7 @@
 */
 .datalist-container input[list] {
   background: white;
-  min-height: 45px;
+  /* min-height: 45px; */
   padding-right: 30px;
   position: relative;
 }
@@ -481,6 +481,13 @@ th {
   margin-top: 2rem;
   flex-wrap: wrap;
 }
+
+.statement {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-indent: 30px;
+}
+
 @media (max-width: 768px) {
   .profile-header {
     padding: 1.5rem;

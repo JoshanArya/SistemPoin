@@ -3,6 +3,30 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/SistemPoin');
 include ROOTPATH . "/config/config.php";
 include ROOTPATH . "/includes/header.php";
 ?>
+<?php
+// Ambil NIS jika ada pencarian
+$nis = $_POST['nis'] ?? '';
+$row_siswa = null;
+
+if (!empty($nis)) {
+    $nis_escaped = mysqli_real_escape_string($conn, $nis);
+    $query = mysqli_query($conn, "SELECT s.nis, s.nama_siswa, t.tingkat, p.program_keahlian, k.rombel,
+        ow.ayah, ow.ibu, ow.wali, ow.pekerjaan_ayah, ow.pekerjaan_ibu, ow.pekerjaan_wali,
+        ow.alamat_ayah, ow.alamat_ibu, ow.alamat_wali, ow.no_telp_ayah, ow.no_telp_ibu, ow.no_telp_wali
+        FROM siswa s
+        JOIN ortu_wali ow USING(id_ortu_wali)
+        JOIN kelas k USING(id_kelas)
+        JOIN tingkat t ON k.id_tingkat = t.id_tingkat
+        JOIN program_keahlian p ON k.id_program_keahlian = p.id_program_keahlian
+        WHERE s.nis = '$nis_escaped'");
+    $row_siswa = mysqli_fetch_assoc($query);
+}
+
+// Ambil daftar semua siswa untuk datalist
+$query_all_siswa = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa ORDER BY nama_siswa ASC");
+?>
+
+
 
 <div class="container py-5">
     <div class="row justify-content-center">
@@ -15,237 +39,116 @@ include ROOTPATH . "/includes/header.php";
                     </h2>
                 </div>
 
-                <form action="surat_perjanjian_ortu.php" method="POST" class="needs-validation" novalidate>
-                    <input type="hidden" name="nis" id="nis" value="">
-                    <input type="hidden" name="ortu_type" id="ortu_type" value="">
-
-                    <div class="form-section-title">
-                        <i class="bi bi-person-badge"></i> Pilih Siswa
-                    </div>
-                    <div id="dropdown_siswa_container" style="display: none; position: absolute; color: #ffffff00;">
-                        <small id="dropdown_siswa_text"></small>
-                    </div>
-                    <div class="row g-3 mb-4">
-                        <div class="col-12">
-                            <label class="form-label">Siswa <span class="text-danger">*</span></label>
-                            <input list="nis_list" id="nis_input" class="form-control datalist-container"
-                                placeholder="Ketik NIS atau nama siswa..." autocomplete="off" required
-                                onchange="loadSiswaData(this.value)">
-                            <datalist id="nis_list">
-                                <?php
-                                $siswa_query = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa ORDER BY nama_siswa");
-                                while ($s = mysqli_fetch_assoc($siswa_query)) {
-                                    echo '<option value="' . $s['nis'] . '">' . $s['nis'] . ' - ' . htmlspecialchars($s['nama_siswa']) . '</option>';
-                                }
-                                ?>
-                            </datalist>
+                <!-- Form Cari Siswa -->
+                <form action="" method="post" class="mb-4 mt-3">
+                    <div class="row align-items-end">
+                        <div class="col-md-8">
+                            <label class="form-label">Cari Siswa (Nama atau NIS)</label>
+                            <div class="datalist-container">
+                                <input list="siswaList" name="nis" class="form-control" placeholder="Masukkan Nama atau NIS..." value="<?= htmlspecialchars($nis) ?>" required>
+                                <datalist id="siswaList">
+                                    <?php while ($s = mysqli_fetch_assoc($query_all_siswa)): ?>
+                                        <option value="<?= $s['nis'] ?>"><?= $s['nama_siswa'] ?> (<?= $s['nis'] ?>)</option>
+                                    <?php endwhile; ?>
+                                </datalist>
+                            </div>
                         </div>
-
-                        <div class="form-section-title" style="margin-bottom: -1.5rem;">
-                            <i class="bi bi-people"></i> Pilih Orang Tua/Wali
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-save shadow-sm border w-100">
+                                <i class="bi bi-search me-2"></i>Cek Data Siswa
+                            </button>
                         </div>
-                        <div class="row g-3 mb-4">
-                            <div class="col-12">
-                                <label class="form-label">Hubungan Keluarga <span class="text-danger">*</span></label>
-                                <div class="dropdown border rounded">
-                                    <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start"
-                                        type="button" id="dropdown_ortu" data-bs-toggle="dropdown">
-                                        Pilih Ayah/Ibu/Wali
+                    </div>
+                </form>
+
+                <?php if ($row_siswa): ?>
+                    <hr>
+                    <form action="surat_perjanjian_ortu.php" method="post">
+                        <input type="hidden" name="nis" value="<?= $row_siswa['nis'] ?>">
+                        <!-- Form tanggal hidden sesuai request -->
+                        <input type="hidden" name="tanggal" value="<?= date('Y-m-d') ?>">
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <div class="alert bg-primary-subtle border-primary">
+                                    <strong>Data Terpilih:</strong> <?= $row_siswa['nama_siswa'] ?> (<?= $row_siswa['nis'] ?>) - <?= $row_siswa['tingkat'] ?> <?= $row_siswa['program_keahlian'] ?> <?= $row_siswa['rombel'] ?>
+                                </div>
+                            </div>
+
+                            <div class="form-section-title" style="margin-bottom: -1.5rem;">
+                                <i class="bi bi-people"></i> Pilih Orang Tua/Wali
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Gunakan Data Orang Tua / Wali</label>
+                            <div class="dropdown border rounded">
+                                    <button class="btn dropdown-toggle-filter dropdown-toggle w-100 text-start" type="button" id="dropdown_select_ortu" data-bs-toggle="dropdown">
+                                        Ayah
                                     </button>
                                     <ul class="dropdown-menu w-100 text-start">
-                                        <li><a class="dropdown-item" href="#" onclick="selectOrtu('ayah'); return false;">Ayah</a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="#" onclick="selectOrtu('ibu'); return false;">Ibu</a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="#" onclick="selectOrtu('wali'); return false;">Wali</a>
-                                        </li>
+                                        <li><a class="dropdown-item" href="#" onclick="updateOrtuData('Ayah', '<?= addslashes($row_siswa['ayah']) ?>', '<?= addslashes($row_siswa['pekerjaan_ayah']) ?>', '<?= addslashes($row_siswa['alamat_ayah']) ?>', '<?= addslashes($row_siswa['no_telp_ayah']) ?>'); return false;">Ayah</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="updateOrtuData('Ibu', '<?= addslashes($row_siswa['ibu']) ?>', '<?= addslashes($row_siswa['pekerjaan_ibu']) ?>', '<?= addslashes($row_siswa['alamat_ibu']) ?>', '<?= addslashes($row_siswa['no_telp_ibu']) ?>'); return false;">Ibu</a></li>
+                                        <?php if (!empty($row_siswa['wali'])): ?>
+                                            <li><a class="dropdown-item" href="#" onclick="updateOrtuData('Wali', '<?= addslashes($row_siswa['wali']) ?>', '<?= addslashes($row_siswa['pekerjaan_wali']) ?>', '<?= addslashes($row_siswa['alamat_wali']) ?>', '<?= addslashes($row_siswa['no_telp_wali']) ?>'); return false;">Wali</a></li>
+                                        <?php endif; ?>
                                     </ul>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-section-title" style="margin-bottom: -1.5rem;">
-                            <i class="bi bi-card-text"></i> Data Orang Tua/Wali
-                        </div>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label">Nama <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="nama_ortu" readonly>
-                                <input type="hidden" name="nama_ortu" id="nama_ortu_hidden">
+                            <div class="form-section-title" style="margin-bottom: -1.5rem;">
+                                <i class="bi bi-card-text"></i> Data Orang Tua/Wali
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Pekerjaan <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="pekerjaan" readonly>
-                                <input type="hidden" name="pekerjaan" id="pekerjaan_hidden">
+                                <label class="form-label">Nama Orang Tua</label>
+                                <input type="text" name="nama_ortu" id="nama_ortu" class="form-control" value="<?= htmlspecialchars($row_siswa['ayah']) ?>" readonly required>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">No Telp <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="no_telp" readonly>
-                                <input type="hidden" name="no_telp" id="no_telp_hidden">
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Alamat <span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="alamat" readonly rows="2"></textarea>
-                                <input type="hidden" name="alamat" id="alamat_hidden">
-                            </div>
-                        </div>
 
-                        <div class="form-section-title" style="margin-bottom: -1.5rem;">
-                            <i class="bi bi-card-text"></i> Detail Surat
-                        </div>
-                        <div class="row g-3 mb-4">
                             <div class="col-md-6">
-                                <label class="form-label">No Surat <span class="text-danger">*</span></label>
-                                <input type="number" name="no_surat" class="form-control" required>
+                                <label class="form-label">Pekerjaan</label>
+                                <input type="text" name="pekerjaan" id="pekerjaan" class="form-control" value="<?= htmlspecialchars($row_siswa['pekerjaan_ayah']) ?>" readonly required>
                             </div>
+
                             <div class="col-md-6">
-                                <label class="form-label">Tanggal <span class="text-danger">*</span></label>
-                                <input type="date" name="tanggal" class="form-control" value="<?= date('Y-m-d') ?>"
-                                    required>
+                                <label class="form-label">No. Hp/Telp</label>
+                                <input type="text" name="no_telp" id="no_telp" class="form-control" value="<?= htmlspecialchars($row_siswa['no_telp_ayah']) ?>" readonly required>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label">Alamat Rumah</label>
+                                <textarea name="alamat" id="alamat" class="form-control" rows="2" readonly required><?= htmlspecialchars($row_siswa['alamat_ayah']) ?></textarea>
+                            </div>
+
+                            <!-- No_surat and Tanggal are removed/hidden as per request -->
+                            <div class="col-12 mt-4 text-end">
+                                <a href="../siswa/list.php" class="btn btn-cancel shadow-sm border me-2">Batal</a>
+                                <button type="submit" class="btn shadow-sm border btn-save">
+                                    <i class="bi bi-printer me-2"></i>Generate Surat Pernyataan
+                                </button>
                             </div>
                         </div>
-
-                        <hr class="my-5">
-
-                        <div class="d-flex justify-content-end gap-3">
-                            <a href="list.php" class="btn btn-cancel shadow-sm border">Batal</a>
-                            <button type="submit" class="btn btn-save shadow-sm border">
-                                <i class="bi bi-printer me-2"></i>Cetak Surat
-                            </button>
-                        </div>
-                </form>
+                    </form>
+                    <script>
+                        function updateOrtuData() {
+                            const select = document.getElementById('select_ortu');
+                            const opt = select.options[select.selectedIndex];
+                            document.getElementById('nama_ortu').value = opt.getAttribute('data-nama');
+                            document.getElementById('pekerjaan').value = opt.getAttribute('data-kerja');
+                            document.getElementById('alamat').value = opt.getAttribute('data-alamat');
+                            document.getElementById('no_telp').value = opt.getAttribute('data-telp');
+                            document.getElementById('ortu_type_hidden').value = opt.value; // Update hidden ortu_type
+                        }
+                        // Initial call to set values if a student is already selected
+                        document.addEventListener('DOMContentLoaded', function() {
+                            if (document.getElementById('select_ortu')) {
+                                updateOrtuData();
+                            }
+                        });
+                    </script>
+                <?php elseif (!empty($nis)): ?>
+                    <div class="alert alert-warning mt-3">Data siswa tidak ditemukan.</div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    const siswaOrtuData = {};
-
-    function loadSiswaData(value) {
-        const [nis, nama] = value.split(' - ');
-        if (!nis || !nama) return;
-
-        document.getElementById('nis').value = nis.trim();
-
-        document.getElementById('dropdown_siswa_container').style.display = 'block';
-        document.getElementById('dropdown_siswa_text').textContent = nama.trim() + ' (' + nis.trim() + ')';
-
-        fetch('/SistemPoin/process/get_siswa_full.php?nis=' + encodeURIComponent(nis.trim()))
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    console.error(data.error);
-                    return;
-                }
-                siswaOrtuData[nis.trim()] = data;
-                document.getElementById('dropdown_ortu').textContent = 'Pilih Ayah/Ibu/Wali';
-                clearOrtuFields();
-            })
-            .catch(err => console.error('AJAX error:', err));
-    }
-
-    function selectOrtu(ortuType) {
-        const nis = document.getElementById('nis').value;
-
-        console.log('selectOrtu called with:', ortuType, 'nis:', nis);
-
-        if (!nis) {
-            alert('Silakan pilih siswa terlebih dahulu');
-            return false;
-        }
-
-        if (!siswaOrtuData[nis]) {
-            console.log('Data not found for nis:', nis);
-            console.log('Available keys:', Object.keys(siswaOrtuData));
-            alert('Data siswa tidak ditemukan. Silakan pilih siswa lagi.');
-            return false;
-        }
-
-        const data = siswaOrtuData[nis];
-        console.log('Data siswa:', data);
-        document.getElementById('ortu_type').value = ortuType;
-
-        let nama = '';
-        let pekerjaan = '';
-        let alamat = '';
-        let no_telp = '';
-        let buttonText = '';
-
-        if (ortuType === 'ibu') {
-            nama = data.ibu || '';
-            pekerjaan = data.pekerjaan_ibu || '';
-            alamat = data.alamat_ibu || '';
-            no_telp = data.no_telp_ibu || '';
-            buttonText = 'Ibu';
-        } else if (ortuType === 'wali') {
-            nama = data.wali || '';
-            pekerjaan = data.pekerjaan_wali || '';
-            alamat = data.alamat_wali || '';
-            no_telp = data.no_telp_wali || '';
-            buttonText = 'Wali';
-        } else {
-            nama = data.ayah || '';
-            pekerjaan = data.pekerjaan_ayah || '';
-            alamat = data.alamat_ayah || '';
-            no_telp = data.no_telp_ayah || '';
-            buttonText = 'Ayah';
-        }
-
-        console.log('Filling fields with - nama:', nama, 'pekerjaan:', pekerjaan);
-
-        // Tampilkan data di display fields
-        document.getElementById('nama_ortu').value = nama;
-        document.getElementById('pekerjaan').value = pekerjaan;
-        document.getElementById('alamat').value = alamat;
-        document.getElementById('no_telp').value = no_telp;
-        document.getElementById('dropdown_ortu').textContent = buttonText;
-
-        // Isi hidden fields untuk dikirim ke server
-        document.getElementById('nama_ortu_hidden').value = nama;
-        document.getElementById('pekerjaan_hidden').value = pekerjaan;
-        document.getElementById('alamat_hidden').value = alamat;
-        document.getElementById('no_telp_hidden').value = no_telp;
-
-        return false;
-    }
-
-    function clearOrtuFields() {
-        document.getElementById('nama_ortu').value = '';
-        document.getElementById('nama_ortu_hidden').value = '';
-        document.getElementById('pekerjaan').value = '';
-        document.getElementById('pekerjaan_hidden').value = '';
-        document.getElementById('alamat').value = '';
-        document.getElementById('alamat_hidden').value = '';
-        document.getElementById('no_telp').value = '';
-        document.getElementById('no_telp_hidden').value = '';
-    }
-
-    // Before form submit, ensure hidden fields are updated and validate
-    document.querySelector('form').addEventListener('submit', function (e) {
-        const nis = document.getElementById('nis').value.trim();
-        const ortu_type = document.getElementById('ortu_type').value.trim();
-        const nama_ortu = document.getElementById('nama_ortu').value.trim();
-
-        // Validasi data harus lengkap
-        if (!nis) {
-            e.preventDefault();
-            alert('Silakan pilih siswa terlebih dahulu');
-            return false;
-        }
-
-        if (!ortu_type || !nama_ortu) {
-            e.preventDefault();
-            alert('Silakan pilih orang tua/wali terlebih dahulu');
-            return false;
-        }
-
-        // Update hidden fields
-        document.getElementById('nama_ortu_hidden').value = document.getElementById('nama_ortu').value;
-        document.getElementById('pekerjaan_hidden').value = document.getElementById('pekerjaan').value;
-        document.getElementById('alamat_hidden').value = document.getElementById('alamat').value;
-        document.getElementById('no_telp_hidden').value = document.getElementById('no_telp').value;
-    });
-</script>
 
 <?php include ROOTPATH . "/includes/footer.php"; ?>

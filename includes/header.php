@@ -15,6 +15,7 @@ if(!isset($_SESSION['username'])){
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- <link rel="stylesheet" href="/SistemPoin/assets/css/print-surat.css"> -->
     <style>
         body {
             font-family: 'Poppins', sans-serif !important;
@@ -60,7 +61,41 @@ if(!isset($_SESSION['username'])){
         .dropdown-item:hover {
             background-color: #e9e9e9;
         }
+
+        .indent {
+            padding-left: 30px;
+        }
         
+        .label {
+            width: 160px;
+            flex-shrink: 0;
+        }
+        .separator {
+            width: 10px;
+            flex-shrink: 0;
+        }
+        .field {
+            flex-grow: 1;
+            border-bottom: 1px dotted black;
+            position: relative;
+            top: -5px; /* Adjust alignment with text */
+        }
+        .form-row {
+            display: flex;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 10mm auto;
+            border: 1px solid #D3D3D3;
+            border-radius: 5px;
+            background: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            position: relative;
+        }
     </style>
 </head>
 <body>
