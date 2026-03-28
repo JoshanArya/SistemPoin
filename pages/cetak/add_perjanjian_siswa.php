@@ -1,5 +1,7 @@
 <?php
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/SistemPoin');
+// Set timezone ke WITA
+date_default_timezone_set('Asia/Makassar');
 include ROOTPATH . "/config/config.php";
 include ROOTPATH . "/includes/header.php";
 
@@ -58,7 +60,6 @@ $query_all_siswa = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa ORDER 
             <hr>
             <form action="surat_perjanjian_siswa.php" method="post">
                 <input type="hidden" name="nis" value="<?= $row_siswa['nis'] ?>">
-                <!-- Form tanggal hidden sesuai request -->
                 <input type="hidden" name="tanggal" value="<?= date('Y-m-d') ?>">
 
                 <div class="row g-3">

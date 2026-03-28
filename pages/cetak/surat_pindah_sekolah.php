@@ -13,6 +13,7 @@ $no_surat = $_POST['no_surat'] ?? '---';
 $nama_ortu = $_POST['nama_ortu'] ?? '';
 $alamat_ortu = $_POST['alamat'] ?? ''; // Sesuai dengan name='alamat' di form Anda
 $pindah_ke = $_POST['pindah_ke'] ?? '';
+$tanggal_input = $_POST['tanggal'] ?? date('Y-m-d');
 $alasan_pindah = $_POST['alasan_pindah'] ?? '';
 
 // Ambil data siswa dengan JOIN
@@ -35,7 +36,8 @@ $kepsek = $row_kepsek['nama_pengguna'] ?? '(Nama Kepala Sekolah)';
 
 // Tanggal Indonesia
 $bulan_indo = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-$tanggal = date("d") . " " . $bulan_indo[date("n")] . " " . date("Y");
+$tgl_obj = strtotime($tanggal_input);
+$tanggal = date("d", $tgl_obj) . " " . $bulan_indo[date("n", $tgl_obj)] . " " . date("Y", $tgl_obj);
 
 ?>
 

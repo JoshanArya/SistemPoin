@@ -1,6 +1,8 @@
 <?php
 // Menentukan lokasi root folder proyek di server
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/SistemPoin');
+// Set timezone ke WITA (Asia/Makassar)
+date_default_timezone_set('Asia/Makassar');
 
 // Menghubungkan ke file konfigurasi (koneksi database)
 include ROOTPATH . "/config/config.php";
@@ -8,13 +10,9 @@ include ROOTPATH . "/config/config.php";
 $nis = $_POST['nis'];
 // Data Orang Tua / Wali (dikirim dari file add_perjanjian_siswa.php menggunakan method POST)
 $no_surat = $_POST['no_surat'];
-$tanggal = $_POST['tanggal'];
+$tanggal_input = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
+$jam_input = !empty($_POST['jam']) ? $_POST['jam'] : date('H:i');
 $keperluan = $_POST['keperluan'];
-
-// pisah format tanggal dan jam nya
-$tanggal = explode("T", $tanggal);
-$tanggal_input = $tanggal[0];
-$jam_input = $tanggal[1];
 
 // pisah format tanggal dan hari nya
 $ambil_tanggal = explode("-", $tanggal_input);
@@ -63,11 +61,6 @@ $waka_kesiswaan = $row_waka['nama_pengguna'];
 // Menyertakan tampilan header (bagian atas halaman)
 include ROOTPATH . "/includes/header.php";
 ?>
-
-
-
-
-
 
 <style>
     /* Animasi icon printer dari template sebelumnya */
@@ -148,11 +141,6 @@ include ROOTPATH . "/includes/header.php";
     }
 </style>
 
-
-
-
-
-
 <!-- tombol navigasi no-print -->
 <center class="no-print">
     <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
@@ -193,18 +181,10 @@ include ROOTPATH . "/includes/header.php";
     </div>
 </center>
 
-
-
-
-
-
-
-
-
 <div class="page">
     <!-- Header / Kop Surat -->
     <div class="header">
-        <img src="/Poin_Pelanggaran_Siswa_XIIRPL3/gambar/kop.jpg" alt="kepala surat" width="100%">
+        <img src="/SistemPoin/assets/img/kop.jpg" alt="kepala surat" width="100%">
     </div><br>
 
     <!-- Body Surat -->
