@@ -68,13 +68,6 @@ include ROOTPATH . "/includes/header.php";
         color: black;
     }
 
-    .no-print-tools {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        margin: 20px 0;
-    }
 
     .header-img {
         width: 100%;
@@ -180,7 +173,7 @@ include ROOTPATH . "/includes/header.php";
 </div>
 
 <div class="print-container">
-    <img src="/SistemPoin/assets/img/kop.jpg" class="header-img" alt="Kop Surat">
+    <img src="/SistemPoin/assets/img/kop.jpg" class="header-img" alt="Kop Surat" style="margin-top: -68px">
 
     <div class="title-doc">SURAT PERNYATAAN SISWA</div>
 

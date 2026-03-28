@@ -152,15 +152,17 @@ $tanggal = date("d", $tgl_obj) . " " . $bulan_indo[date("n", $tgl_obj)] . " " . 
     }
 </style>
 
-<center class="no-print" style="margin-bottom: 20px;">
-    <div style="display: flex; justify-content: center; gap: 10px;">
-        <form action="add_pindah_sekolah.php" method="post">
-            <input type="hidden" name="nis" value="<?= $nis ?>">
-            <button type="submit" class="btn btn-secondary">Kembali</button>
-        </form>
-        <button class="btn btn-primary" onclick="window.print()">Cetak Surat</button>
-    </div>
-</center>
+<div class="no-print no-print-tools">
+    <form action="add_perjanjian_siswa.php" method="post" style="margin: 0;">
+        <input type="hidden" name="nis" value="<?= $nis ?>">
+        <button type="submit" class="btn btn-cancel shadow-sm border">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
+        </button>
+    </form>
+    <button onclick="window.print()" class="btn btn-save shadow-sm border">
+        <i class="bi bi-printer-fill me-1" style="color: #1a8cfd;"></i> Cetak Pernyataan
+    </button>
+</div>
 
 <div class="page">
     <div class="header">

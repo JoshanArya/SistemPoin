@@ -142,44 +142,17 @@ include ROOTPATH . "/includes/header.php";
 </style>
 
 <!-- tombol navigasi no-print -->
-<center class="no-print">
-    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-        <!-- tombol ini berfungsi untuk kembali ke halaman add_panggilan_ortu.php dan mengirimkan nis yang sudah di cek menggunakan method post -->
-        <form action="add_panggilan_ortu.php" method="post" style="margin: 0;">
-            <input type="text" name="nis" value="<?= $nis ?>" hidden>
-            <button type="submit">
-                <svg height="16" width="16" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1024 1024">
-                    <path
-                        d="M874.690416 495.52477c0 11.2973-9.168824 20.466124-20.466124 20.466124l-604.773963 0 188.083679 188.083679c7.992021 7.992021 7.992021 20.947078 0 28.939099-4.001127 3.990894-9.240455 5.996574-14.46955 5.996574-5.239328 0-10.478655-1.995447-14.479783-5.996574l-223.00912-223.00912c-3.837398-3.837398-5.996574-9.046027-5.996574-14.46955 0-5.433756 2.159176-10.632151 5.996574-14.46955l223.019353-223.029586c7.992021-7.992021 20.957311-7.992021 28.949332 0 7.992021 8.002254 7.992021 20.957311 0 28.949332l-188.073446 188.073446 604.753497 0C865.521592 475.058646 874.690416 484.217237 874.690416 495.52477z">
-                    </path>
-                </svg>
-                <span>Kembali</span>
-            </button>
-        </form>
-
-        <!-- tombol ini berfungsi untuk print halaman ini -->
-        <button class="print-btn" onclick="window.print()">
-            <span class="printer-wrapper">
-                <span class="printer-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 92 75">
-                        <path stroke-width="5" stroke="black"
-                            d="M12 37.5H80C85.2467 37.5 89.5 41.7533 89.5 47V69C89.5 70.933 87.933 72.5 86 72.5H6C4.067 72.5 2.5 70.933 2.5 69V47C2.5 41.7533 6.75329 37.5 12 37.5Z">
-                        </path>
-                        <mask fill="white" id="path-2-inside-1_30_7">
-                            <path d="M12 12C12 5.37258 17.3726 0 24 0H57C70.2548 0 81 10.7452 81 24V29H12V12Z"></path>
-                        </mask>
-                        <path mask="url(#path-2-inside-1_30_7)" fill="black"
-                            d="M7 12C7 2.61116 14.6112 -5 24 -5H57C73.0163 -5 86 7.98374 86 24H76C76 13.5066 67.4934 5 57 5H24C20.134 5 17 8.13401 17 12H7ZM81 29H12H81ZM7 29V12C7 2.61116 14.6112 -5 24 -5V5C20.134 5 17 8.13401 17 12V29H7ZM57 -5C73.0163 -5 86 7.98374 86 24V29H76V24C76 13.5066 67.4934 5 57 5V-5Z">
-                        </path>
-                        <circle fill="black" r="3" cy="49" cx="78"></circle>
-                    </svg>
-                </span>
-                <span class="printer-page-wrapper"><span class="printer-page"></span></span>
-            </span>
-            <span>&nbsp;&nbsp;Cetak Lagi</span>
+<div class="no-print no-print-tools">
+    <form action="add_perjanjian_siswa.php" method="post" style="margin: 0;">
+        <input type="hidden" name="nis" value="<?= $nis ?>">
+        <button type="submit" class="btn btn-cancel shadow-sm border">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
         </button>
-    </div>
-</center>
+    </form>
+    <button onclick="window.print()" class="btn btn-save shadow-sm border">
+        <i class="bi bi-printer-fill me-1" style="color: #1a8cfd;"></i> Cetak Pernyataan
+    </button>
+</div>
 
 <div class="page">
     <!-- Header / Kop Surat -->

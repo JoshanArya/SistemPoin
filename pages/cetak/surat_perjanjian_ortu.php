@@ -240,16 +240,17 @@ $bulan_target = $bulan_indo[$tgl_target_obj->format('n')] . ' ' . $tgl_target_ob
     } */
 </style>
 
-<center class="no-print">
-    <div class="btn-container">
-        <button onclick="window.history.back()" class="btn btn-cancel shadow-sm border">
-            <span>Batal</span>
+<div class="no-print no-print-tools">
+    <form action="add_perjanjian_siswa.php" method="post" style="margin: 0;">
+        <input type="hidden" name="nis" value="<?= $nis ?>">
+        <button type="submit" class="btn btn-cancel shadow-sm border">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
         </button>
-        <button onclick="window.print()" class="btn btn-save shadow-sm border">
-            <span><i class="bi bi-printer-fill" style="color: #1a8cfd;"></i> Cetak Laporan</span>
-        </button>
-    </div>
-</center>
+    </form>
+    <button onclick="window.print()" class="btn btn-save shadow-sm border">
+        <i class="bi bi-printer-fill me-1" style="color: #1a8cfd;"></i> Cetak Pernyataan
+    </button>
+</div>
 
 <div class="print-container">
     <img src="/SistemPoin/assets/img/kop.jpg" class="header-img" alt="Kop Surat">

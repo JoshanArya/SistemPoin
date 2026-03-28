@@ -96,6 +96,13 @@ if(!isset($_SESSION['username'])){
             box-sizing: border-box;
             position: relative;
         }
+        .no-print-tools {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
