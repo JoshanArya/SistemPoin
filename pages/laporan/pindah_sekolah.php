@@ -80,8 +80,9 @@ $total_pindah = mysqli_num_rows($result);
                         <td><?= htmlspecialchars($row['sekolah_tujuan']) ?></td>
                         <td><?= date('d/m/Y', strtotime($row['tanggal_pembuatan_surat'])) ?></td>
                         <td class="text-center">
-                            <a href="../cetak/surat_pindah_sekolah.php?id=<?= $row['id_surat_keluar'] ?>" <i
-                                class="bi bi-printer"></i>
+                            <a href="../cetak/surat_pindah_sekolah.php?id=<?= $row['id_surat_keluar'] ?>" 
+                               class="btn-action btn-detail" title="Cetak Surat">
+                                <i class="bi bi-printer"></i>
                             </a>
                         </td>
                     </tr>

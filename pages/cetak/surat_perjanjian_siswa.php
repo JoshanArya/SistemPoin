@@ -161,12 +161,9 @@ include ROOTPATH . "/includes/header.php";
 </style>
 
 <div class="no-print no-print-tools">
-    <form action="add_perjanjian_siswa.php" method="post" style="margin: 0;">
-        <input type="hidden" name="nis" value="<?= $nis ?>">
-        <button type="submit" class="btn btn-cancel shadow-sm border">
-            <i class="bi bi-arrow-left me-1"></i> Kembali
-        </button>
-    </form>
+    <button onclick="history.back()" class="btn btn-cancel shadow-sm border">
+        <i class="bi bi-arrow-left me-1"></i> Kembali
+    </button>
     <button onclick="window.print()" class="btn btn-save shadow-sm border">
         <i class="bi bi-printer-fill me-1" style="color: #1a8cfd;"></i> Cetak Pernyataan
     </button>

@@ -84,6 +84,7 @@ $result_riwayat = mysqli_query($conn, $sql_riwayat);
 $sql_surat = "SELECT 
                 sk.no_surat,
                 sk.jenis_surat,
+                sk.status_surat,
                 sk.tanggal_pembuatan_surat,
                 sp.sekolah_tujuan,
                 sp.alasan_pindah
@@ -432,6 +433,7 @@ function formatTanggal($tanggal)
                                     <th>No. Surat</th>
                                     <th>Jenis Surat</th>
                                     <th>Tanggal</th>
+                                    <th class="text-center">Status</th>
                                     <th>Keterangan</th>
                                 </tr>
                             </thead>
@@ -445,6 +447,17 @@ function formatTanggal($tanggal)
                                             </span>
                                         </td>
                                         <td><?= formatTanggal($row['tanggal_pembuatan_surat']) ?></td>
+                                        <td class="text-center">
+                                            <?php
+                                            if ($row['status_surat'] == 'Belum dibuat') {
+                                                echo '<span class="badge-surat-belum">• Belum dibuat</span>';
+                                            } elseif ($row['status_surat'] == 'Sudah dicetak') {
+                                                echo '<span class="badge-surat-cetak">• Sudah dicetak</span>';
+                                            } else {
+                                                echo '<span class="badge-surat-selesai">• Selesai</span>';
+                                            }
+                                            ?>
+                                        </td>
                                         <td>
                                             <?php if ($row['jenis_surat'] == 'Pindah Sekolah' && $row['sekolah_tujuan']): ?>
                                                 <small>Tujuan: <?= htmlspecialchars($row['sekolah_tujuan']) ?></small>
@@ -467,9 +480,11 @@ function formatTanggal($tanggal)
         <a href="list.php" class="btn btn-cancel">
             <i class="bi bi-arrow-left me-2"></i>Kembali
         </a>
+        <?php if (in_array($_SESSION['user_role'] ?? '', ['admin', 'bk'])): ?>
         <a href="edit.php?nis=<?= $data['nis'] ?>" class="btn btn-save">
             <i class="bi bi-pencil-square me-2"></i>Edit Data
         </a>
+        <?php endif; ?>
         <!-- <button onclick="window.print()" class="btn btn-primary-action btn-action">
             <i class="bi bi-printer me-2"></i>Cetak
         </button> -->

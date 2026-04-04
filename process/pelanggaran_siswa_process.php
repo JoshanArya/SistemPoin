@@ -4,7 +4,7 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/SistemPoin');
 include ROOTPATH . '/config/config.php';
 
 // Role check
-if (!isset($_SESSION['username']) || !in_array($_SESSION['user_role'] ?? 'guru', ['guru', 'bk'])) {
+if (!isset($_SESSION['username']) || !in_array($_SESSION['user_role'] ?? 'guru', ['guru', 'bk', 'admin'])) {
     header("Location: ../pages/dashboard.php");
     exit;
 }
@@ -18,7 +18,7 @@ if ($action == 'add') {
         $keterangan = mysqli_real_escape_string($conn, trim($_POST['keterangan']));
 
         // Validation
-        if (empty($nis) || strlen($nis) !== 4 || empty($tanggal) || $id_jenis < 1) {
+        if (empty($nis) || empty($tanggal) || $id_jenis < 1) {
             echo "<script>alert('Error: NIS, tanggal, dan jenis pelanggaran wajib!');window.history.back();</script>";
             exit;
         }
@@ -54,4 +54,3 @@ if ($action == 'add') {
         header("Location: ../pages/pelanggaran/list.php");
     }
 ?>
-

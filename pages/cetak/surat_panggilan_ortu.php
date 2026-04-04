@@ -7,12 +7,28 @@ date_default_timezone_set('Asia/Makassar');
 // Menghubungkan ke file konfigurasi (koneksi database)
 include ROOTPATH . "/config/config.php";
 
-$nis = $_POST['nis'];
-// Data Orang Tua / Wali (dikirim dari file add_perjanjian_siswa.php menggunakan method POST)
-$no_surat = $_POST['no_surat'];
-$tanggal_input = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
-$jam_input = !empty($_POST['jam']) ? $_POST['jam'] : date('H:i');
-$keperluan = $_POST['keperluan'];
+// Cek apakah diakses melalui ID (dari laporan/riwayat) atau POST (setelah tambah surat)
+if (isset($_GET['id'])) {
+    $id_surat = mysqli_real_escape_string($conn, $_GET['id']);
+    $q_surat = mysqli_query($conn, "SELECT * FROM surat_keluar WHERE id_surat_keluar = '$id_surat'");
+    $data_surat = mysqli_fetch_assoc($q_surat);
+
+    if (!$data_surat) {
+        die("Error: Data surat tidak ditemukan.");
+    }
+
+    $nis = $data_surat['nis'];
+    $no_surat = $data_surat['no_surat'];
+    $tanggal_input = date('Y-m-d', strtotime($data_surat['tanggal_pemanggilan']));
+    $jam_input = date('H:i', strtotime($data_surat['tanggal_pemanggilan']));
+    $keperluan = $data_surat['keperluan'];
+} else {
+    $nis = $_POST['nis'] ?? '';
+    $no_surat = $_POST['no_surat'] ?? '';
+    $tanggal_input = !empty($_POST['tanggal']) ? $_POST['tanggal'] : date('Y-m-d');
+    $jam_input = !empty($_POST['jam']) ? $_POST['jam'] : date('H:i');
+    $keperluan = $_POST['keperluan'] ?? '';
+}
 
 // pisah format tanggal dan hari nya
 $ambil_tanggal = explode("-", $tanggal_input);
@@ -41,6 +57,10 @@ JOIN tingkat USING(id_tingkat)
 JOIN program_keahlian USING(id_program_keahlian) WHERE nis = '$nis'");
 $row_siswa = mysqli_fetch_assoc($query_siswa);
 
+if (!$row_siswa) {
+    die("Error: Data siswa tidak ditemukan untuk NIS: " . htmlspecialchars($nis));
+}
+
 // query untuk menampilkan data guru BK
 $tingkat = $row_siswa['tingkat'];
 if ($tingkat == 'XII') {
@@ -63,106 +83,83 @@ include ROOTPATH . "/includes/header.php";
 ?>
 
 <style>
-    /* Animasi icon printer dari template sebelumnya */
-    button {
-        display: flex;
-        height: 3em;
-        align-items: center;
-        justify-content: center;
-        background-color: #eeeeee4b;
-        border-radius: 3px;
-        letter-spacing: 1px;
-        transition: all 0.2s linear;
-        cursor: pointer;
-        border: none;
-        background: #fff;
+    /* Mengatur font agar terlihat lebih formal untuk surat resmi */
+    .page {
+        font-family: "Times New Roman", Times, serif !important;
+        font-size: 12pt;
+        color: black;
+        line-height: 1.5;
+        padding: 10mm 20mm !important;
     }
 
-    button>svg {
-        margin-right: 5px;
-        margin-left: 5px;
-        font-size: 20px;
-        transition: all 0.4s ease-in;
+    .table-info td {
+        padding: 2px 0;
+        vertical-align: top;
     }
 
-    button:hover>svg {
-        font-size: 1.2em;
-        transform: translateX(-5px);
-    }
-
-    button:hover {
-        box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
-        transform: translateY(-2px);
-    }
-
-    .printer-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 20px;
-        height: 100%;
-    }
-
-    .printer-container {
-        height: 50%;
+    .signature-section {
+        margin-top: 30px;
         width: 100%;
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
     }
 
-    .printer-container svg {
+    .sig-table {
         width: 100%;
-        height: auto;
-        transform: translateY(4px);
+        border-collapse: collapse;
     }
 
-    .printer-page-wrapper {
-        width: 100%;
-        height: 50%;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
+    .sig-table td {
+        width: 50%;
+        padding: 5px 0;
     }
 
-    .printer-page {
-        width: 70%;
-        height: 10px;
-        border: 1px solid black;
-        background-color: white;
-        transform: translateY(0px);
-        transition: all 0.3s;
-        transform-origin: top;
+    .sig-space {
+        height: 80px;
     }
 
-    .print-btn:hover .printer-page {
-        height: 16px;
+    .underline-bold {
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    @media print {
+        nav, .navbar, .no-print, header, footer {
+            display: none !important;
+        }
+        body {
+            background: white !important;
+            margin: 0;
+            padding: 0;
+        }
+        .page {
+            margin: 0 auto;
+            box-shadow: none;
+            border: none;
+            width: 100%;
+            min-height: auto;
+        }
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
     }
 </style>
 
 <!-- tombol navigasi no-print -->
 <div class="no-print no-print-tools">
-    <form action="add_perjanjian_siswa.php" method="post" style="margin: 0;">
-        <input type="hidden" name="nis" value="<?= $nis ?>">
-        <button type="submit" class="btn btn-cancel shadow-sm border">
-            <i class="bi bi-arrow-left me-1"></i> Kembali
-        </button>
-    </form>
-    <button onclick="window.print()" class="btn btn-save shadow-sm border">
-        <i class="bi bi-printer-fill me-1" style="color: #1a8cfd;"></i> Cetak Pernyataan
-    </button>
+    <button onclick="history.back()" class="btn btn-cancel shadow-sm border"><i class="bi bi-arrow-left me-1"></i> Kembali</button>
+    <button onclick="window.print()" class="btn btn-save shadow-sm border"><i class="bi bi-printer-fill me-1" style="color: #1a8cfd;"></i> Cetak Pernyataan</button>
 </div>
 
 <div class="page">
     <!-- Header / Kop Surat -->
     <div class="header">
-        <img src="/SistemPoin/assets/img/kop.jpg" alt="kepala surat" width="100%">
-    </div><br>
+        <img src="/SistemPoin/assets/img/kop.jpg" alt="kepala surat" width="100%" style="margin-top: -15px;">
+    </div>
+    <hr style="border: 1.5px solid black; margin-top: 0; margin-bottom: 20px;">
 
     <!-- Body Surat -->
     <div class="body-surat">
-        <table class="table-info" style="width: 100%; margin-bottom: 25px;">
+        <table class="table-info" style="width: 100%; margin-bottom: 20px;">
             <tr>
                 <td style="width: 90px;">No.</td>
                 <td style="width: 15px;">:</td>
@@ -178,7 +175,7 @@ include ROOTPATH . "/includes/header.php";
                     •	II → Bulan surat dibuat (Pebruari).
                     •	2026 → Tahun pembuatan surat. 
                 -->
-                <td><?= $no_surat ?>/SMK TI/BG/<?= $bulan_romawi ?>/<?= date("Y") ?></td>
+                <td><?= htmlspecialchars($no_surat) ?></td>
             </tr>
             <tr>
                 <td>Lamp.</td>
@@ -192,13 +189,13 @@ include ROOTPATH . "/includes/header.php";
             </tr>
         </table>
 
-        <p style="margin: 0; margin-bottom: 5px;">
+        <p style="margin: 0; margin-bottom: 10px;">
             Kepada<br>
             Yth. Bapak/ Ibu
         </p>
-        <table class="table-info" style="width: 100%; margin-left: 35px; margin-bottom: 25px;">
+        <table class="table-info" style="width: 100%; margin-left: 35px; margin-bottom: 20px;">
             <tr>
-                <td style="width: 190px;">Orang Tua / Wali dari</td>
+                <td style="width: 180px;">Orang Tua / Wali dari</td>
                 <td style="width: 15px;">:</td>
                 <td><?php echo $row_siswa['nama_siswa']; ?></td>
             </tr>
@@ -218,9 +215,9 @@ include ROOTPATH . "/includes/header.php";
             Bersama surat ini, kami mengharapkan kehadiran Bapak / Ibu pada :
         </p>
 
-        <table class="table-info" style="width: 100%; margin-left: 35px; margin-bottom: 25px;">
+        <table class="table-info" style="width: 100%; margin-left: 35px; margin-bottom: 20px;">
             <tr>
-                <td style="width: 160px;">Hari / Tanggal</td>
+                <td style="width: 150px;">Hari / Tanggal</td>
                 <td style="width: 15px;">:</td>
                 <!-- menampilkan hari dan tanggal berdasarkan dari data yang di input dari file add_panggilan_ortu -->
                 <td><?php echo $hari; ?> / <?php echo $tanggal_input; ?></td>

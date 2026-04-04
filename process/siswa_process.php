@@ -4,6 +4,13 @@ include ROOTPATH . "/config/config.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
+    session_start();
+    // Matriks Akses: Tambah/Edit/Hapus Siswa HANYA untuk Admin/BK
+    if (!in_array($_SESSION['user_role'] ?? '', ['admin', 'bk'])) {
+        echo "<script>alert('Anda tidak memiliki izin untuk mengelola data siswa!');window.history.back();</script>";
+        exit;
+    }
+
     $action = $_POST['action'];
 
     if ($action == 'add') {
@@ -195,4 +202,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-

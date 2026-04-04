@@ -1,0 +1,98 @@
+Guidebook Penggunaan Sistem Poin Pelanggaran Siswa
+
+1. Akses dan Login
+Halaman Login: Buka browser dan arahkan ke URL sistem.
+Login Guru/Staff: Gunakan Username dan Password yang telah didaftarkan oleh Admin.
+Login Siswa: Gunakan NIS sebagai username dan password standar (default: Siswa12345*!) atau password yang telah diubah.
+
+2. Panduan untuk Administrator & Manajemen
+
+A. Mengelola Data Guru (Menu: Kelola Guru)
+Klik tombol Tambah Guru.
+Isi Kode Guru, Nama, Username, dan pilih Jabatan (Contoh: Guru BK XII, Waka Kesiswaan).
+Tentukan Role (Admin, BK, Guru, atau Manajemen).
+Simpan data. Guru yang berstatus "Tidak Aktif" tidak akan bisa login.
+
+B. Mengelola Data Kelas (Menu: Kelola Kelas)
+Pilih Tambah Kelas.
+Pilih Tingkat (X, XI, XII), Program Keahlian, dan isi nomor Rombel.
+Pilih Wali Kelas dan Guru BK yang bertanggung jawab atas kelas tersebut.
+Tips: Sistem akan otomatis menyarankan Guru BK berdasarkan tingkat yang dipilih.
+
+C. Mengelola Data Siswa (Menu: Kelola Siswa)
+Klik Tambah Siswa Baru.
+Isi identitas siswa (NIS, Nama, Jenis Kelamin, Kelas).
+Data Orang Tua: Masukkan informasi Ayah, Ibu, atau Wali (Nama, Pekerjaan, No. Telp, Alamat). Data ini sangat penting untuk keperluan surat-menyurat.
+Klik Simpan. Akun siswa akan otomatis dibuat menggunakan NIS tersebut.
+
+3. Panduan untuk Guru & Guru BK
+
+A. Mencatat Pelanggaran Siswa
+Buka menu Data Siswa atau Input Pelanggaran.
+Cari nama siswa berdasarkan NIS atau Nama di kolom pencarian.
+Pilih jenis pelanggaran (Poin akan otomatis terhitung berdasarkan kategori).
+Isi tanggal kejadian dan keterangan tambahan (jika ada).
+Klik Simpan. Poin siswa akan otomatis bertambah secara kumulatif.
+
+B. Memantau Riwayat Siswa (Halaman Detail)
+Klik ikon Mata (Detail) pada daftar siswa.
+Anda dapat melihat:
+Total poin saat ini.
+Grafik/Riwayat 5 pelanggaran terakhir.
+Informasi kontak orang tua yang bisa dihubungi (tersedia tombol pintas WhatsApp jika data telp diisi).
+Daftar surat yang pernah dikeluarkan untuk siswa tersebut.
+
+C. Membuat dan Mencetak Surat (Menu: Cetak Surat)
+Sistem menyediakan 4 jenis dokumen otomatis:
+Surat Perjanjian Siswa: Digunakan saat siswa pertama kali melanggar (sebagai pembinaan).
+Surat Panggilan Orang Tua: Digunakan jika poin sudah mencapai ambang batas tertentu. Anda perlu mengisi No. Surat, Tanggal Pertemuan, dan Jam.
+Surat Perjanjian Orang Tua: Pernyataan formal bahwa orang tua akan membina siswa di rumah.
+Surat Keterangan Pindah: Digunakan untuk prosedur siswa keluar/pindah sekolah.
+Langkah Cetak:
+
+Pilih jenis surat di menu Cetak.
+Cari NIS Siswa.
+Lengkapi detail tambahan (No. Surat, Keperluan, atau Data Orang Tua).
+Klik Cetak. Sistem akan memproses penyimpanan ke database laporan dan membuka jendela Print secara otomatis.
+
+4. Panduan untuk Siswa
+
+A. Melihat Profil & Poin
+Setelah login, buka menu Profil Saya.
+Siswa dapat melihat total poin pelanggaran mereka secara real-time.
+Siswa dapat memantau status keaktifan mereka di sekolah.
+
+5. Troubleshooting & Tips
+Lupa Password: Segera hubungi Admin untuk melakukan reset melalui menu Kelola Guru/Siswa.
+Data Ortu Tidak Muncul di Surat: Pastikan saat mengedit data siswa, bagian "Informasi Orang Tua" diisi dengan lengkap.
+Format Print: Saat jendela print muncul, pastikan opsi "Headers and Footers" di pengaturan browser dimatikan agar hasil cetak lebih rapi sesuai format sekolah.
+
+6. Matriks Hak Akses (Role Access Control)
+
+| Fitur / Akses Sistem                | Admin / BK | Wakasek        | Kepsek         | Guru Mapel     | Siswa          |
+|-------------------------------------|:----------:|:--------------:|:--------------:|:--------------:|:--------------:|
+| Login & Dashboard                   |      ✓     |       ✓        |       ✓        |       ✓        |       ✓        |
+| Melihat Data Siswa                  |      ✓     |       ✓        |       ✓        |       ✓        | Diri Sendiri   |
+| Tambah/Hapus Data Siswa             |      ✓     |       X        |       X        |       X        |       X        |
+| Edit Data Siswa                     |      ✓     |       X        |       X        |       X        | Password Saja  |
+| CRUD Referensi (Pelanggaran/Kelas)  |      ✓     |       X        |       X        |       X        |       X        |
+| Input Pelanggaran Siswa             |      ✓     |       ✓        |       ✓        |       ✓        |       X        |
+| Lihat Riwayat Pelanggaran           |      ✓     |       ✓        |       ✓        |       ✓        | Milik Sendiri  |
+| Cetak Laporan Rekapitulasi          |      ✓     |       ✓        |       ✓        |       X        |       X        |
+| Cetak & Download Surat              |      ✓     |       ✓        |       ✓        |       X        |       X        |
+| Upload Dokumen Surat                |      ✓     |       X        |       X        |       X        |       X        |
+| Lihat & Status Surat                |      ✓     |       ✓        |       ✓        |       ✓        | Milik Sendiri  |
+| Manajemen User (Guru/Siswa)         |      ✓     |       X        |       X        |       X        |       X        |
+| Edit Profil                         |      ✓     | User/Pass      | User/Pass      | User/Pass      | Password Saja  |
+
+Keterangan Status Surat:
+- Belum dibuat
+- Sudah dicetak
+- Sudah ditandatangani/selesai
+
+Menu Khusus Surat:
+1. Surat Perjanjian Siswa
+2. Surat Perjanjian Orang Tua
+3. Surat Panggilan Orang Tua
+4. Surat Pindah Sekolah
+5. Status Surat

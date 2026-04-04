@@ -63,8 +63,9 @@ $query_all_siswa = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa ORDER 
 
                 <?php if ($row_siswa): ?>
                     <hr>
-                    <form action="surat_pindah_sekolah.php" method="POST" class="needs-validation" novalidate>
+                    <form action="../../process/surat_process.php" method="POST" class="needs-validation" novalidate>
                         <input type="hidden" name="nis" value="<?= $row_siswa['nis'] ?>">
+                        <input type="hidden" name="jenis_surat" value="Pindah Sekolah">
 
                         <div class="alert bg-primary-subtle border-primary mb-4">
                             <strong>Data Terpilih:</strong> <?= $row_siswa['nama_siswa'] ?> (<?= $row_siswa['nis'] ?>) - <?= $row_siswa['tingkat'] ?> <?= $row_siswa['program_keahlian'] ?> <?= $row_siswa['rombel'] ?>

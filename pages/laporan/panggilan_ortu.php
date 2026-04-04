@@ -76,7 +76,8 @@ $total_surat = mysqli_num_rows($result);
                         <td><?= htmlspecialchars($row['kelas_name']) ?></td>
                         <td><?= date('d/m/Y', strtotime($row['tanggal_pembuatan_surat'])) ?></td>
                         <td class="text-center">
-                            <a href="SistemPoin/pages/cetak/surat_panggilan_ortu_fixed.php?id=<?= $row['id_surat_keluar'] ?>"
+                            <a href="../cetak/surat_panggilan_ortu.php?id=<?= $row['id_surat_keluar'] ?>" 
+                                class="btn-action btn-detail" title="Cetak Surat">
                                 <i class="bi bi-printer"></i>
                             </a>
                         </td>

@@ -94,8 +94,8 @@ $total_perjanjian = mysqli_num_rows($result);
                         <td><?= date('d/m/Y', strtotime($row['tanggal'])) ?></td>
                         <td class="text-center">
                             <a class="btn-action btn-detail"
-                                href="../cetak/<?= strtolower(str_replace(' ', '_', $row['jenis'])) ?>.php?id=<?= $row['id'] ?>"
-                                title="Lihat/Cetak" target="_blank">
+                                href="../cetak/surat_<?= strtolower(str_replace(' ', '_', trim($row['jenis']))) ?>.php?id=<?= $row['id'] ?>"
+                                title="Lihat/Cetak">
                                 <i class="bi bi-printer"></i>
                             </a>
                         </td>

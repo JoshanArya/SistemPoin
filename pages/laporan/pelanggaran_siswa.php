@@ -11,18 +11,19 @@ $sql = "SELECT
     COUNT(ps.id_pelanggaran_siswa) as total_pelanggaran,
     SUM(jp.poin) as total_poin,
     MAX(ps.tanggal) as tanggal_terakhir
-FROM siswa s 
-LEFT JOIN pelanggaran_siswa ps ON s.nis = ps.nis
-LEFT JOIN jenis_pelanggaran jp ON ps.id_jenis_pelanggaran = jp.id_jenis_pelanggaran
-WHERE s.status_siswa = 'aktif'
-GROUP BY s.nis, s.nama_siswa
-HAVING total_pelanggaran > 0";
+FROM siswa s
+INNER JOIN pelanggaran_siswa ps ON s.nis = ps.nis
+INNER JOIN jenis_pelanggaran jp ON ps.id_jenis_pelanggaran = jp.id_jenis_pelanggaran
+WHERE s.status_siswa = 'aktif'";
 
 // Handle search
 $search = $_POST['search'] ?? $_GET['search'] ?? '';
 if ($search) {
-    $sql .= " AND (s.nis LIKE '%$search%' OR s.nama_siswa LIKE '%$search%')";
+    $search_escaped = mysqli_real_escape_string($conn, $search);
+    $sql .= " AND (s.nis LIKE '%$search_escaped%' OR s.nama_siswa LIKE '%$search_escaped%')";
 }
+
+$sql .= " GROUP BY s.nis, s.nama_siswa";
 $sql .= " ORDER BY total_poin DESC, tanggal_terakhir DESC";
 
 $result = mysqli_query($conn, $sql);
@@ -46,7 +47,7 @@ $total_laporan = mysqli_num_rows($result);
                     <i class="bi bi-search"></i> Filter
                 </button>
                 <?php if ($search): ?>
-                    <a href="list.php" class="btn btn-secondary">
+                    <a href="pelanggaran_siswa.php" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i> Reset
                     </a>
                 <?php endif; ?>
@@ -61,7 +62,7 @@ $total_laporan = mysqli_num_rows($result);
                     <th class="text-center" style="width: 60px;">No</th>
                     <th>NIS</th>
                     <th>Nama Siswa</th>
-                    <th class="text-center" style="width: 200px;">Jenis Pelanggaran</th>
+                    <th class="text-center" style="width: 200px;">Jumlah Pelanggaran</th>
                     <th class="text-center" style="width: 100px;">Total Poin</th>
                     <th class="text-center" style="width: 150px;">Tanggal Terakhir</th>
                     <th class="text-center" style="width: 100px;">Aksi</th>

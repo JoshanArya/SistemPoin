@@ -19,6 +19,7 @@ if(!isset($_SESSION['username'])){
     <style>
         body {
             font-family: 'Poppins', sans-serif !important;
+            overflow-x: hidden;
         }
         .navbar-nav {
             margin: 0;
@@ -131,7 +132,7 @@ if(!isset($_SESSION['username'])){
             <?php } else { // guru/admin/bk/manajemen
                 $show_admin = ($_SESSION['user_role'] == 'admin');
                 $show_surat = in_array($_SESSION['user_role'], ['bk', 'manajemen', 'admin']);
-                $show_reports = in_array($_SESSION['user_role'], ['admin', 'bk', 'manajemen']);
+                $show_reports = in_array($_SESSION['user_role'], ['admin', 'bk', 'manajemen', 'guru']);
             ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Kelola Data</a>
@@ -169,7 +170,6 @@ if(!isset($_SESSION['username'])){
                 <a class="nav-link dropdown-toggle fw-bold text-primary" href="#" id="profileDropdown" data-bs-toggle="dropdown">
                     <i class="bi bi-person-circle me-1"></i>
                     <?php echo ($_SESSION['role'] == 'guru') ? $_SESSION['nama_pengguna'] : $_SESSION['nama_siswa']; ?>
-                    <small class="d-none d-md-inline ms-1">(<?= $_SESSION['user_role'] ?? 'user' ?>)</small>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
                     <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-fill me-2" style="color: #1a8cfd;"></i> Edit Profil</a></li>
@@ -179,4 +179,3 @@ if(!isset($_SESSION['username'])){
         </ul>
     </div>
 </nav>
-

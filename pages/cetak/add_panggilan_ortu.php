@@ -62,8 +62,9 @@ $query_all_siswa = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa ORDER 
 
                 <?php if ($row_siswa): ?>
                     <hr>
-                    <form action="surat_panggilan_ortu.php" method="POST" class="needs-validation" novalidate>
+                    <form action="../../process/surat_process.php" method="POST" class="needs-validation" novalidate>
                         <input type="hidden" name="nis" value="<?= $row_siswa['nis'] ?>">
+                        <input type="hidden" name="jenis_surat" value="Panggilan Orang Tua">
 
                         <div class="alert bg-primary-subtle border-primary mb-4">
                             <strong>Data Terpilih:</strong> <?= $row_siswa['nama_siswa'] ?> (<?= $row_siswa['nis'] ?>) - <?= $row_siswa['tingkat'] ?> <?= $row_siswa['program_keahlian'] ?> <?= $row_siswa['rombel'] ?>
@@ -72,12 +73,18 @@ $query_all_siswa = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa ORDER 
                         <div class="form-section-title">
                             <i class="bi bi-card-text"></i> Detail Surat
                         </div>
-                        <div class="row g-3 mb-4">
+                        <div class="row g-3 mb-3">
                             <div class="col-md-12">
                                 <label class="form-label">No Surat <span class="text-danger">*</span></label>
                                 <input type="number" name="no_surat" class="form-control" required>
-                                <input type="hidden" name="tanggal" value="<?= date('Y-m-d') ?>">
-                                <input type="hidden" name="jam" value="<?= date('H:i') ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Tanggal Pemanggilan <span class="text-danger">*</span></label>
+                                <input type="date" name="tanggal" class="form-control" value="<?= date('Y-m-d') ?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Jam Pemanggilan <span class="text-danger">*</span></label>
+                                <input type="time" name="jam" class="form-control" value="<?= date('H:i') ?>" required>
                             </div>
                         </div>
 

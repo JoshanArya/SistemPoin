@@ -65,9 +65,10 @@ $query_all_siswa = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa ORDER 
 
                 <?php if ($row_siswa): ?>
                     <hr>
-                    <form action="surat_perjanjian_ortu.php" method="post">
+                    <form action="../../process/surat_process.php" method="post">
                         <input type="hidden" name="nis" value="<?= $row_siswa['nis'] ?>">
                         <input type="hidden" name="tanggal" value="<?= date('Y-m-d') ?>">
+                        <input type="hidden" name="jenis_surat" value="Surat Perjanjian Orang Tua">
 
                         <div class="row g-3">
                             <div class="col-md-12">
@@ -98,6 +99,11 @@ $query_all_siswa = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa ORDER 
                             <div class="form-section-title" style="margin-bottom: -1.5rem;">
                                 <i class="bi bi-card-text"></i> Data Orang Tua/Wali
                             </div>
+                            <div class="col-md-12">
+                                <label class="form-label">No Surat <span class="text-danger">*</span></label>
+                                <input type="number" name="no_surat" class="form-control" placeholder="Contoh: 001" required>
+                            </div>
+
                             <div class="col-md-6">
                                 <label class="form-label">Nama Orang Tua</label>
                                 <input type="text" name="nama_ortu" id="nama_ortu" class="form-control" value="<?= htmlspecialchars($row_siswa['ayah']) ?>" readonly required>
@@ -120,7 +126,7 @@ $query_all_siswa = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa ORDER 
 
                             <!-- No_surat and Tanggal are removed/hidden as per request -->
                             <div class="col-12 mt-4 text-end">
-                                <a href="../siswa/list.php" class="btn btn-cancel shadow-sm border me-2">Batal</a>
+                                <a href="list.php" class="btn btn-cancel shadow-sm border me-2">Batal</a>
                                 <button type="submit" class="btn shadow-sm border btn-save">
                                     <i class="bi bi-printer me-2"></i>Cetak Surat
                                 </button>

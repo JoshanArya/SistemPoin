@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `guru` (
   `kode_guru` char(8) COLLATE utf8mb4_general_ci NOT NULL,
   `nama_pengguna` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `role` enum('admin','bk','guru','manajemen','siswa') COLLATE utf8mb4_general_ci DEFAULT 'guru',
+  `role` enum('admin','bk','guru','manajemen') COLLATE utf8mb4_general_ci DEFAULT 'guru',
   `username` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `password` varchar(70) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `aktif` enum('Y','N') COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -234,6 +234,12 @@ CREATE TABLE `ortu_wali` (
   `ayah` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `ibu` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `wali` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tempat_lahir_ayah` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tempat_lahir_ibu` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tempat_lahir_wali` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tanggal_lahir_ayah` date DEFAULT NULL,
+  `tanggal_lahir_ibu` date DEFAULT NULL,
+  `tanggal_lahir_wali` date DEFAULT NULL,
   `pekerjaan_ayah` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `pekerjaan_ibu` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `pekerjaan_wali` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -249,12 +255,12 @@ CREATE TABLE `ortu_wali` (
 -- Dumping data for table `ortu_wali`
 --
 
-INSERT INTO `ortu_wali` (`id_ortu_wali`, `ayah`, `ibu`, `wali`, `pekerjaan_ayah`, `pekerjaan_ibu`, `pekerjaan_wali`, `no_telp_ayah`, `no_telp_ibu`, `no_telp_wali`, `alamat_ayah`, `alamat_ibu`, `alamat_wali`) VALUES
-(1, '', '', '', '', '', '', '', '', '', '', '', ''),
-(2, 'Lukman Halimah', 'Mega Rahma', NULL, 'Penjahit', 'Penjahit', NULL, '628621323300', '628621323300', NULL, 'Jalan Antasura, Perumahan Elit', 'Jalan Antasura, Perumahan Elit', NULL),
-(3, '', '', '', '', '', '', '', '', '', '', '', ''),
-(4, '', '', '', '', '', '', '', '', '', '', '', ''),
-(11, '', 'Kepo', '', '', 'Boss', '', '', '1235551223', '', '', 'Kepo', '');
+INSERT INTO `ortu_wali` (`id_ortu_wali`, `ayah`, `ibu`, `wali`, `tempat_lahir_ayah`, `tempat_lahir_ibu`, `tempat_lahir_wali`, `tanggal_lahir_ayah`, `tanggal_lahir_ibu`, `tanggal_lahir_wali`, `pekerjaan_ayah`, `pekerjaan_ibu`, `pekerjaan_wali`, `no_telp_ayah`, `no_telp_ibu`, `no_telp_wali`, `alamat_ayah`, `alamat_ibu`, `alamat_wali`) VALUES
+(1, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, '', '', '', '', '', '', '', '', ''),
+(2, 'Lukman Halimah', 'Mega Rahma', NULL, 'Denpasar', 'Denpasar', NULL, '1980-05-10', '1982-08-15', NULL, 'Penjahit', 'Penjahit', NULL, '628621323300', '628621323300', NULL, 'Jalan Antasura, Perumahan Elit', 'Jalan Antasura, Perumahan Elit', NULL),
+(3, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, '', '', '', '', '', '', '', '', ''),
+(4, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, '', '', '', '', '', '', '', '', ''),
+(11, '', 'Kepo', '', NULL, 'Denpasar', NULL, NULL, '1985-01-01', NULL, '', 'Boss', '', '', '1235551223', '', '', 'Kepo', '');
 
 -- --------------------------------------------------------
 
@@ -289,21 +295,25 @@ INSERT INTO `pelanggaran_siswa` (`id_pelanggaran_siswa`, `tanggal`, `nis`, `id_j
 --
 
 CREATE TABLE `perjanjian_orang_tua` (
-  `id_perjanjian_ortu` int NOT NULL,
+  `id_perjanjian_ortu` int(5) NOT NULL,
   `tanggal` datetime DEFAULT NULL,
-  `id_pelanggaran_siswa` int DEFAULT NULL,
+  `id_pelanggaran_siswa` int(5) DEFAULT NULL,
   `status` enum('Masih Proses','Selesai') COLLATE utf8mb4_general_ci DEFAULT NULL,
   `foto_dokumen` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `tingkat` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `tingkat` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `nama_ortu` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `pekerjaan_ortu` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `alamat_ortu` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `no_telp_ortu` varchar(16) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `perjanjian_orang_tua`
 --
 
-INSERT INTO `perjanjian_orang_tua` (`id_perjanjian_ortu`, `tanggal`, `id_pelanggaran_siswa`, `status`, `foto_dokumen`, `tingkat`) VALUES
-(1, '2026-01-02 09:26:31', 1, 'Masih Proses', NULL, 'X'),
-(2, '2026-01-03 09:26:32', 2, 'Selesai', 'IMG_20260923.jpg', 'XI');
+INSERT INTO `perjanjian_orang_tua` (`id_perjanjian_ortu`, `tanggal`, `id_pelanggaran_siswa`, `status`, `foto_dokumen`, `tingkat`, `nama_ortu`, `pekerjaan_ortu`, `alamat_ortu`, `no_telp_ortu`) VALUES
+(1, '2026-01-02 09:26:31', 1, 'Masih Proses', NULL, 'X', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura', '628621323300'),
+(2, '2026-01-03 09:26:32', 2, 'Selesai', 'IMG_20260923.jpg', 'XI', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -312,22 +322,29 @@ INSERT INTO `perjanjian_orang_tua` (`id_perjanjian_ortu`, `tanggal`, `id_pelangg
 --
 
 CREATE TABLE `perjanjian_siswa` (
-  `id_perjanjian_siswa` int NOT NULL,
+  `id_perjanjian_siswa` int(5) NOT NULL,
   `tanggal` datetime DEFAULT NULL,
-  `id_pelanggaran_siswa` int DEFAULT NULL,
+  `id_pelanggaran_siswa` int(11) DEFAULT NULL,
   `status` enum('Masih Proses','Selesai') COLLATE utf8mb4_general_ci DEFAULT NULL,
   `foto_dokumen` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `tingkat` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `tingkat` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `nama_ortu` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `pekerjaan_ortu` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `alamat_ortu` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `no_telp_ortu` varchar(16) COLLATE utf8mb4_general_ci NOT NULL,
+  `wali_kelas` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `guru_bk` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `wakasek_kesiswaan` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `perjanjian_siswa`
 --
 
-INSERT INTO `perjanjian_siswa` (`id_perjanjian_siswa`, `tanggal`, `id_pelanggaran_siswa`, `status`, `foto_dokumen`, `tingkat`) VALUES
-(1, '2026-01-02 09:26:31', 1, 'Masih Proses', NULL, 'X'),
-(2, '2026-01-03 09:26:32', 2, 'Selesai', 'IMG_20260923.jpg', 'XI'),
-(3, '2026-01-05 08:26:32', 3, 'Masih Proses', NULL, 'XI');
+INSERT INTO `perjanjian_siswa` (`id_perjanjian_siswa`, `tanggal`, `id_pelanggaran_siswa`, `status`, `foto_dokumen`, `tingkat`, `nama_ortu`, `pekerjaan_ortu`, `alamat_ortu`, `no_telp_ortu`, `wali_kelas`, `guru_bk`, `wakasek_kesiswaan`) VALUES
+(1, '2026-01-02 09:26:31', 1, 'Masih Proses', NULL, 'X', '', '', '', '', '', '', ''),
+(2, '2026-01-03 09:26:32', 2, 'Selesai', 'IMG_20260923.jpg', 'XI', '', '', '', '', '', '', ''),
+(3, '2026-01-05 08:26:32', 3, 'Masih Proses', NULL, 'XI', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -407,25 +424,30 @@ INSERT INTO `siswa` (`nis`, `nama_siswa`, `jenis_kelamin`, `alamat`, `password`,
 --
 
 CREATE TABLE `surat_keluar` (
-  `id_surat_keluar` int NOT NULL,
+  `id_surat_keluar` int(5) NOT NULL,
   `no_surat` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `jenis_surat` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `id_surat_pindah` int DEFAULT NULL,
+  `id_surat_pindah` int(5) DEFAULT NULL,
+  `id_perjanjian_siswa` int(5) DEFAULT NULL,
+  `id_perjanjian_ortu` int(5) DEFAULT NULL,
   `nis` char(5) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tanggal_pembuatan_surat` date DEFAULT NULL,
-  `id_profil_sekolah` int DEFAULT NULL,
-  `id_tahun_ajaran` int DEFAULT NULL,
-  `tingkat` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `id_profil_sekolah` int(2) DEFAULT NULL,
+  `id_tahun_ajaran` int(3) DEFAULT NULL,
+  `tingkat` varchar(3) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tanggal_pemanggilan` datetime DEFAULT NULL,
+  `keperluan` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status_surat` enum('Belum dibuat','Sudah dicetak','Sudah ditandatangani/selesai') COLLATE utf8mb4_general_ci DEFAULT 'Sudah dicetak'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `surat_keluar`
 --
 
-INSERT INTO `surat_keluar` (`id_surat_keluar`, `no_surat`, `jenis_surat`, `id_surat_pindah`, `nis`, `tanggal_pembuatan_surat`, `id_profil_sekolah`, `id_tahun_ajaran`, `tingkat`) VALUES
-(1, '548/SMKTI/BG/XII/2025', 'Pindah Sekolah', 1, '7012', '2026-01-08', 1, 5, 'XI'),
-(2, '549/SMKTI/BG/XII/2025', 'Panggilan Orang Tua', NULL, '8312', '2026-01-08', 1, 5, 'XI'),
-(3, '550/SMKTI/BG/I/2026', 'Pindah Sekolah', 2, '9123', '2026-01-10', 1, 5, 'X');
+INSERT INTO `surat_keluar` (`id_surat_keluar`, `no_surat`, `jenis_surat`, `id_surat_pindah`, `id_perjanjian_siswa`, `id_perjanjian_ortu`, `nis`, `tanggal_pembuatan_surat`, `id_profil_sekolah`, `id_tahun_ajaran`, `tingkat`, `tanggal_pemanggilan`, `keperluan`, `status_surat`) VALUES
+(1, '548/SMKTI/BG/XII/2025', 'Pindah Sekolah', 1, NULL, NULL, '7012', '2026-01-08', 1, 5, 'XI', NULL, NULL, 'Sudah dicetak'),
+(2, '549/SMKTI/BG/XII/2025', 'Panggilan Orang Tua', NULL, NULL, NULL, '8312', '2026-01-08', 1, 5, 'XI', '2026-01-10 09:00:00', 'Pembinaan Kedisiplinan', 'Sudah dicetak'),
+(3, '550/SMKTI/BG/I/2026', 'Pindah Sekolah', 2, NULL, NULL, '9123', '2026-01-10', 1, 5, 'X', NULL, NULL, 'Sudah dicetak');
 
 -- --------------------------------------------------------
 
@@ -434,19 +456,21 @@ INSERT INTO `surat_keluar` (`id_surat_keluar`, `no_surat`, `jenis_surat`, `id_su
 --
 
 CREATE TABLE `surat_pindah` (
-  `id_surat_pindah` int NOT NULL,
-  `sekolah_tujuan` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `alasan_pindah` text COLLATE utf8mb4_general_ci
+  `id_surat_pindah` int(5) NOT NULL,
+  `sekolah_tujuan` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `alasan_pindah` text COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_ortu` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `alamat_ortu` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `surat_pindah`
 --
 
-INSERT INTO `surat_pindah` (`id_surat_pindah`, `sekolah_tujuan`, `alasan_pindah`) VALUES
-(1, 'SMAN 1 Surakarta', 'Mengikuti perpindahan dinas orang tua'),
-(2, 'SMKS Harapan', 'Mengikuti perpindahan dinas orang tua'),
-(3, 'SMKN 2 Denpasar', 'Mengikuti perpindahan dinas orang tua');
+INSERT INTO `surat_pindah` (`id_surat_pindah`, `sekolah_tujuan`, `alasan_pindah`, `nama_ortu`, `alamat_ortu`) VALUES
+(1, 'SMAN 1 Surakarta', 'Mengikuti perpindahan dinas orang tua', 'Bpk. Ahmad', 'Surakarta'),
+(2, 'SMKS Harapan', 'Mengikuti perpindahan dinas orang tua', 'Ibu Siti', 'Denpasar'),
+(3, 'SMKN 2 Denpasar', 'Mengikuti perpindahan dinas orang tua', 'Bpk. Wayan', 'Badung');
 
 -- --------------------------------------------------------
 
@@ -570,6 +594,8 @@ ALTER TABLE `siswa`
 ALTER TABLE `surat_keluar`
   ADD PRIMARY KEY (`id_surat_keluar`),
   ADD KEY `id_pindah_sekolah` (`id_surat_pindah`),
+  ADD KEY `id_perjanjian_siswa` (`id_perjanjian_siswa`),
+  ADD KEY `id_perjanjian_ortu` (`id_perjanjian_ortu`),
   ADD KEY `nis` (`nis`),
   ADD KEY `id_profil_sekolah` (`id_profil_sekolah`),
   ADD KEY `id_tahun_ajaran` (`id_tahun_ajaran`);
@@ -685,6 +711,16 @@ ALTER TABLE `kelas`
 --
 ALTER TABLE `perjanjian_orang_tua`
   ADD CONSTRAINT `perjanjian_orang_tua_ibfk_1` FOREIGN KEY (`id_pelanggaran_siswa`) REFERENCES `pelanggaran_siswa` (`id_pelanggaran_siswa`);
+
+--
+-- Constraints for table `surat_keluar`
+--
+ALTER TABLE `surat_keluar`
+  ADD CONSTRAINT `surat_keluar_ibfk_1` FOREIGN KEY (`nis`) REFERENCES `siswa` (`nis`),
+  ADD CONSTRAINT `surat_keluar_ibfk_2` FOREIGN KEY (`id_surat_pindah`) REFERENCES `surat_pindah` (`id_surat_pindah`),
+  ADD CONSTRAINT `surat_keluar_ibfk_3` FOREIGN KEY (`id_tahun_ajaran`) REFERENCES `tahun_ajaran` (`id_tahun_ajaran`),
+  ADD CONSTRAINT `surat_keluar_ibfk_4` FOREIGN KEY (`id_perjanjian_siswa`) REFERENCES `perjanjian_siswa` (`id_perjanjian_siswa`),
+  ADD CONSTRAINT `surat_keluar_ibfk_5` FOREIGN KEY (`id_perjanjian_ortu`) REFERENCES `perjanjian_orang_tua` (`id_perjanjian_ortu`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
