@@ -7,14 +7,33 @@ include ROOTPATH . "/includes/header.php";
 // Menghubungkan ke file konfigurasi (koneksi database)
 include ROOTPATH . "/config/config.php";
 
-// Gunakan null coalescing operator (??) untuk menghindari error undefined index
-$nis = $_POST['nis'] ?? '';
-$no_surat = $_POST['no_surat'] ?? '---';
-$nama_ortu = $_POST['nama_ortu'] ?? '';
-$alamat_ortu = $_POST['alamat'] ?? ''; // Sesuai dengan name='alamat' di form Anda
-$pindah_ke = $_POST['pindah_ke'] ?? '';
-$tanggal_input = $_POST['tanggal'] ?? date('Y-m-d');
-$alasan_pindah = $_POST['alasan_pindah'] ?? '';
+// Ambil parameter ID jika cetak ulang, atau dari POST jika baru dibuat
+$id_surat = $_GET['id'] ?? null;
+$nis = $_POST['nis'] ?? $_GET['nis'] ?? '';
+
+if ($id_surat) {
+    // CETAK ULANG: Ambil data dari database berdasarkan ID Surat Keluar
+    $q_surat = mysqli_query($conn, "SELECT sk.no_surat, sk.tanggal_pembuatan_surat, sp.* 
+        FROM surat_keluar sk 
+        JOIN surat_pindah sp ON sk.id_surat_pindah = sp.id_surat_pindah 
+        WHERE sk.id_surat_keluar = '$id_surat'");
+    $data_surat = mysqli_fetch_assoc($q_surat);
+    
+    $no_surat = $data_surat['no_surat'] ?? '---';
+    $nama_ortu = $data_surat['nama_ortu'] ?? '---';
+    $alamat_ortu = $data_surat['alamat_ortu'] ?? '---';
+    $pindah_ke = $data_surat['sekolah_tujuan'] ?? '---';
+    $alasan_pindah = $data_surat['alasan_pindah'] ?? '---';
+    $tanggal_input = $data_surat['tanggal_pembuatan_surat'] ?? date('Y-m-d');
+} else {
+    // BARU DIBUAT: Ambil dari data POST form
+    $no_surat = $_POST['no_surat'] ?? '---';
+    $nama_ortu = $_POST['nama_ortu'] ?? '';
+    $alamat_ortu = $_POST['alamat'] ?? '';
+    $pindah_ke = $_POST['pindah_ke'] ?? '';
+    $alasan_pindah = $_POST['alasan_pindah'] ?? '';
+    $tanggal_input = $_POST['tanggal'] ?? date('Y-m-d');
+}
 
 // Ambil data siswa dengan JOIN
 $query_siswa = mysqli_query($conn, "SELECT * FROM siswa 

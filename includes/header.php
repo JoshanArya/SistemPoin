@@ -172,7 +172,7 @@ if(!isset($_SESSION['username'])){
                     <?php echo ($_SESSION['role'] == 'guru') ? $_SESSION['nama_pengguna'] : $_SESSION['nama_siswa']; ?>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-fill me-2" style="color: #1a8cfd;"></i> Edit Profil</a></li>
+                    <li><a class="dropdown-item" href="/SistemPoin/pages/edit_profile.php"><i class="bi bi-pencil-fill me-2" style="color: #1a8cfd;"></i> Edit Profil</a></li>
                     <li><a href="/SistemPoin/logout.php" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
                 </ul>
             </li>

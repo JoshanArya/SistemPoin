@@ -7,10 +7,31 @@ include ROOTPATH . "/config/config.php";
 // Menyertakan tampilan header (bagian atas halaman) - Navbar tetap aman di sini
 include ROOTPATH . "/includes/header.php";
 
-$nis = $_POST['nis'] ?? '';
-$ortu_type = $_POST['ortu_type'] ?? 'ayah';
-$no_surat = $_POST['no_surat'] ?? '---';
-$tanggal_input = $_POST['tanggal'] ?? date('Y-m-d');
+// Ambil parameter ID jika cetak ulang, atau dari POST jika baru dibuat
+$id_surat = $_GET['id'] ?? null;
+$nis = $_POST['nis'] ?? $_GET['nis'] ?? '';
+
+if ($id_surat) {
+    // CETAK ULANG: Ambil data dari database berdasarkan ID Surat Keluar
+    $id_surat = mysqli_real_escape_string($conn, $id_surat);
+    $q_surat = mysqli_query($conn, "SELECT sk.no_surat, sk.tanggal_pembuatan_surat, po.* 
+        FROM surat_keluar sk 
+        JOIN perjanjian_orang_tua po ON sk.id_perjanjian_ortu = po.id_perjanjian_ortu 
+        WHERE sk.id_surat_keluar = '$id_surat'");
+    $data_surat = mysqli_fetch_assoc($q_surat);
+    
+    $no_surat = $data_surat['no_surat'] ?? '---';
+    $nama_ortu = $data_surat['nama_ortu'] ?? '---';
+    $pekerjaan = $data_surat['pekerjaan_ortu'] ?? '---';
+    $alamat = $data_surat['alamat_ortu'] ?? '---';
+    $no_telp = $data_surat['no_telp_ortu'] ?? '---';
+    $tanggal_input = $data_surat['tanggal'] ?? date('Y-m-d');
+} else {
+    // BARU DIBUAT: Ambil dari data POST form
+    $ortu_type = $_POST['ortu_type'] ?? 'ayah';
+    $no_surat = $_POST['no_surat'] ?? '---';
+    $tanggal_input = $_POST['tanggal'] ?? date('Y-m-d');
+}
 
 // Validasi data
 if (empty($nis)) {
@@ -37,14 +58,13 @@ $row_siswa = mysqli_fetch_assoc($query_siswa);
 if (!$row_siswa) {
     die("Error: Data siswa tidak ditemukan.");
 }
+if (!$id_surat) {
+    // Logika penentuan data orang tua hanya jika bukan cetak ulang
+    $nama_ortu = $_POST['nama_ortu'] ?? ($row_siswa['ayah'] ?? '');
+    $pekerjaan = $_POST['pekerjaan'] ?? ($row_siswa['pekerjaan_ayah'] ?? '');
+    $alamat = $_POST['alamat'] ?? ($row_siswa['alamat_ayah'] ?? '');
+    $no_telp = $_POST['no_telp'] ?? ($row_siswa['no_telp_ayah'] ?? '');
 
-// Logika penentuan data orang tua
-$nama_ortu = $_POST['nama_ortu'] ?? ($row_siswa['ayah'] ?? '');
-$pekerjaan = $_POST['pekerjaan'] ?? ($row_siswa['pekerjaan_ayah'] ?? '');
-$alamat = $_POST['alamat'] ?? ($row_siswa['alamat_ayah'] ?? '');
-$no_telp = $_POST['no_telp'] ?? ($row_siswa['no_telp_ayah'] ?? '');
-
-if (empty($nama_ortu) && $row_siswa) {
     if ($ortu_type === 'ibu') {
         $nama_ortu = $row_siswa['ibu'];
         $pekerjaan = $row_siswa['pekerjaan_ibu'];
@@ -60,8 +80,8 @@ if (empty($nama_ortu) && $row_siswa) {
 
 // Format tanggal
 $bulan_indo = ["", "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-$tgl_input_obj = DateTime::createFromFormat('Y-m-d', $tanggal_input);
-$tanggal_formatted = $tgl_input_obj ? $tgl_input_obj->format('d') . ' ' . $bulan_indo[$tgl_input_obj->format('n')] . ' ' . $tgl_input_obj->format('Y') : $tanggal_input;
+$tgl_input_obj = new DateTime($tanggal_input);
+$tanggal_formatted = $tgl_input_obj->format('d') . ' ' . $bulan_indo[$tgl_input_obj->format('n')] . ' ' . $tgl_input_obj->format('Y');
 
 $tgl_target_obj = clone $tgl_input_obj;
 $tgl_target_obj->modify('+3 months');

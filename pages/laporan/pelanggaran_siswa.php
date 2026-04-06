@@ -32,16 +32,16 @@ $total_laporan = mysqli_num_rows($result);
 
 <div class="container py-5">
     <div class="row align-items-center mb-4">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <h2 class="main-title mb-0" style="color: #2d3436; font-weight: 700;">
-                Daftar <span class="text-primary fst-italic">Laporan Pelanggaran Siswa</span>
+                Laporan <span class="text-primary fst-italic">Pelanggaran Siswa</span>
             </h2>
             <small class="text-muted">Total Siswa Bermasalah: <?= $total_laporan ?></small>
         </div>
 
-        <div class="col-md-6">
-            <form action="" method="POST" class="d-flex justify-content-md-end gap-2">
-                <input type="text" class="form-control w-50" placeholder="Cari NIS atau nama siswa..." name="search"
+        <div class="col-md-7">
+            <form action="" method="POST" class="d-flex justify-content-md-end gap-2 align-items-center">
+                <input type="text" class="form-control" style="max-width: 300px;" placeholder="Cari NIS atau nama siswa..." name="search"
                     value="<?= htmlspecialchars($search) ?>">
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-search"></i> Filter
@@ -85,10 +85,12 @@ $total_laporan = mysqli_num_rows($result);
                             <?= date('d/m/Y', strtotime($row['tanggal_terakhir'])) ?>
                         </td>
                         <td class="text-center">
-                            <a class="btn-action btn-detail" href="detail_pelanggaran_siswa.php?nis=<?= $row['nis'] ?>"
-                                title="Lihat Detail">
-                                <i class="bi bi-eye-fill"></i>
-                            </a>
+                            <div class="d-flex justify-content-center gap-1">
+                                <a class="btn-action btn-detail" href="detail_pelanggaran_siswa.php?nis=<?= $row['nis'] ?>"
+                                    title="Lihat Detail">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 <?php endwhile; ?>

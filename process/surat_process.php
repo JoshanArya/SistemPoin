@@ -9,6 +9,35 @@ if (!in_array($_SESSION['user_role'] ?? 'guru', ['bk', 'admin', 'manajemen'])) {
     exit;
 }
 
+$action = $_POST['action'] ?? '';
+
+// Handle update status perjanjian menjadi Selesai
+if ($action == 'update_status') {
+    $id_surat = (int)$_POST['id_surat'];
+    $jenis = $_POST['jenis'];
+
+    // Update status berdasarkan jenis tabel perjanjiannya
+    if ($jenis == 'Perjanjian Ortu') {
+        $query = "UPDATE perjanjian_orang_tua po 
+                  JOIN surat_keluar sk ON po.id_perjanjian_ortu = sk.id_perjanjian_ortu 
+                  SET po.status = 'Selesai' 
+                  WHERE sk.id_surat_keluar = $id_surat";
+    } else {
+        $query = "UPDATE perjanjian_siswa ps 
+                  JOIN surat_keluar sk ON ps.id_perjanjian_siswa = sk.id_perjanjian_siswa 
+                  SET ps.status = 'Selesai' 
+                  WHERE sk.id_surat_keluar = $id_surat";
+    }
+
+    if (mysqli_query($conn, $query)) {
+        echo "<script>alert('Status perjanjian berhasil diperbarui!'); window.location.href='../pages/laporan/perjanjian.php';</script>";
+    } else {
+        echo "<script>alert('Gagal memperbarui status: " . mysqli_error($conn) . "'); window.history.back();</script>";
+    }
+    exit;
+}
+
+// Logika pembuatan surat baru (existing)
 $nis = mysqli_real_escape_string($conn, $_POST['nis'] ?? '');
 $jenis_surat = $_POST['jenis_surat'] ?? '';
 $no_surat_input = mysqli_real_escape_string($conn, $_POST['no_surat'] ?? '');

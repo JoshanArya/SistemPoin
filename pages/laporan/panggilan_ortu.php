@@ -17,7 +17,8 @@ $sql = "SELECT sk.id_surat_keluar, sk.no_surat, sk.tanggal_pembuatan_surat, s.ni
 // Handle search
 $search = $_POST['search'] ?? $_GET['search'] ?? '';
 if ($search) {
-    $sql .= " AND (s.nis LIKE '%$search%' OR s.nama_siswa LIKE '%$search%' OR sk.no_surat LIKE '%$search%')";
+    $s = mysqli_real_escape_string($conn, $search);
+    $sql .= " AND (s.nis LIKE '%$s%' OR s.nama_siswa LIKE '%$s%' OR sk.no_surat LIKE '%$s%')";
 }
 $sql .= " ORDER BY sk.tanggal_pembuatan_surat DESC";
 
@@ -27,16 +28,16 @@ $total_surat = mysqli_num_rows($result);
 
 <div class="container py-5">
     <div class="row align-items-center mb-4">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <h2 class="main-title mb-0" style="color: #2d3436; font-weight: 700;">
                 Laporan <span class="text-primary fst-italic">Surat Panggilan Ortu</span>
             </h2>
             <small class="text-muted">Total Surat: <?= $total_surat ?></small>
         </div>
 
-        <div class="col-md-6">
-            <form action="" method="POST" class="d-flex justify-content-md-end gap-2">
-                <input type="text" class="form-control w-50" placeholder="Cari NIS, nama, atau no surat..."
+        <div class="col-md-7">
+            <form action="" method="POST" class="d-flex justify-content-md-end gap-2 align-items-center">
+                <input type="text" class="form-control" style="max-width: 300px;" placeholder="Cari NIS, nama, atau no surat..."
                     name="search" value="<?= htmlspecialchars($search) ?>">
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-search"></i> Filter
@@ -75,9 +76,9 @@ $total_surat = mysqli_num_rows($result);
                         <td><?= htmlspecialchars($row['nama_siswa']) ?></td>
                         <td><?= htmlspecialchars($row['kelas_name']) ?></td>
                         <td><?= date('d/m/Y', strtotime($row['tanggal_pembuatan_surat'])) ?></td>
-                        <td class="text-center">
-                            <a href="../cetak/surat_panggilan_ortu.php?id=<?= $row['id_surat_keluar'] ?>" 
-                                class="btn-action btn-detail" title="Cetak Surat">
+                        <td class="text-center d-flex justify-content-center gap-1 align-items-center px-0">
+                            <a href="../cetak/surat_panggilan_ortu.php?id=<?= $row['id_surat_keluar'] ?>&nis=<?= $row['nis'] ?>" 
+                                class="btn-action btn-detail" title="Cetak Ulang">
                                 <i class="bi bi-printer"></i>
                             </a>
                         </td>

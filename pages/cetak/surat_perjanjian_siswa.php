@@ -5,14 +5,37 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/SistemPoin');
 // Menghubungkan ke file konfigurasi (koneksi database)
 include ROOTPATH . "/config/config.php";
 
-$nis = $_POST['nis'];
-// Data Orang Tua / Wali (dikirim dari file add_perjanjian_siswa.php menggunakan method POST)
-$nama_ortu = $_POST['nama_ortu'];
-$pekerjaan = $_POST['pekerjaan'];
-$alamat = $_POST['alamat'];
-$no_telp = $_POST['no_telp'];
-$masalah = $_POST['masalah'] ?? '';
-$tanggal_input = $_POST['tanggal'] ?? date('Y-m-d');
+// Ambil parameter ID jika cetak ulang, atau dari POST jika baru dibuat
+$id_surat = $_GET['id'] ?? null;
+$nis = $_POST['nis'] ?? $_GET['nis'] ?? '';
+
+if ($id_surat) {
+    // CETAK ULANG: Ambil data dari database
+    $id_surat = mysqli_real_escape_string($conn, $id_surat);
+    $q_surat = mysqli_query($conn, "SELECT sk.no_surat, sk.tanggal_pembuatan_surat, sk.keperluan as masalah, ps.* 
+        FROM surat_keluar sk 
+        JOIN perjanjian_siswa ps ON sk.id_perjanjian_siswa = ps.id_perjanjian_siswa 
+        WHERE sk.id_surat_keluar = '$id_surat'");
+    $data_surat = mysqli_fetch_assoc($q_surat);
+    
+    $no_surat = $data_surat['no_surat'] ?? '---';
+    $nama_ortu = $data_surat['nama_ortu'] ?? '---';
+    $pekerjaan = $data_surat['pekerjaan_ortu'] ?? '---';
+    $alamat = $data_surat['alamat_ortu'] ?? '---';
+    $no_telp = $data_surat['no_telp_ortu'] ?? '---';
+    $masalah = $data_surat['masalah'] ?? '---';
+    $tanggal_input = $data_surat['tanggal'] ?? date('Y-m-d');
+} else {
+    // BARU DIBUAT: Ambil dari data POST form
+    $nama_ortu = $_POST['nama_ortu'] ?? '';
+    $pekerjaan = $_POST['pekerjaan'] ?? '';
+    $alamat = $_POST['alamat'] ?? '';
+    $no_telp = $_POST['no_telp'] ?? '';
+    $masalah = $_POST['masalah'] ?? '';
+    $tanggal_input = $_POST['tanggal'] ?? date('Y-m-d');
+}
+
+if (empty($nis)) die("Error: NIS tidak ditemukan.");
 
 // mengambil data siswa dari database join ke tabel ortu_wali, kelas, tingkat, program_keahlian, dan guru
 $query_siswa = mysqli_query($conn, "SELECT nis, nama_siswa, tingkat, program_keahlian, rombel, ayah, ibu, wali, nama_pengguna, deskripsi FROM siswa
@@ -44,8 +67,8 @@ $waka_kesiswaan = $row_waka['nama_pengguna'];
 $bulan_indo = ["", "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
 // Format tanggal dari input
-$tgl_obj = DateTime::createFromFormat('Y-m-d', $tanggal_input);
-$tanggal_formatted = $tgl_obj ? $tgl_obj->format('d') . ' ' . $bulan_indo[$tgl_obj->format('n')] . ' ' . $tgl_obj->format('Y') : date('d') . ' ' . $bulan_indo[date('n')] . ' ' . date('Y');
+$tgl_obj = new DateTime($tanggal_input);
+$tanggal_formatted = $tgl_obj->format('d') . ' ' . $bulan_indo[$tgl_obj->format('n')] . ' ' . $tgl_obj->format('Y');
 
 // Menyertakan tampilan header (bagian atas halaman)
 include ROOTPATH . "/includes/header.php";

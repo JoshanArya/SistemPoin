@@ -102,7 +102,7 @@ $nama_user = $_SESSION['nama_pengguna'] ?? 'Pengguna';
                                         <td class="fw-semibold"><?= htmlspecialchars($row['nama_siswa']) ?></td>
                                         <td><?= htmlspecialchars($row['jenis']) ?></td>
                                         <td class="text-center">
-                                            <span class="badge bg-danger rounded-pill"><?= $row['poin'] ?></span>
+                                            <span class="poin-badge-detail"><?= $row['poin'] ?></span>
                                         </td>
                                     </tr>
                                     <?php endwhile; ?>
@@ -176,7 +176,7 @@ $nama_user = $_SESSION['nama_pengguna'] ?? 'Pengguna';
                                         <td class="fw-semibold"><?= htmlspecialchars($row['jenis']) ?></td>
                                         <td class="small text-muted"><?= htmlspecialchars($row['keterangan'] ?: '-') ?></td>
                                         <td class="text-center">
-                                            <span class="badge bg-warning text-dark rounded-pill"><?= $row['poin'] ?></span>
+                                            <span class="poin-badge-detail"><?= $row['poin'] ?></span>
                                         </td>
                                     </tr>
                                     <?php endwhile; ?>
@@ -219,10 +219,14 @@ $nama_user = $_SESSION['nama_pengguna'] ?? 'Pengguna';
                                         <td><?= date('d/m/Y', strtotime($row['tanggal_pembuatan_surat'])) ?></td>
                                         <td class="text-center">
                                             <?php
-                                            $status = $row['status_surat'];
-                                            $badge_class = ($status == 'Sudah dicetak') ? 'bg-info' : (($status == 'Selesai') ? 'bg-success' : 'bg-secondary');
+                                            if ($row['status_surat'] == 'Belum dibuat') {
+                                                echo '<span class="badge rounded-pill badge-surat-belum px-3 py-1">• Belum dibuat</span>';
+                                            } elseif ($row['status_surat'] == 'Sudah dicetak') {
+                                                echo '<span class="badge rounded-pill badge-surat-cetak px-3 py-1">• Sudah dicetak</span>';
+                                            } else {
+                                                echo '<span class="badge rounded-pill badge-surat-selesai px-3 py-1">• Selesai</span>';
+                                            }
                                             ?>
-                                            <span class="badge <?= $badge_class ?> rounded-pill"><?= $status ?></span>
                                         </td>
                                     </tr>
                                     <?php endwhile; ?>
