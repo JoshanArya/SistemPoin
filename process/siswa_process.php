@@ -15,12 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($action == 'add') {
         // 1. Ambil Data Utama Siswa
-        $nis = trim($_POST['nis']);
-        $nama_siswa = trim($_POST['nama_siswa']);
-        $jenis_kelamin = $_POST['jenis_kelamin'];
-        $alamat = trim($_POST['alamat_siswa']);
-        $kelas_value = $_POST['kelas'];
-        $status_siswa = trim($_POST['status_siswa']);
+        $nis = mysqli_real_escape_string($conn, trim($_POST['nis']));
+        $nama_siswa = mysqli_real_escape_string($conn, trim($_POST['nama_siswa']));
+        $jenis_kelamin = mysqli_real_escape_string($conn, $_POST['jenis_kelamin']);
+        $alamat = mysqli_real_escape_string($conn, trim($_POST['alamat_siswa']));
+        $kelas_value = mysqli_real_escape_string($conn, $_POST['kelas']);
+        $status_siswa = mysqli_real_escape_string($conn, trim($_POST['status_siswa']));
         
         if (empty($jenis_kelamin) || empty($kelas_value) || empty($status_siswa)) {
             echo "<script>alert('Error: Jenis Kelamin, Kelas, dan Status Siswa harus dipilih!');</script>";
@@ -58,18 +58,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // 4. Ambil Data Orang Tua / Wali
-        $ayah = trim($_POST['ayah']);
-        $ibu = trim($_POST['ibu']);
-        $wali = trim($_POST['wali']);
-        $pekerjaan_ayah = trim($_POST['pekerjaan_ayah']);
-        $pekerjaan_ibu = trim($_POST['pekerjaan_ibu']);
-        $pekerjaan_wali = trim($_POST['pekerjaan_wali']);
-        $telp_ayah = trim($_POST['telp_ayah']);
-        $telp_ibu = trim($_POST['telp_ibu']);
-        $telp_wali = trim($_POST['telp_wali']);
-        $alamat_ayah = trim($_POST['alamat_ayah']);
-        $alamat_ibu = trim($_POST['alamat_ibu']);
-        $alamat_wali = trim($_POST['alamat_wali']);
+        $ayah = mysqli_real_escape_string($conn, trim($_POST['ayah']));
+        $ibu = mysqli_real_escape_string($conn, trim($_POST['ibu']));
+        $wali = mysqli_real_escape_string($conn, trim($_POST['wali']));
+        $pekerjaan_ayah = mysqli_real_escape_string($conn, trim($_POST['pekerjaan_ayah']));
+        $pekerjaan_ibu = mysqli_real_escape_string($conn, trim($_POST['pekerjaan_ibu']));
+        $pekerjaan_wali = mysqli_real_escape_string($conn, trim($_POST['pekerjaan_wali']));
+        $telp_ayah = mysqli_real_escape_string($conn, trim($_POST['telp_ayah']));
+        $telp_ibu = mysqli_real_escape_string($conn, trim($_POST['telp_ibu']));
+        $telp_wali = mysqli_real_escape_string($conn, trim($_POST['telp_wali']));
+        $alamat_ayah = mysqli_real_escape_string($conn, trim($_POST['alamat_ayah']));
+        $alamat_ibu = mysqli_real_escape_string($conn, trim($_POST['alamat_ibu']));
+        $alamat_wali = mysqli_real_escape_string($conn, trim($_POST['alamat_wali']));
 
         // 5. Insert Data Orang Tua / Wali
         $query_ortu = "INSERT INTO ortu_wali (ayah, ibu, wali, pekerjaan_ayah, pekerjaan_ibu, pekerjaan_wali, no_telp_ayah, no_telp_ibu, no_telp_wali, alamat_ayah, alamat_ibu, alamat_wali) 
@@ -101,12 +101,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     } elseif ($action == 'edit') {
         // Ambil data dari form (nis readonly sehingga dikirim)
-        $nis = trim($_POST['nis']);
-        $nama_siswa = trim($_POST['nama_siswa']);
-        $jenis_kelamin = $_POST['jenis_kelamin'];
-        $alamat = trim($_POST['alamat_siswa']);
-        $kelas_value = $_POST['kelas'];
-        $status_siswa = trim($_POST['status_siswa']);
+        $nis = mysqli_real_escape_string($conn, trim($_POST['nis']));
+        $nama_siswa = mysqli_real_escape_string($conn, trim($_POST['nama_siswa']));
+        $jenis_kelamin = mysqli_real_escape_string($conn, $_POST['jenis_kelamin']);
+        $alamat = mysqli_real_escape_string($conn, trim($_POST['alamat_siswa']));
+        $kelas_value = mysqli_real_escape_string($conn, $_POST['kelas']);
+        $status_siswa = mysqli_real_escape_string($conn, trim($_POST['status_siswa']));
 
         // Validasi minimal
         if (empty($jenis_kelamin) || empty($kelas_value) || empty($status_siswa)) {
@@ -140,18 +140,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Ambil data orang tua / wali dari form
-        $ayah = trim($_POST['ayah']);
-        $ibu = trim($_POST['ibu']);
-        $wali = trim($_POST['wali']);
-        $pekerjaan_ayah = trim($_POST['pekerjaan_ayah']);
-        $pekerjaan_ibu = trim($_POST['pekerjaan_ibu']);
-        $pekerjaan_wali = trim($_POST['pekerjaan_wali']);
-        $telp_ayah = trim($_POST['telp_ayah']);
-        $telp_ibu = trim($_POST['telp_ibu']);
-        $telp_wali = trim($_POST['telp_wali']);
-        $alamat_ayah = trim($_POST['alamat_ayah']);
-        $alamat_ibu = trim($_POST['alamat_ibu']);
-        $alamat_wali = trim($_POST['alamat_wali']);
+        $ayah = mysqli_real_escape_string($conn, trim($_POST['ayah']));
+        $ibu = mysqli_real_escape_string($conn, trim($_POST['ibu']));
+        $wali = mysqli_real_escape_string($conn, trim($_POST['wali']));
+        $pekerjaan_ayah = mysqli_real_escape_string($conn, trim($_POST['pekerjaan_ayah']));
+        $pekerjaan_ibu = mysqli_real_escape_string($conn, trim($_POST['pekerjaan_ibu']));
+        $pekerjaan_wali = mysqli_real_escape_string($conn, trim($_POST['pekerjaan_wali']));
+        $telp_ayah = mysqli_real_escape_string($conn, trim($_POST['telp_ayah']));
+        $telp_ibu = mysqli_real_escape_string($conn, trim($_POST['telp_ibu']));
+        $telp_wali = mysqli_real_escape_string($conn, trim($_POST['telp_wali']));
+        $alamat_ayah = mysqli_real_escape_string($conn, trim($_POST['alamat_ayah']));
+        $alamat_ibu = mysqli_real_escape_string($conn, trim($_POST['alamat_ibu']));
+        $alamat_wali = mysqli_real_escape_string($conn, trim($_POST['alamat_wali']));
 
         if ($id_ortu_wali) {
             // Update ortu_wali

@@ -110,7 +110,7 @@ if(!isset($_SESSION['username'])){
 <nav class="navbar navbar-expand-lg sticky-top bg-white py-3 shadow">
     <a class="navbar-brand fw-bold d-flex align-items-center" href="/SistemPoin/pages/dashboard.php">
         <img src="/SistemPoin/assets/img/Logo.svg" alt="SakuSiswa Logo" style="height: 32px; width: auto;" class="ms-2">
-        Saku<span style="color: #1a8cfd;">Siswa.</span>
+        <span style="color: #579afd;">Saku</span><span style="color: #0d6efd;">Siswa.</span>
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

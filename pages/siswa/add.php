@@ -110,7 +110,7 @@ $query_kelas = mysqli_query($conn, "SELECT id_kelas, tingkat, program_keahlian, 
                         </div>
                     </div>
 
-                    <div class="form-section-title mt-5">
+                    <div class="form-section-title mt-5 mb-3">
                         <i class="bi bi-people"></i> Informasi Orang Tua / Wali
                     </div>
 
